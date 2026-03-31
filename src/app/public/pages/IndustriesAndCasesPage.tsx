@@ -95,10 +95,10 @@ export function IndustriesAndCasesPage() {
     type: 'caseHighlights' as const,
     isEnabled: true,
     order: 0,
-    title: language === 'es' ? 'Resultados agregados a partir de casos reales' : 'Aggregated outcomes from real case studies',
+    title: language === 'es' ? 'Lectura agregada de casos reales' : 'Aggregated view of real case studies',
     subtitle: language === 'es'
-      ? 'Tomamos los indicadores recurrentes de los casos publicados para construir una lectura resumida del impacto que ya se está logrando en distintas industrias.'
-      : 'We take recurring indicators from published case studies to build a summarized view of the impact already being achieved across industries.',
+      ? 'Resumimos señales repetidas de los casos publicados para mostrar el impacto que ya se está logrando.'
+      : 'We summarize recurring signals from published case studies to show the impact already being delivered.',
     ctaLabel: '',
     ctaHref: '',
     referencedIds: [],

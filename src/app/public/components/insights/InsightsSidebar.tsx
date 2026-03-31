@@ -1,4 +1,4 @@
-import { Search, Linkedin, Instagram, Youtube } from 'lucide-react';
+import { Search, Linkedin, Instagram, Youtube, Facebook } from 'lucide-react';
 import { Link } from 'react-router';
 import { useLanguage } from '../../../shared/contexts/LanguageContext';
 import { ImageWithFallback } from '../../../components/figma/ImageWithFallback';
@@ -78,6 +78,12 @@ export function InsightsSidebar({
       url: 'https://www.youtube.com/@idata.global',
       color: 'hover:bg-red-600',
     },
+    {
+      name: 'Facebook',
+      icon: Facebook,
+      url: 'https://www.facebook.com/iData.Global.IA/',
+      color: 'hover:bg-[#1877F2]',
+    },
   ];
 
   return (
@@ -128,23 +134,42 @@ export function InsightsSidebar({
           <h3 className="font-light text-xl text-gray-900 mb-4">
             {language === 'es' ? 'Categorías' : 'Categories'}
           </h3>
-          <div className="space-y-4">
+          <div className="space-y-3">
+            <button
+              type="button"
+              onClick={() => onCategorySelect?.(null)}
+              className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition-colors ${
+                selectedCategory === null
+                  ? 'border-purple-600 bg-purple-50 text-purple-700'
+                  : 'border-gray-200 bg-gray-50 text-gray-700 hover:border-gray-300 hover:bg-white'
+              }`}
+            >
+              <span className="text-sm font-medium">{language === 'es' ? 'Todas las categorías' : 'All categories'}</span>
+            </button>
             {categories.map((category) => {
-              const slug = getLocalizedValue(category.slug_es, category.slug_en);
               const title = getLocalizedValue(category.title_es, category.title_en);
 
               return (
-                <Link
+                <button
                   key={category.id}
-                  to={`/${language}/insights/category/${slug}`}
-                  className="group flex gap-3 hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                  type="button"
+                  onClick={() => onCategorySelect?.(category.id)}
+                  className={`group flex w-full gap-3 rounded-xl border p-3 text-left transition-colors ${
+                    selectedCategory === category.id
+                      ? 'border-purple-600 bg-purple-50'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
                 >
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-light text-sm text-gray-900 leading-tight line-clamp-3 group-hover:text-purple-600 transition-colors">
+                    <h4 className={`font-light text-sm leading-tight line-clamp-3 transition-colors ${
+                      selectedCategory === category.id
+                        ? 'text-purple-700'
+                        : 'text-gray-900 group-hover:text-purple-600'
+                    }`}>
                       {title}
                     </h4>
                   </div>
-                </Link>
+                </button>
               );
             })}
           </div>

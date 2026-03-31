@@ -498,10 +498,10 @@ export function ServicesPage() {
         : 'These platforms do not live apart from the service model. They are the ecosystem on which we design, implement, and operate enterprise Data & AI solutions.',
     },
     cases: {
-      title: language === 'es' ? 'Así se ve el edificio cuando entra en producción' : 'This is what the building looks like in production',
+      title: language === 'es' ? 'Casos de éxito: el edificio ya construido' : 'Success stories: the building already in place',
       description: language === 'es'
-        ? 'Cuando la construcción se completa, aparecen resultados medibles: plataformas activas, decisiones más rápidas y operación lista para escalar.'
-        : 'When the build is completed, measurable outcomes appear: active platforms, faster decisions, and operations ready to scale.',
+        ? 'Aquí se ve el edificio completo en acción: plataformas activas, decisiones más rápidas y resultados medibles que nacen de una construcción bien hecha.'
+        : 'This is what the completed building looks like in action: live platforms, faster decisions, and measurable outcomes that come from building it right.',
       cta: language === 'es' ? 'Ver caso completo' : 'View full case',
     },
     cta: {
@@ -821,7 +821,7 @@ export function ServicesPage() {
             transition={{ duration: 0.7 }}
           >
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#4387DF]">
-              {language === 'es' ? 'Casos en producción' : 'Cases in production'}
+              {language === 'es' ? 'Casos de éxito' : 'Success stories'}
             </p>
             <h2 className="mt-4 text-3xl font-light text-[var(--text-strong)] md:text-4xl">
               {content.cases.title}

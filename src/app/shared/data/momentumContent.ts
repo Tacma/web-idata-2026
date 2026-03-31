@@ -17,6 +17,7 @@ export interface MomentumCollectionItem {
   description: string;
   href: string;
   meta: string;
+  isoDate?: string;
   image?: string | null;
 }
 
@@ -56,6 +57,7 @@ export function buildMomentumContent({
           ? 'Conversación cerrada con líderes de tecnología sobre prioridades de adopción, operación y escalabilidad.'
           : 'Private conversation with technology leaders about adoption, operations, and scale priorities.',
       href: `${eventsHref}#event-breakfast`,
+      isoDate: '2026-04-18T08:00:00-05:00',
       image: articles[0]?.image || articles[1]?.image || null,
       meta: language === 'es' ? 'Bogotá / cupos limitados' : 'Bogota / limited seats',
     },
@@ -71,8 +73,57 @@ export function buildMomentumContent({
           ? 'Sesión práctica para revisar arquitecturas, quick wins y decisiones de plataforma para equipos de datos.'
           : 'Hands-on session to review architectures, quick wins, and platform decisions for data teams.',
       href: `${eventsHref}#event-workshop`,
+      isoDate: '2026-05-09T09:00:00-05:00',
       image: articles[1]?.image || articles[0]?.image || null,
       meta: language === 'es' ? 'Formato hands-on' : 'Hands-on format',
+    },
+    {
+      id: 'event-roundtable',
+      label: language === 'es' ? 'Mayo 23' : 'May 23',
+      title:
+        language === 'es'
+          ? 'Mesa ejecutiva: modernización de datos'
+          : 'Executive roundtable: data modernization',
+      description:
+        language === 'es'
+          ? 'Espacio curado para revisar hoja de ruta, quick wins y decisiones de plataforma con líderes de negocio y tecnología.'
+          : 'Curated session to review roadmap, quick wins, and platform decisions with business and technology leaders.',
+      href: `${eventsHref}#event-roundtable`,
+      isoDate: '2026-05-23T08:30:00-05:00',
+      image: articles[2]?.image || articles[0]?.image || null,
+      meta: language === 'es' ? 'Roundtable privado' : 'Private roundtable',
+    },
+    {
+      id: 'event-clinic',
+      label: language === 'es' ? 'Junio 06' : 'June 06',
+      title:
+        language === 'es'
+          ? 'Clínica de arquitectura y gobierno'
+          : 'Architecture and governance clinic',
+      description:
+        language === 'es'
+          ? 'Sesión breve para aterrizar gobierno, observabilidad y operación continua sobre plataformas de datos.'
+          : 'Short session to land governance, observability, and continuous operations on data platforms.',
+      href: `${eventsHref}#event-clinic`,
+      isoDate: '2026-06-06T10:00:00-05:00',
+      image: articles[0]?.image || articles[1]?.image || null,
+      meta: language === 'es' ? 'Clinic session' : 'Clinic session',
+    },
+    {
+      id: 'event-lab',
+      label: language === 'es' ? 'Junio 20' : 'June 20',
+      title:
+        language === 'es'
+          ? 'Laboratorio de copilots y automatización'
+          : 'Copilots and automation lab',
+      description:
+        language === 'es'
+          ? 'Revisión aplicada de escenarios de IA empresarial con foco en operaciones, service desk y analítica aumentada.'
+          : 'Applied review of enterprise AI scenarios focused on operations, service desk, and augmented analytics.',
+      href: `${eventsHref}#event-lab`,
+      isoDate: '2026-06-20T09:30:00-05:00',
+      image: articles[1]?.image || articles[2]?.image || null,
+      meta: language === 'es' ? 'AI adoption lab' : 'AI adoption lab',
     },
   ];
 
@@ -107,8 +158,37 @@ export function buildMomentumContent({
       image: articles[1]?.image || articles[2]?.image || null,
       meta: language === 'es' ? 'Ops + governance' : 'Ops + governance',
     },
+    {
+      id: 'build-decision-kits',
+      label: language === 'es' ? 'Diseño activo' : 'Active design',
+      title:
+        language === 'es'
+          ? 'Kits de decisión para comités ejecutivos'
+          : 'Decision kits for executive committees',
+      description:
+        language === 'es'
+          ? 'Estamos empaquetando tableros, indicadores y narrativas para acelerar decisiones con mejor contexto.'
+          : 'We are packaging dashboards, indicators, and narratives to accelerate decisions with better context.',
+      href: `${buildsHref}#build-decision-kits`,
+      image: articles[0]?.image || articles[2]?.image || null,
+      meta: language === 'es' ? 'Decision systems' : 'Decision systems',
+    },
+    {
+      id: 'build-observability',
+      label: language === 'es' ? 'Próximo release' : 'Upcoming release',
+      title:
+        language === 'es'
+          ? 'Observabilidad para data products'
+          : 'Observability for data products',
+      description:
+        language === 'es'
+          ? 'Estamos conectando alertas, métricas de uso y señales operativas para equipos que necesitan continuidad real.'
+          : 'We are connecting alerts, usage metrics, and operational signals for teams that need real continuity.',
+      href: `${buildsHref}#build-observability`,
+      image: articles[2]?.image || articles[1]?.image || null,
+      meta: language === 'es' ? 'Reliability layer' : 'Reliability layer',
+    },
   ];
 
   return { events, labs };
 }
-
