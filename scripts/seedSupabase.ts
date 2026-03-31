@@ -1,7 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config({ path: '.env.local' })
-dotenv.config({ path: '.env' })
-
 import { createClient } from '@supabase/supabase-js'
 import { createHash } from 'crypto'
 import {
@@ -15,8 +11,8 @@ import {
   mockTestimonials,
 } from '../src/app/data/mockData'
 
-const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
-const supabaseServiceRoleKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseServiceRoleKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY
 
 if (!supabaseUrl || !supabaseServiceRoleKey) {
   throw new Error('Missing Supabase environment variables (SUPABASE_URL or VITE_SUPABASE_URL, and/or VITE_SUPABASE_SERVICE_ROLE_KEY)')
