@@ -16,10 +16,10 @@ import {
 } from '../src/app/data/mockData'
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const supabaseServiceRoleKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY
 
 if (!supabaseUrl || !supabaseServiceRoleKey) {
-  throw new Error('Missing Supabase environment variables (SUPABASE_URL or VITE_SUPABASE_URL, and/or SUPABASE_SERVICE_ROLE_KEY)')
+  throw new Error('Missing Supabase environment variables (SUPABASE_URL or VITE_SUPABASE_URL, and/or VITE_SUPABASE_SERVICE_ROLE_KEY)')
 }
 
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey)

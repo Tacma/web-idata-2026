@@ -10,7 +10,7 @@ Esta guía deja este proyecto listo para publicarse en Azure Static Web Apps usa
 
 ## Variable que NO debes subir al sitio público
 
-- `SUPABASE_SERVICE_ROLE_KEY`
+- `VITE_SUPABASE_SERVICE_ROLE_KEY`
 
 Esa llave es solo para scripts de servidor o administración segura. No debe quedar en GitHub ni en Azure Static Web Apps para este frontend.
 
