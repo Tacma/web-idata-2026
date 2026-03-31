@@ -1,0 +1,1010 @@
+[
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/57c6301ab7145ee9f1d118169ba33db8ad13999c.png",
+    "filename": "careers-banner.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/careers/careers-banner.png",
+    "size": 852022,
+    "item": {
+      "hash": "57c6301ab7145ee9f1d118169ba33db8ad13999c",
+      "file": "src/app/public/pages/Careers.tsx",
+      "variable": "careersBannerImage",
+      "currentPath": "src/assets/57c6301ab7145ee9f1d118169ba33db8ad13999c.png",
+      "futurePath": "/assets/images/careers/careers-banner.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/ed370e692ad7f1e382eb99fbc6beef86c1da4251.png",
+    "filename": "culture.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/careers/culture.png",
+    "size": 391607,
+    "item": {
+      "hash": "ed370e692ad7f1e382eb99fbc6beef86c1da4251",
+      "file": "src/app/public/pages/Careers.tsx",
+      "variable": "cultureImage",
+      "currentPath": "src/assets/ed370e692ad7f1e382eb99fbc6beef86c1da4251.png",
+      "futurePath": "/assets/images/careers/culture.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/ebcdc655b31368ba51720354d958d877a0a91062.png",
+    "filename": "hero.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/about/hero.png",
+    "size": 2567631,
+    "item": {
+      "hash": "ebcdc655b31368ba51720354d958d877a0a91062",
+      "file": "src/app/public/pages/About.tsx",
+      "variable": "heroImage",
+      "currentPath": "src/assets/ebcdc655b31368ba51720354d958d877a0a91062.png",
+      "futurePath": "/assets/images/about/hero.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/ae562fdabd65d9651214906535f0624dca06cc6a.png",
+    "filename": "team.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/about/team.png",
+    "size": 572940,
+    "item": {
+      "hash": "ae562fdabd65d9651214906535f0624dca06cc6a",
+      "file": "src/app/public/pages/About.tsx",
+      "variable": "teamImage",
+      "currentPath": "src/assets/ae562fdabd65d9651214906535f0624dca06cc6a.png",
+      "futurePath": "/assets/images/about/team.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/e1362831fe70eb39f894aa7bab963c7d7d25cd4d.png",
+    "filename": "global-presence.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/about/global-presence.png",
+    "size": 20178043,
+    "item": {
+      "hash": "e1362831fe70eb39f894aa7bab963c7d7d25cd4d",
+      "file": "src/app/public/pages/About.tsx",
+      "variable": "globalPresenceImage",
+      "currentPath": "src/assets/e1362831fe70eb39f894aa7bab963c7d7d25cd4d.png",
+      "futurePath": "/assets/images/about/global-presence.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/3bf23a950290c6e1aaeda88947a8341567e11e5e.png",
+    "filename": "transformamos.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/about/transformamos.png",
+    "size": 1152953,
+    "item": {
+      "hash": "3bf23a950290c6e1aaeda88947a8341567e11e5e",
+      "file": "src/app/public/pages/About.tsx",
+      "variable": "transformamosImage",
+      "currentPath": "src/assets/3bf23a950290c6e1aaeda88947a8341567e11e5e.png",
+      "futurePath": "/assets/images/about/transformamos.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/2d69b2e0003b5983abcea60a809ceb744a552d65.png",
+    "filename": "bayron.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/team/bayron.png",
+    "size": 138727,
+    "item": {
+      "hash": "2d69b2e0003b5983abcea60a809ceb744a552d65",
+      "file": "src/app/public/pages/About.tsx",
+      "variable": "bayronPhoto",
+      "currentPath": "src/assets/2d69b2e0003b5983abcea60a809ceb744a552d65.png",
+      "futurePath": "/assets/images/team/bayron.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/023015df2324327451f05c232f40fda738147b0c.png",
+    "filename": "victor.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/team/victor.png",
+    "size": 196799,
+    "item": {
+      "hash": "023015df2324327451f05c232f40fda738147b0c",
+      "file": "src/app/public/pages/About.tsx",
+      "variable": "victorPhoto",
+      "currentPath": "src/assets/023015df2324327451f05c232f40fda738147b0c.png",
+      "futurePath": "/assets/images/team/victor.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/bdbe50b8128fa4a2128c222ba5b58b03ea9addd5.png",
+    "filename": "angela.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/team/angela.png",
+    "size": 174133,
+    "item": {
+      "hash": "bdbe50b8128fa4a2128c222ba5b58b03ea9addd5",
+      "file": "src/app/public/pages/About.tsx",
+      "variable": "angelaPhoto",
+      "currentPath": "src/assets/bdbe50b8128fa4a2128c222ba5b58b03ea9addd5.png",
+      "futurePath": "/assets/images/team/angela.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/5dadeafa75d24b5b794373b02353a341522765a7.png",
+    "filename": "lucia.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/team/lucia.png",
+    "size": 184980,
+    "item": {
+      "hash": "5dadeafa75d24b5b794373b02353a341522765a7",
+      "file": "src/app/public/pages/About.tsx",
+      "variable": "luciaPhoto",
+      "currentPath": "src/assets/5dadeafa75d24b5b794373b02353a341522765a7.png",
+      "futurePath": "/assets/images/team/lucia.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/f5c5b21aadcd070194f8f9f37c8ac6adaf9602c8.png",
+    "filename": "dayana.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/team/dayana.png",
+    "size": 195307,
+    "item": {
+      "hash": "f5c5b21aadcd070194f8f9f37c8ac6adaf9602c8",
+      "file": "src/app/public/pages/About.tsx",
+      "variable": "dayanaPhoto",
+      "currentPath": "src/assets/f5c5b21aadcd070194f8f9f37c8ac6adaf9602c8.png",
+      "futurePath": "/assets/images/team/dayana.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/202ec833b06c7799e876fd83c520fa94807e6fe3.png",
+    "filename": "industries.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/hero/industries.png",
+    "size": 7270868,
+    "item": {
+      "hash": "202ec833b06c7799e876fd83c520fa94807e6fe3",
+      "file": "src/app/public/pages/IndustriesIndex.tsx",
+      "variable": "heroImage",
+      "currentPath": "src/assets/202ec833b06c7799e876fd83c520fa94807e6fe3.png",
+      "futurePath": "/assets/images/hero/industries.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/f13e93a5336016cfdd179a5fe66e5a9ffb036446.png",
+    "filename": "services-index.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/hero/services-index.png",
+    "size": 4238132,
+    "item": {
+      "hash": "f13e93a5336016cfdd179a5fe66e5a9ffb036446",
+      "file": "src/app/public/pages/ServicesIndex.tsx",
+      "variable": "heroImage",
+      "currentPath": "src/assets/f13e93a5336016cfdd179a5fe66e5a9ffb036446.png",
+      "futurePath": "/assets/images/hero/services-index.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/807f4652c8d95ddbee1d44684e9e0291c16c029f.png",
+    "filename": "services.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/hero/services.png",
+    "size": 2301073,
+    "item": {
+      "hash": "807f4652c8d95ddbee1d44684e9e0291c16c029f",
+      "file": "src/app/public/pages/ServicesPage.tsx",
+      "variable": "heroImage",
+      "currentPath": "src/assets/807f4652c8d95ddbee1d44684e9e0291c16c029f.png",
+      "futurePath": "/assets/images/hero/services.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/e0fd18e1974bd95855a2de171535d160bd4bc63e.png",
+    "filename": "data-strategy.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/services/data-strategy.png",
+    "size": 607924,
+    "item": {
+      "hash": "e0fd18e1974bd95855a2de171535d160bd4bc63e",
+      "file": "src/app/public/pages/ServicesPage.tsx",
+      "variable": "dataStrategyImage",
+      "currentPath": "src/assets/e0fd18e1974bd95855a2de171535d160bd4bc63e.png",
+      "futurePath": "/assets/images/services/data-strategy.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/76b02f6059883d09d11f4c3a88fd01cd8d66aa9a.png",
+    "filename": "data-engineering.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/services/data-engineering.png",
+    "size": 601547,
+    "item": {
+      "hash": "76b02f6059883d09d11f4c3a88fd01cd8d66aa9a",
+      "file": "src/app/public/pages/ServicesPage.tsx",
+      "variable": "dataEngineeringImage",
+      "currentPath": "src/assets/76b02f6059883d09d11f4c3a88fd01cd8d66aa9a.png",
+      "futurePath": "/assets/images/services/data-engineering.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/1299c30cdfc96cd0398b9935d436448d0134427e.png",
+    "filename": "advanced-analytics.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/services/advanced-analytics.png",
+    "size": 1015420,
+    "item": {
+      "hash": "1299c30cdfc96cd0398b9935d436448d0134427e",
+      "file": "src/app/public/pages/ServicesPage.tsx",
+      "variable": "advancedAnalyticsImage",
+      "currentPath": "src/assets/1299c30cdfc96cd0398b9935d436448d0134427e.png",
+      "futurePath": "/assets/images/services/advanced-analytics.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/f7cb664cad0f1746ea9066ed03e99d14705dcb0a.png",
+    "filename": "artificial-intelligence.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/services/artificial-intelligence.png",
+    "size": 1205439,
+    "item": {
+      "hash": "f7cb664cad0f1746ea9066ed03e99d14705dcb0a",
+      "file": "src/app/public/pages/ServicesPage.tsx",
+      "variable": "artificialIntelligenceImage",
+      "currentPath": "src/assets/f7cb664cad0f1746ea9066ed03e99d14705dcb0a.png",
+      "futurePath": "/assets/images/services/artificial-intelligence.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/6b516d23f0f656858f47ef4bf97125f4c1f98dbe.png",
+    "filename": "data-platforms.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/services/data-platforms.png",
+    "size": 1207630,
+    "item": {
+      "hash": "6b516d23f0f656858f47ef4bf97125f4c1f98dbe",
+      "file": "src/app/public/pages/ServicesPage.tsx",
+      "variable": "dataPlatformsImage",
+      "currentPath": "src/assets/6b516d23f0f656858f47ef4bf97125f4c1f98dbe.png",
+      "futurePath": "/assets/images/services/data-platforms.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/0aa3ccc9e83c8e7482164db714ed3d7d8e5ceb33.png",
+    "filename": "data-operations.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/services/data-operations.png",
+    "size": 786263,
+    "item": {
+      "hash": "0aa3ccc9e83c8e7482164db714ed3d7d8e5ceb33",
+      "file": "src/app/public/pages/ServicesPage.tsx",
+      "variable": "dataOperationsImage",
+      "currentPath": "src/assets/0aa3ccc9e83c8e7482164db714ed3d7d8e5ceb33.png",
+      "futurePath": "/assets/images/services/data-operations.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/48829b35c832ac4a631d74dcfd8ac69d34b0adfa.png",
+    "filename": "microsoft.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/microsoft.png",
+    "size": 39713,
+    "item": {
+      "hash": "48829b35c832ac4a631d74dcfd8ac69d34b0adfa",
+      "file": "src/app/public/pages/ServicesPage.tsx",
+      "variable": "microsoftLogo",
+      "currentPath": "src/assets/48829b35c832ac4a631d74dcfd8ac69d34b0adfa.png",
+      "futurePath": "/assets/logos/partners/microsoft.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/0f1a314fdbee8b957c6504f8fff0a07b3918b269.png",
+    "filename": "snowflake.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/snowflake.png",
+    "size": 123987,
+    "item": {
+      "hash": "0f1a314fdbee8b957c6504f8fff0a07b3918b269",
+      "file": "src/app/public/pages/ServicesPage.tsx",
+      "variable": "snowflakeLogo",
+      "currentPath": "src/assets/0f1a314fdbee8b957c6504f8fff0a07b3918b269.png",
+      "futurePath": "/assets/logos/partners/snowflake.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/d77c1b8e6a9a1a6f84c17715022360c027287a95.png",
+    "filename": "databricks.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/databricks.png",
+    "size": 89351,
+    "item": {
+      "hash": "d77c1b8e6a9a1a6f84c17715022360c027287a95",
+      "file": "src/app/public/pages/ServicesPage.tsx",
+      "variable": "databricksLogo",
+      "currentPath": "src/assets/d77c1b8e6a9a1a6f84c17715022360c027287a95.png",
+      "futurePath": "/assets/logos/partners/databricks.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/809f376c4277570a490e5d7e959560b3df1ea78b.png",
+    "filename": "google-cloud.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/google-cloud.png",
+    "size": 124141,
+    "item": {
+      "hash": "809f376c4277570a490e5d7e959560b3df1ea78b",
+      "file": "src/app/public/pages/ServicesPage.tsx",
+      "variable": "googleCloudLogo",
+      "currentPath": "src/assets/809f376c4277570a490e5d7e959560b3df1ea78b.png",
+      "futurePath": "/assets/logos/partners/google-cloud.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/b8142854237a06a23c35b902808cc4d698f6938b.png",
+    "filename": "aws.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/aws.png",
+    "size": 71003,
+    "item": {
+      "hash": "b8142854237a06a23c35b902808cc4d698f6938b",
+      "file": "src/app/public/pages/ServicesPage.tsx",
+      "variable": "awsLogo",
+      "currentPath": "src/assets/b8142854237a06a23c35b902808cc4d698f6938b.png",
+      "futurePath": "/assets/logos/partners/aws.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/683c3c060f30ddc97aad2f8f2fe317663df72155.png",
+    "filename": "contact.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/hero/contact.png",
+    "size": 2672559,
+    "item": {
+      "hash": "683c3c060f30ddc97aad2f8f2fe317663df72155",
+      "file": "src/app/public/pages/Contact.tsx",
+      "variable": "contactHeroImage",
+      "currentPath": "src/assets/683c3c060f30ddc97aad2f8f2fe317663df72155.png",
+      "futurePath": "/assets/images/hero/contact.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/e0fd18e1974bd95855a2de171535d160bd4bc63e.png",
+    "filename": "data-strategy.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/services/data-strategy.png",
+    "size": 607924,
+    "item": {
+      "hash": "e0fd18e1974bd95855a2de171535d160bd4bc63e",
+      "file": "src/app/public/pages/ServiceDetailPage.tsx",
+      "variable": "dataStrategyImage",
+      "currentPath": "src/assets/e0fd18e1974bd95855a2de171535d160bd4bc63e.png",
+      "futurePath": "/assets/images/services/data-strategy.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/76b02f6059883d09d11f4c3a88fd01cd8d66aa9a.png",
+    "filename": "data-engineering.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/services/data-engineering.png",
+    "size": 601547,
+    "item": {
+      "hash": "76b02f6059883d09d11f4c3a88fd01cd8d66aa9a",
+      "file": "src/app/public/pages/ServiceDetailPage.tsx",
+      "variable": "dataEngineeringImage",
+      "currentPath": "src/assets/76b02f6059883d09d11f4c3a88fd01cd8d66aa9a.png",
+      "futurePath": "/assets/images/services/data-engineering.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/1299c30cdfc96cd0398b9935d436448d0134427e.png",
+    "filename": "advanced-analytics.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/services/advanced-analytics.png",
+    "size": 1015420,
+    "item": {
+      "hash": "1299c30cdfc96cd0398b9935d436448d0134427e",
+      "file": "src/app/public/pages/ServiceDetailPage.tsx",
+      "variable": "advancedAnalyticsImage",
+      "currentPath": "src/assets/1299c30cdfc96cd0398b9935d436448d0134427e.png",
+      "futurePath": "/assets/images/services/advanced-analytics.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/f7cb664cad0f1746ea9066ed03e99d14705dcb0a.png",
+    "filename": "artificial-intelligence.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/services/artificial-intelligence.png",
+    "size": 1205439,
+    "item": {
+      "hash": "f7cb664cad0f1746ea9066ed03e99d14705dcb0a",
+      "file": "src/app/public/pages/ServiceDetailPage.tsx",
+      "variable": "artificialIntelligenceImage",
+      "currentPath": "src/assets/f7cb664cad0f1746ea9066ed03e99d14705dcb0a.png",
+      "futurePath": "/assets/images/services/artificial-intelligence.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/6b516d23f0f656858f47ef4bf97125f4c1f98dbe.png",
+    "filename": "data-platforms.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/services/data-platforms.png",
+    "size": 1207630,
+    "item": {
+      "hash": "6b516d23f0f656858f47ef4bf97125f4c1f98dbe",
+      "file": "src/app/public/pages/ServiceDetailPage.tsx",
+      "variable": "dataPlatformsImage",
+      "currentPath": "src/assets/6b516d23f0f656858f47ef4bf97125f4c1f98dbe.png",
+      "futurePath": "/assets/images/services/data-platforms.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/0aa3ccc9e83c8e7482164db714ed3d7d8e5ceb33.png",
+    "filename": "data-operations.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/services/data-operations.png",
+    "size": 786263,
+    "item": {
+      "hash": "0aa3ccc9e83c8e7482164db714ed3d7d8e5ceb33",
+      "file": "src/app/public/pages/ServiceDetailPage.tsx",
+      "variable": "dataOperationsImage",
+      "currentPath": "src/assets/0aa3ccc9e83c8e7482164db714ed3d7d8e5ceb33.png",
+      "futurePath": "/assets/images/services/data-operations.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/48829b35c832ac4a631d74dcfd8ac69d34b0adfa.png",
+    "filename": "microsoft.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/microsoft.png",
+    "size": 39713,
+    "item": {
+      "hash": "48829b35c832ac4a631d74dcfd8ac69d34b0adfa",
+      "file": "src/app/public/pages/ServiceDetailPage.tsx",
+      "variable": "microsoftLogo",
+      "currentPath": "src/assets/48829b35c832ac4a631d74dcfd8ac69d34b0adfa.png",
+      "futurePath": "/assets/logos/partners/microsoft.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/0f1a314fdbee8b957c6504f8fff0a07b3918b269.png",
+    "filename": "snowflake.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/snowflake.png",
+    "size": 123987,
+    "item": {
+      "hash": "0f1a314fdbee8b957c6504f8fff0a07b3918b269",
+      "file": "src/app/public/pages/ServiceDetailPage.tsx",
+      "variable": "snowflakeLogo",
+      "currentPath": "src/assets/0f1a314fdbee8b957c6504f8fff0a07b3918b269.png",
+      "futurePath": "/assets/logos/partners/snowflake.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/d77c1b8e6a9a1a6f84c17715022360c027287a95.png",
+    "filename": "databricks.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/databricks.png",
+    "size": 89351,
+    "item": {
+      "hash": "d77c1b8e6a9a1a6f84c17715022360c027287a95",
+      "file": "src/app/public/pages/ServiceDetailPage.tsx",
+      "variable": "databricksLogo",
+      "currentPath": "src/assets/d77c1b8e6a9a1a6f84c17715022360c027287a95.png",
+      "futurePath": "/assets/logos/partners/databricks.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/809f376c4277570a490e5d7e959560b3df1ea78b.png",
+    "filename": "google-cloud.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/google-cloud.png",
+    "size": 124141,
+    "item": {
+      "hash": "809f376c4277570a490e5d7e959560b3df1ea78b",
+      "file": "src/app/public/pages/ServiceDetailPage.tsx",
+      "variable": "googleCloudLogo",
+      "currentPath": "src/assets/809f376c4277570a490e5d7e959560b3df1ea78b.png",
+      "futurePath": "/assets/logos/partners/google-cloud.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/b8142854237a06a23c35b902808cc4d698f6938b.png",
+    "filename": "aws.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/aws.png",
+    "size": 71003,
+    "item": {
+      "hash": "b8142854237a06a23c35b902808cc4d698f6938b",
+      "file": "src/app/public/pages/ServiceDetailPage.tsx",
+      "variable": "awsLogo",
+      "currentPath": "src/assets/b8142854237a06a23c35b902808cc4d698f6938b.png",
+      "futurePath": "/assets/logos/partners/aws.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/921b886abff2b12e01dec8866e9d861ee838fd1b.png",
+    "filename": "case-studies-index.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/hero/case-studies-index.png",
+    "size": 3078540,
+    "item": {
+      "hash": "921b886abff2b12e01dec8866e9d861ee838fd1b",
+      "file": "src/app/public/pages/CaseStudiesIndex.tsx",
+      "variable": "heroImage",
+      "currentPath": "src/assets/921b886abff2b12e01dec8866e9d861ee838fd1b.png",
+      "futurePath": "/assets/images/hero/case-studies-index.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/48829b35c832ac4a631d74dcfd8ac69d34b0adfa.png",
+    "filename": "microsoft.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/microsoft.png",
+    "size": 39713,
+    "item": {
+      "hash": "48829b35c832ac4a631d74dcfd8ac69d34b0adfa",
+      "file": "src/app/public/pages/CaseStudiesIndex.tsx",
+      "variable": "microsoftLogo",
+      "currentPath": "src/assets/48829b35c832ac4a631d74dcfd8ac69d34b0adfa.png",
+      "futurePath": "/assets/logos/partners/microsoft.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/0f1a314fdbee8b957c6504f8fff0a07b3918b269.png",
+    "filename": "snowflake.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/snowflake.png",
+    "size": 123987,
+    "item": {
+      "hash": "0f1a314fdbee8b957c6504f8fff0a07b3918b269",
+      "file": "src/app/public/pages/CaseStudiesIndex.tsx",
+      "variable": "snowflakeLogo",
+      "currentPath": "src/assets/0f1a314fdbee8b957c6504f8fff0a07b3918b269.png",
+      "futurePath": "/assets/logos/partners/snowflake.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/d77c1b8e6a9a1a6f84c17715022360c027287a95.png",
+    "filename": "databricks.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/databricks.png",
+    "size": 89351,
+    "item": {
+      "hash": "d77c1b8e6a9a1a6f84c17715022360c027287a95",
+      "file": "src/app/public/pages/CaseStudiesIndex.tsx",
+      "variable": "databricksLogo",
+      "currentPath": "src/assets/d77c1b8e6a9a1a6f84c17715022360c027287a95.png",
+      "futurePath": "/assets/logos/partners/databricks.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/809f376c4277570a490e5d7e959560b3df1ea78b.png",
+    "filename": "google-cloud.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/google-cloud.png",
+    "size": 124141,
+    "item": {
+      "hash": "809f376c4277570a490e5d7e959560b3df1ea78b",
+      "file": "src/app/public/pages/CaseStudiesIndex.tsx",
+      "variable": "googleCloudLogo",
+      "currentPath": "src/assets/809f376c4277570a490e5d7e959560b3df1ea78b.png",
+      "futurePath": "/assets/logos/partners/google-cloud.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/b8142854237a06a23c35b902808cc4d698f6938b.png",
+    "filename": "aws.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/aws.png",
+    "size": 71003,
+    "item": {
+      "hash": "b8142854237a06a23c35b902808cc4d698f6938b",
+      "file": "src/app/public/pages/CaseStudiesIndex.tsx",
+      "variable": "awsLogo",
+      "currentPath": "src/assets/b8142854237a06a23c35b902808cc4d698f6938b.png",
+      "futurePath": "/assets/logos/partners/aws.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/2e14479f6b7066197b9d67ffd124097086808a61.png",
+    "filename": "ins.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/clients/ins.png",
+    "size": 111404,
+    "item": {
+      "hash": "2e14479f6b7066197b9d67ffd124097086808a61",
+      "file": "src/app/public/pages/CaseStudiesIndex.tsx",
+      "variable": "insLogo",
+      "currentPath": "src/assets/2e14479f6b7066197b9d67ffd124097086808a61.png",
+      "futurePath": "/assets/logos/clients/ins.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/06b06e1855dac275c8812f9479d406e8e9c1ca79.png",
+    "filename": "velez.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/clients/velez.png",
+    "size": 46892,
+    "item": {
+      "hash": "06b06e1855dac275c8812f9479d406e8e9c1ca79",
+      "file": "src/app/public/pages/CaseStudiesIndex.tsx",
+      "variable": "velezLogo",
+      "currentPath": "src/assets/06b06e1855dac275c8812f9479d406e8e9c1ca79.png",
+      "futurePath": "/assets/logos/clients/velez.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/fea3a17e7a6ead1a7633740672cbe99a239fd082.png",
+    "filename": "nadro.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/clients/nadro.png",
+    "size": 11153,
+    "item": {
+      "hash": "fea3a17e7a6ead1a7633740672cbe99a239fd082",
+      "file": "src/app/public/pages/CaseStudiesIndex.tsx",
+      "variable": "nadroLogo",
+      "currentPath": "src/assets/fea3a17e7a6ead1a7633740672cbe99a239fd082.png",
+      "futurePath": "/assets/logos/clients/nadro.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/c1c9d7e7386341aeb2920aa7bd64068809822c14.png",
+    "filename": "haceb.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/clients/haceb.png",
+    "size": 26397,
+    "item": {
+      "hash": "c1c9d7e7386341aeb2920aa7bd64068809822c14",
+      "file": "src/app/public/pages/CaseStudiesIndex.tsx",
+      "variable": "hacebLogo",
+      "currentPath": "src/assets/c1c9d7e7386341aeb2920aa7bd64068809822c14.png",
+      "futurePath": "/assets/logos/clients/haceb.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/7f2a0e2d34d7f6af4acad574a9b15fad31a6695f.png",
+    "filename": "jfk.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/clients/jfk.png",
+    "size": 49081,
+    "item": {
+      "hash": "7f2a0e2d34d7f6af4acad574a9b15fad31a6695f",
+      "file": "src/app/public/pages/CaseStudiesIndex.tsx",
+      "variable": "jfkLogo",
+      "currentPath": "src/assets/7f2a0e2d34d7f6af4acad574a9b15fad31a6695f.png",
+      "futurePath": "/assets/logos/clients/jfk.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/c1583c61ef791e553848a046849ced947984afb5.png",
+    "filename": "davis.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/clients/davis.png",
+    "size": 43031,
+    "item": {
+      "hash": "c1583c61ef791e553848a046849ced947984afb5",
+      "file": "src/app/public/pages/CaseStudiesIndex.tsx",
+      "variable": "davisLogo",
+      "currentPath": "src/assets/c1583c61ef791e553848a046849ced947984afb5.png",
+      "futurePath": "/assets/logos/clients/davis.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/48829b35c832ac4a631d74dcfd8ac69d34b0adfa.png",
+    "filename": "microsoft.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/microsoft.png",
+    "size": 39713,
+    "item": {
+      "hash": "48829b35c832ac4a631d74dcfd8ac69d34b0adfa",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "microsoftLogo",
+      "currentPath": "src/assets/48829b35c832ac4a631d74dcfd8ac69d34b0adfa.png",
+      "futurePath": "/assets/logos/partners/microsoft.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/0f1a314fdbee8b957c6504f8fff0a07b3918b269.png",
+    "filename": "snowflake.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/snowflake.png",
+    "size": 123987,
+    "item": {
+      "hash": "0f1a314fdbee8b957c6504f8fff0a07b3918b269",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "snowflakeLogo",
+      "currentPath": "src/assets/0f1a314fdbee8b957c6504f8fff0a07b3918b269.png",
+      "futurePath": "/assets/logos/partners/snowflake.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/d77c1b8e6a9a1a6f84c17715022360c027287a95.png",
+    "filename": "databricks.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/databricks.png",
+    "size": 89351,
+    "item": {
+      "hash": "d77c1b8e6a9a1a6f84c17715022360c027287a95",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "databricksLogo",
+      "currentPath": "src/assets/d77c1b8e6a9a1a6f84c17715022360c027287a95.png",
+      "futurePath": "/assets/logos/partners/databricks.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/809f376c4277570a490e5d7e959560b3df1ea78b.png",
+    "filename": "google-cloud.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/google-cloud.png",
+    "size": 124141,
+    "item": {
+      "hash": "809f376c4277570a490e5d7e959560b3df1ea78b",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "googleCloudLogo",
+      "currentPath": "src/assets/809f376c4277570a490e5d7e959560b3df1ea78b.png",
+      "futurePath": "/assets/logos/partners/google-cloud.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/b8142854237a06a23c35b902808cc4d698f6938b.png",
+    "filename": "aws.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/aws.png",
+    "size": 71003,
+    "item": {
+      "hash": "b8142854237a06a23c35b902808cc4d698f6938b",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "awsLogo",
+      "currentPath": "src/assets/b8142854237a06a23c35b902808cc4d698f6938b.png",
+      "futurePath": "/assets/logos/partners/aws.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/64c2a94903fc2aeb8877fc1cde125accceae6357.png",
+    "filename": "ins-hero.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/case-studies/ins-hero.png",
+    "size": 1298647,
+    "item": {
+      "hash": "64c2a94903fc2aeb8877fc1cde125accceae6357",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "insHeroImage",
+      "currentPath": "src/assets/64c2a94903fc2aeb8877fc1cde125accceae6357.png",
+      "futurePath": "/assets/images/case-studies/ins-hero.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/95f5231b46b50e1e0563f086e023eda105bcf13b.png",
+    "filename": "data-architecture-hero.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/case-studies/data-architecture-hero.png",
+    "size": 2317738,
+    "item": {
+      "hash": "95f5231b46b50e1e0563f086e023eda105bcf13b",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "dataArchitectureHero",
+      "currentPath": "src/assets/95f5231b46b50e1e0563f086e023eda105bcf13b.png",
+      "futurePath": "/assets/images/case-studies/data-architecture-hero.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/2fe699e45c2e6cb3f77d2eab2fbd09019e366523.png",
+    "filename": "haceb-hero.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/case-studies/haceb-hero.png",
+    "size": 1476549,
+    "item": {
+      "hash": "2fe699e45c2e6cb3f77d2eab2fbd09019e366523",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "hacebHeroImage",
+      "currentPath": "src/assets/2fe699e45c2e6cb3f77d2eab2fbd09019e366523.png",
+      "futurePath": "/assets/images/case-studies/haceb-hero.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/2e14479f6b7066197b9d67ffd124097086808a61.png",
+    "filename": "ins.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/clients/ins.png",
+    "size": 111404,
+    "item": {
+      "hash": "2e14479f6b7066197b9d67ffd124097086808a61",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "insLogo",
+      "currentPath": "src/assets/2e14479f6b7066197b9d67ffd124097086808a61.png",
+      "futurePath": "/assets/logos/clients/ins.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/06b06e1855dac275c8812f9479d406e8e9c1ca79.png",
+    "filename": "velez.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/clients/velez.png",
+    "size": 46892,
+    "item": {
+      "hash": "06b06e1855dac275c8812f9479d406e8e9c1ca79",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "velezLogo",
+      "currentPath": "src/assets/06b06e1855dac275c8812f9479d406e8e9c1ca79.png",
+      "futurePath": "/assets/logos/clients/velez.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/fea3a17e7a6ead1a7633740672cbe99a239fd082.png",
+    "filename": "nadro.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/clients/nadro.png",
+    "size": 11153,
+    "item": {
+      "hash": "fea3a17e7a6ead1a7633740672cbe99a239fd082",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "nadroLogo",
+      "currentPath": "src/assets/fea3a17e7a6ead1a7633740672cbe99a239fd082.png",
+      "futurePath": "/assets/logos/clients/nadro.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/c1c9d7e7386341aeb2920aa7bd64068809822c14.png",
+    "filename": "haceb.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/clients/haceb.png",
+    "size": 26397,
+    "item": {
+      "hash": "c1c9d7e7386341aeb2920aa7bd64068809822c14",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "hacebLogo",
+      "currentPath": "src/assets/c1c9d7e7386341aeb2920aa7bd64068809822c14.png",
+      "futurePath": "/assets/logos/clients/haceb.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/7f2a0e2d34d7f6af4acad574a9b15fad31a6695f.png",
+    "filename": "jfk.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/clients/jfk.png",
+    "size": 49081,
+    "item": {
+      "hash": "7f2a0e2d34d7f6af4acad574a9b15fad31a6695f",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "jfkLogo",
+      "currentPath": "src/assets/7f2a0e2d34d7f6af4acad574a9b15fad31a6695f.png",
+      "futurePath": "/assets/logos/clients/jfk.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/c1583c61ef791e553848a046849ced947984afb5.png",
+    "filename": "davis.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/clients/davis.png",
+    "size": 43031,
+    "item": {
+      "hash": "c1583c61ef791e553848a046849ced947984afb5",
+      "file": "src/app/public/pages/CaseStudyDetail.tsx",
+      "variable": "davisLogo",
+      "currentPath": "src/assets/c1583c61ef791e553848a046849ced947984afb5.png",
+      "futurePath": "/assets/logos/clients/davis.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/f13e93a5336016cfdd179a5fe66e5a9ffb036446.png",
+    "filename": "business-analytics.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/hero/business-analytics.png",
+    "size": 4238132,
+    "item": {
+      "hash": "f13e93a5336016cfdd179a5fe66e5a9ffb036446",
+      "file": "src/app/public/components/hero/BannerCarousel.tsx",
+      "variable": "businessAnalytics",
+      "currentPath": "src/assets/f13e93a5336016cfdd179a5fe66e5a9ffb036446.png",
+      "futurePath": "/assets/images/hero/business-analytics.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/b86f9f238fc505b2a767d919802c20b3a7008a07.png",
+    "filename": "touch-interface.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/hero/touch-interface.png",
+    "size": 5994525,
+    "item": {
+      "hash": "b86f9f238fc505b2a767d919802c20b3a7008a07",
+      "file": "src/app/public/components/hero/BannerCarousel.tsx",
+      "variable": "touchInterface",
+      "currentPath": "src/assets/b86f9f238fc505b2a767d919802c20b3a7008a07.png",
+      "futurePath": "/assets/images/hero/touch-interface.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/31f47165e77b4832ecdf1b4454b8ab4690c8b1a8.png",
+    "filename": "data-visualization.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/hero/data-visualization.png",
+    "size": 1537253,
+    "item": {
+      "hash": "31f47165e77b4832ecdf1b4454b8ab4690c8b1a8",
+      "file": "src/app/public/components/hero/BannerCarousel.tsx",
+      "variable": "dataVisualization",
+      "currentPath": "src/assets/31f47165e77b4832ecdf1b4454b8ab4690c8b1a8.png",
+      "futurePath": "/assets/images/hero/data-visualization.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/6707a99b3f00e8781810e4a2da4770218ad1d3d1.png",
+    "filename": "databricks.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/databricks.png",
+    "size": 33885,
+    "item": {
+      "hash": "6707a99b3f00e8781810e4a2da4770218ad1d3d1",
+      "file": "src/app/public/components/sections/PartnersSection.tsx",
+      "variable": "databricksLogo",
+      "currentPath": "src/assets/6707a99b3f00e8781810e4a2da4770218ad1d3d1.png",
+      "futurePath": "/assets/logos/partners/databricks.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/39c219b2f06de4cb5909c4a548597fc419ee1c9c.png",
+    "filename": "microsoft.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/microsoft.png",
+    "size": 12123,
+    "item": {
+      "hash": "39c219b2f06de4cb5909c4a548597fc419ee1c9c",
+      "file": "src/app/public/components/sections/PartnersSection.tsx",
+      "variable": "microsoftLogo",
+      "currentPath": "src/assets/39c219b2f06de4cb5909c4a548597fc419ee1c9c.png",
+      "futurePath": "/assets/logos/partners/microsoft.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/624953b8852fe92d4f63e7605e72b0549ba81c89.png",
+    "filename": "td-synnex.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/partners/td-synnex.png",
+    "size": 42459,
+    "item": {
+      "hash": "624953b8852fe92d4f63e7605e72b0549ba81c89",
+      "file": "src/app/public/components/sections/PartnersSection.tsx",
+      "variable": "tdSynnexLogo",
+      "currentPath": "src/assets/624953b8852fe92d4f63e7605e72b0549ba81c89.png",
+      "futurePath": "/assets/logos/partners/td-synnex.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/4c7049aaff013a605e31fb46a88d0dba9bdf9428.png",
+    "filename": "logo-complete.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/brand/logo-complete.png",
+    "size": 4792,
+    "item": {
+      "hash": "4c7049aaff013a605e31fb46a88d0dba9bdf9428",
+      "file": "src/app/public/components/Footer.tsx",
+      "variable": "logoComplete",
+      "currentPath": "src/assets/4c7049aaff013a605e31fb46a88d0dba9bdf9428.png",
+      "futurePath": "/assets/logos/brand/logo-complete.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/4c7049aaff013a605e31fb46a88d0dba9bdf9428.png",
+    "filename": "logo-complete.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/logos/brand/logo-complete.png",
+    "size": 4792,
+    "item": {
+      "hash": "4c7049aaff013a605e31fb46a88d0dba9bdf9428",
+      "file": "src/app/public/components/Header.tsx",
+      "variable": "logoComplete",
+      "currentPath": "src/assets/4c7049aaff013a605e31fb46a88d0dba9bdf9428.png",
+      "futurePath": "/assets/logos/brand/logo-complete.png",
+      "status": "pending"
+    }
+  },
+  {
+    "url": "https://sorted-ashen-34968367.figma.site/_assets/v11/0672d1e82b63fbb8a1b13c17fdbe095b353950ff.png",
+    "filename": "insights.png",
+    "localPath": "/Users/tacma/Desktop/Web iData/public/assets/images/hero/insights.png",
+    "size": 6221910,
+    "item": {
+      "hash": "0672d1e82b63fbb8a1b13c17fdbe095b353950ff",
+      "file": "src/app/public/components/insights/InsightsHero.tsx",
+      "variable": "heroImage",
+      "currentPath": "src/assets/0672d1e82b63fbb8a1b13c17fdbe095b353950ff.png",
+      "futurePath": "/assets/images/hero/insights.png",
+      "status": "pending"
+    }
+  }
+]

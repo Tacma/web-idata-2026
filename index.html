@@ -1,0 +1,48 @@
+
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      <link rel="manifest" href="/site.webmanifest" />
+      <meta
+        name="description"
+        content="iData Global delivers Data Analytics, AI and ML solutions for LATAM, the United States and Europe."
+      />
+      <meta name="theme-color" content="#4387DF" />
+      <title>iData Global</title>
+      <script>
+        (function () {
+          var path = window.location.pathname;
+          var hasLanguagePrefix = path === '/en' || path === '/es' || path.startsWith('/en/') || path.startsWith('/es/');
+          var isAdminRoute = path === '/admin' || path.startsWith('/admin/');
+
+          if (!hasLanguagePrefix && !isAdminRoute) {
+            var normalizedPath = path === '/' ? '/en/' : '/en' + path;
+            window.location.replace(normalizedPath + window.location.search + window.location.hash);
+          }
+        })();
+      </script>
+      <script>
+        (function () {
+          var storageKey = 'idata-theme';
+          var storedTheme = window.localStorage.getItem(storageKey);
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : (prefersDark ? 'dark' : 'light');
+          var root = document.documentElement;
+          root.dataset.theme = theme;
+          root.style.colorScheme = theme;
+          if (theme === 'dark') {
+            root.classList.add('dark');
+          }
+        })();
+      </script>
+    </head>
+
+    <body>
+      <div id="root"></div>
+      <script type="module" src="/src/main.tsx"></script>
+    </body>
+  </html>
+  

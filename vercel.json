@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/admin/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/es/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/en/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/((?!assets/|favicon\\.svg|site\\.webmanifest|robots\\.txt|sitemap\\.xml).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

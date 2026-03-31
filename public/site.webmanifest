@@ -1,0 +1,17 @@
+{
+  "name": "iData Global",
+  "short_name": "iData",
+  "description": "Data Analytics, AI and ML solutions for LATAM, United States and Europe.",
+  "start_url": "/en/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4387DF",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

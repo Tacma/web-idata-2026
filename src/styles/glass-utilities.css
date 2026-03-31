@@ -1,0 +1,230 @@
+/**
+ * Apple Liquid Glass System - Glassmorphism Utilities
+ * Inspired by macOS Big Sur, iOS, and Apple's design language
+ */
+
+@layer utilities {
+  /* Base Glass Classes */
+  .glass-light {
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(var(--glass-blur-light));
+    -webkit-backdrop-filter: blur(var(--glass-blur-light));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow-sm);
+  }
+
+  .glass-medium {
+    background: var(--glass-bg-medium);
+    backdrop-filter: blur(var(--glass-blur-medium));
+    -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow-md);
+  }
+
+  .glass-heavy {
+    background: var(--glass-bg-heavy);
+    backdrop-filter: blur(var(--glass-blur-heavy));
+    -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow-lg);
+  }
+
+  /* Card Variants */
+  .glass-card {
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(var(--glass-blur-medium));
+    -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius-lg);
+    box-shadow: var(--glass-shadow-md);
+    color: var(--glass-text-primary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card:hover {
+    background: var(--glass-bg-medium);
+    box-shadow: var(--glass-shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  /* Button Variants */
+  .glass-button {
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(var(--glass-blur-light));
+    -webkit-backdrop-filter: blur(var(--glass-blur-light));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius-md);
+    box-shadow: var(--glass-shadow-sm);
+    color: var(--glass-text-primary);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-button:hover {
+    background: var(--glass-bg-medium);
+    box-shadow: var(--glass-shadow-md);
+    transform: scale(1.02);
+  }
+
+  .glass-button:active {
+    transform: scale(0.98);
+    box-shadow: var(--glass-shadow-sm);
+  }
+
+  /* Navigation Bar */
+  .glass-nav {
+    background: var(--glass-bg-heavy);
+    backdrop-filter: blur(var(--glass-blur-heavy)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--glass-blur-heavy)) saturate(180%);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow-sm);
+  }
+
+  /* Modal/Dialog */
+  .glass-modal {
+    background: var(--glass-bg-heavy);
+    backdrop-filter: blur(var(--glass-blur-heavy));
+    -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius-xl);
+    box-shadow: var(--glass-shadow-xl);
+  }
+
+  /* Input Fields */
+  .glass-input {
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(var(--glass-blur-light));
+    -webkit-backdrop-filter: blur(var(--glass-blur-light));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius-sm);
+    box-shadow: var(--glass-shadow-sm);
+    color: var(--glass-text-primary);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-input:focus {
+    background: var(--glass-bg-medium);
+    box-shadow: var(--glass-shadow-md);
+    border-color: rgba(67, 135, 223, 0.5);
+  }
+
+  /* Panel/Sidebar */
+  .glass-panel {
+    background: var(--glass-bg-medium);
+    backdrop-filter: blur(var(--glass-blur-medium)) saturate(150%);
+    -webkit-backdrop-filter: blur(var(--glass-blur-medium)) saturate(150%);
+    border-right: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow-md);
+  }
+
+  /* Popover/Tooltip */
+  .glass-popover {
+    background: var(--glass-bg-heavy);
+    backdrop-filter: blur(var(--glass-blur-heavy));
+    -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius-md);
+    box-shadow: var(--glass-shadow-lg);
+  }
+
+  /* Tag/Badge */
+  .glass-badge {
+    background: var(--glass-bg-medium);
+    backdrop-filter: blur(var(--glass-blur-light));
+    -webkit-backdrop-filter: blur(var(--glass-blur-light));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius-sm);
+    box-shadow: var(--glass-shadow-sm);
+  }
+
+  /* Utility Classes */
+  .glass-shadow-sm {
+    box-shadow: var(--glass-shadow-sm);
+  }
+
+  .glass-shadow-md {
+    box-shadow: var(--glass-shadow-md);
+  }
+
+  .glass-shadow-lg {
+    box-shadow: var(--glass-shadow-lg);
+  }
+
+  .glass-shadow-xl {
+    box-shadow: var(--glass-shadow-xl);
+  }
+
+  .glass-border {
+    border: 1px solid var(--glass-border);
+  }
+
+  .glass-radius-sm {
+    border-radius: var(--glass-radius-sm);
+  }
+
+  .glass-radius-md {
+    border-radius: var(--glass-radius-md);
+  }
+
+  .glass-radius-lg {
+    border-radius: var(--glass-radius-lg);
+  }
+
+  .glass-radius-xl {
+    border-radius: var(--glass-radius-xl);
+  }
+
+  /* Backdrop Blur Utilities */
+  .backdrop-blur-light {
+    backdrop-filter: blur(var(--glass-blur-light));
+    -webkit-backdrop-filter: blur(var(--glass-blur-light));
+  }
+
+  .backdrop-blur-medium {
+    backdrop-filter: blur(var(--glass-blur-medium));
+    -webkit-backdrop-filter: blur(var(--glass-blur-medium));
+  }
+
+  .backdrop-blur-heavy {
+    backdrop-filter: blur(var(--glass-blur-heavy));
+    -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+  }
+
+  /* Hover States */
+  .glass-hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--glass-shadow-lg);
+  }
+
+  .glass-hover-scale:hover {
+    transform: scale(1.02);
+  }
+
+  .glass-hover-glow:hover {
+    box-shadow: var(--glass-shadow-lg), 0 0 24px rgba(67, 135, 223, 0.2);
+  }
+
+  /* Active/Pressed States */
+  .glass-active-press:active {
+    transform: scale(0.98);
+  }
+
+  /* Smooth Transitions */
+  .glass-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-transition-fast {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Apple-style Vibrancy Effects */
+  .glass-vibrancy-light {
+    backdrop-filter: blur(var(--glass-blur-medium)) saturate(180%) brightness(105%);
+    -webkit-backdrop-filter: blur(var(--glass-blur-medium)) saturate(180%) brightness(105%);
+  }
+
+  .glass-vibrancy-dark {
+    backdrop-filter: blur(var(--glass-blur-medium)) saturate(180%) brightness(95%);
+    -webkit-backdrop-filter: blur(var(--glass-blur-medium)) saturate(180%) brightness(95%);
+  }
+}
