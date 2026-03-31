@@ -31,10 +31,10 @@ export function IndustryHubSection({ industry, language }: IndustryHubSectionPro
         boxShadow: `0 24px 56px rgba(8,15,30,0.08), inset 0 1px 0 rgba(255,255,255,0.04), 0 0 0 1px ${tone.tint}`,
       }}
     >
-      <div className="grid gap-6 xl:grid-cols-[260px_minmax(0,1fr)] xl:items-start">
-        <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+      <div className="space-y-6">
+        <div className="grid gap-3 md:grid-cols-3">
           <div
-            className="overflow-hidden rounded-[24px] border p-5"
+            className="overflow-hidden rounded-[22px] border p-4"
             style={{
               borderColor: `${tone.border}40`,
               background: `radial-gradient(circle at top left, ${tone.tint}, transparent 45%), var(--surface-1)`,
@@ -52,16 +52,16 @@ export function IndustryHubSection({ industry, language }: IndustryHubSectionPro
               </span>
             </div>
 
-            <h2 className="mt-4 text-[clamp(1.6rem,2.4vw,2.4rem)] font-light leading-[0.96] tracking-[-0.05em] text-[var(--text-strong)]">
+            <h2 className="mt-3 text-[clamp(1.35rem,2vw,2rem)] font-light leading-[0.98] tracking-[-0.05em] text-[var(--text-strong)]">
               {industry.name}
             </h2>
 
             {industry.solutionTags.length > 0 ? (
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-3 flex flex-wrap gap-2">
                 {industry.solutionTags.slice(0, 4).map((tag) => (
                   <span
                     key={tag.id}
-                    className="rounded-full border border-[var(--line-soft)] bg-[var(--surface-0)] px-3 py-1.5 text-[11px] font-medium text-[var(--text-soft)]"
+                    className="rounded-full border border-[var(--line-soft)] bg-[var(--surface-0)] px-3 py-1 text-[10px] font-medium text-[var(--text-soft)]"
                   >
                     {tag.label}
                   </span>
@@ -71,7 +71,7 @@ export function IndustryHubSection({ industry, language }: IndustryHubSectionPro
           </div>
 
           <div
-            className="rounded-[24px] border p-4"
+            className="rounded-[22px] border p-4"
             style={{
               borderColor: `${tone.border}26`,
               background: `linear-gradient(180deg, ${tone.tint}, var(--surface-1))`,
@@ -80,9 +80,9 @@ export function IndustryHubSection({ industry, language }: IndustryHubSectionPro
             <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: tone.border }}>
               {language === 'es' ? 'Retos frecuentes' : 'Frequent challenges'}
             </p>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {industry.challenges.slice(0, 3).map((challenge) => (
-                <p key={challenge} className="text-sm leading-5 text-[var(--text-strong)]">
+                <p key={challenge} className="text-[0.95rem] leading-5 text-[var(--text-strong)]">
                   {challenge}
                 </p>
               ))}
@@ -90,7 +90,7 @@ export function IndustryHubSection({ industry, language }: IndustryHubSectionPro
           </div>
 
           <div
-            className="rounded-[24px] border p-4"
+            className="rounded-[22px] border p-4"
             style={{
               borderColor: `${tone.border}26`,
               background: `linear-gradient(180deg, rgba(255,255,255,0.02), ${tone.tint})`,
@@ -99,9 +99,9 @@ export function IndustryHubSection({ industry, language }: IndustryHubSectionPro
             <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: tone.border }}>
               {language === 'es' ? 'Valor que activamos' : 'Value we activate'}
             </p>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {industry.value.slice(0, 3).map((value) => (
-                <p key={value} className="text-sm leading-5 text-[var(--text-strong)]">
+                <p key={value} className="text-[0.95rem] leading-5 text-[var(--text-strong)]">
                   {value}
                 </p>
               ))}
@@ -109,7 +109,7 @@ export function IndustryHubSection({ industry, language }: IndustryHubSectionPro
           </div>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 2xl:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {industry.cases.map((caseStudy) => (
             <IndustryCaseCard key={caseStudy.id} caseStudy={caseStudy} language={language} />
           ))}

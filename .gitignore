@@ -27,7 +27,6 @@ coverage/
 
 # Large/raw media sources that should not be versioned
 public/assets/video/hero/home-fluid-shape.mov
-public/assets/video/hero/home-iridescent-light.mp4
 public/assets/video/hero/*pingpong.mov
 public/assets/video/hero/*pingpong.mp4
 public/assets/video/hero/home-fluid-shape.mp4

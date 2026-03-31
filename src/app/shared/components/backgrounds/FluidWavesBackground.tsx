@@ -18,7 +18,9 @@ export function FluidWavesBackground({
   const { theme } = useTheme();
   const resolvedTheme = colorScheme === 'auto' ? theme : colorScheme;
   const isDark = resolvedTheme === 'dark';
-  const videoSrc = '/assets/video/hero/home-fluid-shape-720p.mov';
+  const videoSrc = isDark
+    ? '/assets/video/hero/home-fluid-shape-720p.mov'
+    : '/assets/video/hero/home-iridescent-light.mp4';
   const videoFitClass = isDark
     ? 'object-cover object-[72%_50%] sm:object-contain sm:object-center'
     : 'object-cover object-[66%_50%] sm:object-cover sm:object-center';
@@ -30,7 +32,7 @@ export function FluidWavesBackground({
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) {
+    if (!video || !videoSrc) {
       return;
     }
 
@@ -98,7 +100,7 @@ export function FluidWavesBackground({
       video.removeEventListener('ended', handleLoadedMetadata);
       video.pause();
     };
-  }, [videoSrc]);
+  }, [isDark, videoSrc]);
 
   return (
     <div
@@ -115,29 +117,31 @@ export function FluidWavesBackground({
       />
 
       <div className="absolute inset-0 flex items-center justify-end overflow-hidden">
-        <div className="relative h-[118%] w-[132%] sm:h-[104%] sm:w-[88%] md:h-[112%] md:w-[78%]">
-          <video
-            key={videoSrc}
-            ref={videoRef}
-            className={`absolute inset-0 h-full w-full will-change-[opacity,filter,transform] ${videoFitClass} ${videoMotionClass}`}
-            autoPlay
-            muted
-            playsInline
-            preload="metadata"
-            disablePictureInPicture
-            src={videoSrc}
-          />
+        {videoSrc ? (
+          <div className="relative h-[118%] w-[132%] sm:h-[104%] sm:w-[88%] md:h-[112%] md:w-[78%]">
+            <video
+              key={videoSrc}
+              ref={videoRef}
+              className={`absolute inset-0 h-full w-full will-change-[opacity,filter,transform] ${videoFitClass} ${videoMotionClass}`}
+              autoPlay
+              muted
+              playsInline
+              preload="metadata"
+              disablePictureInPicture
+              src={videoSrc}
+            />
 
-          <div
-            className="absolute inset-0"
-            style={{
-              background: isDark
-                ? 'radial-gradient(circle at 60% 48%, rgba(255,242,252,0.05) 0%, rgba(255,255,255,0.01) 22%, rgba(0,0,0,0.08) 54%, rgba(0,0,0,0.72) 100%), linear-gradient(180deg, rgba(24,0,18,0.18) 0%, rgba(0,0,0,0.02) 30%, rgba(24,0,18,0.18) 100%)'
-                : 'radial-gradient(circle at 60% 48%, rgba(255,255,255,0.12) 0%, rgba(255,245,251,0.08) 24%, rgba(246,230,244,0.08) 58%, rgba(247,237,247,0.16) 100%), linear-gradient(180deg, rgba(247,236,246,0.18) 0%, rgba(247,236,246,0.02) 30%, rgba(248,235,246,0.18) 100%)',
-              mixBlendMode: 'screen',
-            }}
-          />
-        </div>
+            <div
+              className="absolute inset-0"
+              style={{
+                background: isDark
+                  ? 'radial-gradient(circle at 60% 48%, rgba(255,242,252,0.05) 0%, rgba(255,255,255,0.01) 22%, rgba(0,0,0,0.08) 54%, rgba(0,0,0,0.72) 100%), linear-gradient(180deg, rgba(24,0,18,0.18) 0%, rgba(0,0,0,0.02) 30%, rgba(24,0,18,0.18) 100%)'
+                  : 'radial-gradient(circle at 62% 42%, rgba(255,255,255,0.14) 0%, rgba(255,245,251,0.08) 24%, rgba(246,230,244,0.08) 58%, rgba(247,237,247,0.16) 100%), linear-gradient(180deg, rgba(247,236,246,0.12) 0%, rgba(247,236,246,0.02) 30%, rgba(248,235,246,0.16) 100%)',
+                mixBlendMode: 'screen',
+              }}
+            />
+          </div>
+        ) : null}
       </div>
 
       <div
