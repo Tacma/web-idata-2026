@@ -347,7 +347,7 @@ export function EventDetail() {
                       </div>
 
                       <div className={`space-y-4 rounded-[22px] border p-4 ${isDark ? 'border-white/10 bg-white/6' : 'border-slate-200 bg-white'}`}>
-                        <label className="flex items-start gap-3">
+                        <label className="flex items-center gap-3">
                           <Checkbox
                             checked={form.dataConsent}
                             onCheckedChange={(checked) => setForm((current) => ({ ...current, dataConsent: checked === true }))}
@@ -362,7 +362,7 @@ export function EventDetail() {
                           </span>
                         </label>
 
-                        <label className="flex items-start gap-3">
+                        <label className="flex items-center gap-3">
                           <Checkbox
                             checked={form.updatesConsent}
                             onCheckedChange={(checked) => setForm((current) => ({ ...current, updatesConsent: checked === true }))}

@@ -311,16 +311,16 @@ export function InsightsIndex() {
                           <h3 className={`mt-4 text-[1.02rem] font-medium leading-[1.08] tracking-[-0.04em] ${isDark ? 'text-white' : 'text-slate-950'}`}>
                             {event.title}
                           </h3>
-                          <p className={`mt-3 min-h-[84px] text-[12px] leading-5 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                          <p className={`mt-3 min-h-[72px] text-[12px] leading-5 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                             {event.description}
                           </p>
 
-                          <div className="mt-auto pt-5">
-                            <div className={`flex w-full items-center justify-center gap-4 rounded-[18px] border px-4 py-3 shadow-sm ${isDark ? 'border-white/10 bg-white/6' : 'border-slate-200 bg-white'}`}>
+                          <div className="mt-auto pt-3">
+                            <div className={`flex w-full items-center justify-center gap-4 rounded-[18px] border px-4 py-2 shadow-sm ${isDark ? 'border-white/10 bg-white/6' : 'border-slate-200 bg-white'}`}>
                               {(event.sponsorLogos || []).slice(0, 2).map((logo: string, logoIndex: number) => (
                                 <span
                                   key={`${event.id}-${logo}-${logoIndex}`}
-                                  className="flex h-11 flex-1 items-center justify-center"
+                                  className="flex h-9 flex-1 items-center justify-center"
                                 >
                                   <img src={logo} alt="" className="partner-logo-adaptive max-h-8 w-full object-contain" />
                                 </span>

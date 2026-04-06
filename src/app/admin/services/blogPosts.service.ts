@@ -1,6 +1,7 @@
 import { supabase } from '../../../lib/supabaseClient';
 import { filterVisibleInsights } from '../../../services/insightVisibility';
 import { normalizeBlogPost } from '../../../services/contentUtils';
+import { hydrateBlogPostCollection, hydrateBlogPostDetail } from '../../../services/blogFallbacks';
 
 export async function getAllBlogPosts(filters?: { status?: string }): Promise<any[]> {
   let query = supabase.from('blog_posts').select('*');
@@ -12,7 +13,7 @@ export async function getAllBlogPosts(filters?: { status?: string }): Promise<an
   const { data, error } = await query.order('published_date', { ascending: false });
 
   if (error) throw error;
-  return filterVisibleInsights((data || []).map(normalizeBlogPost));
+  return filterVisibleInsights(hydrateBlogPostCollection(data || [])).map(normalizeBlogPost);
 }
 
 export async function getBlogPostById(id: string): Promise<any | null> {
@@ -23,7 +24,7 @@ export async function getBlogPostById(id: string): Promise<any | null> {
     .single();
 
   if (error) return null;
-  return data;
+  return hydrateBlogPostDetail(data);
 }
 
 export async function createBlogPost(post: any): Promise<any> {
