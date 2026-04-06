@@ -1,12 +1,15 @@
 import { Link, useLocation, useNavigate } from 'react-router';
 import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Language } from '../../types';
 import { getLanguageFromPath, t } from '../../utils/i18n';
 
 interface HeaderProps {
   language: Language;
 }
+
+const DESKTOP_BREAKPOINT = 768;
+const FULL_DESKTOP_NAV_WIDTH = 1280;
 
 // Mapeo de rutas principales entre ES y EN
 const routeMapping: Record<string, string> = {
@@ -32,8 +35,11 @@ const routeMapping: Record<string, string> = {
 
 export function Header({ language }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [forceMobileMenu, setForceMobileMenu] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const headerRowRef = useRef<HTMLDivElement>(null);
+  const desktopNavRef = useRef<HTMLElement>(null);
 
   const getNavItems = (lang: Language) => [
     { label: t('services', lang), href: `/${lang}/${lang === 'es' ? 'servicios' : 'services'}` },
@@ -45,6 +51,63 @@ export function Header({ language }: HeaderProps) {
   ];
 
   const navItems = getNavItems(language);
+
+  useEffect(() => {
+    const measureHeader = () => {
+      const headerRow = headerRowRef.current;
+      const desktopNav = desktopNavRef.current;
+
+      if (!headerRow || !desktopNav) return;
+
+      const isBelowDesktopBreakpoint = window.innerWidth < DESKTOP_BREAKPOINT;
+
+      if (isBelowDesktopBreakpoint) {
+        setForceMobileMenu(false);
+        return;
+      }
+
+      const shouldPreferMobileLayout = window.innerWidth < FULL_DESKTOP_NAV_WIDTH;
+      const rowWrapped = headerRow.scrollWidth > headerRow.clientWidth + 1;
+      const navWrapped = desktopNav.scrollWidth > desktopNav.clientWidth + 1;
+      const navHasMultipleRows = desktopNav.getBoundingClientRect().height > 40;
+      const headerHasMultipleRows = headerRow.getBoundingClientRect().height > 72;
+
+      setForceMobileMenu(
+        shouldPreferMobileLayout || rowWrapped || navWrapped || navHasMultipleRows || headerHasMultipleRows
+      );
+    };
+
+    measureHeader();
+
+    const resizeObserver = new ResizeObserver(() => {
+      window.requestAnimationFrame(measureHeader);
+    });
+
+    if (headerRowRef.current) {
+      resizeObserver.observe(headerRowRef.current);
+    }
+
+    if (desktopNavRef.current) {
+      resizeObserver.observe(desktopNavRef.current);
+    }
+
+    window.addEventListener('resize', measureHeader);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', measureHeader);
+    };
+  }, [language, location.pathname]);
+
+  useEffect(() => {
+    if (!forceMobileMenu && window.innerWidth >= DESKTOP_BREAKPOINT) {
+      setMobileMenuOpen(false);
+    }
+  }, [forceMobileMenu]);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const toggleLanguage = () => {
     const newLang = language === 'es' ? 'en' : 'es';
@@ -89,7 +152,7 @@ export function Header({ language }: HeaderProps) {
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div ref={headerRowRef} className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to={`/${language}/`} className="text-2xl font-light text-gray-900">
@@ -98,12 +161,15 @@ export function Header({ language }: HeaderProps) {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav
+            ref={desktopNavRef}
+            className={`${forceMobileMenu ? 'hidden' : 'hidden xl:flex'} items-center gap-6 min-w-0`}
+          >
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
-                className="text-sm text-gray-700 hover:text-gray-900 transition-colors"
+                className="text-sm text-gray-700 hover:text-gray-900 transition-colors whitespace-nowrap"
               >
                 {item.label}
               </Link>
@@ -122,14 +188,14 @@ export function Header({ language }: HeaderProps) {
             {/* CTA Button - Hidden on mobile */}
             <Link
               to={`/${language}/${language === 'es' ? 'contacto' : 'contact'}`}
-              className="hidden md:inline-flex items-center px-5 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300 hover:scale-105"
+              className={`${forceMobileMenu ? 'hidden' : 'hidden xl:inline-flex'} items-center px-5 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-all duration-300 hover:scale-105 whitespace-nowrap`}
             >
               {language === 'es' ? 'Contactar' : 'Contact'}
             </Link>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2"
+              className={`${forceMobileMenu ? 'inline-flex' : 'xl:hidden'} p-2`}
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? (
@@ -143,7 +209,7 @@ export function Header({ language }: HeaderProps) {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
+          <div className={`${forceMobileMenu ? 'block' : 'xl:hidden'} py-4 border-t border-gray-200`}>
             <nav className="flex flex-col gap-4">
               {navItems.map((item) => (
                 <Link

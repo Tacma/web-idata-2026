@@ -3,6 +3,7 @@ import { ArrowRight, X } from 'lucide-react';
 import { useLanguage } from '../../shared/contexts/LanguageContext';
 import type { Industry } from '../../shared/types';
 import type { LucideIcon } from 'lucide-react';
+import { buildContactLink } from '../../shared/utils/contactLinks';
 
 interface IndustryExpandableCardProps {
   industry: Industry;
@@ -127,7 +128,14 @@ export function IndustryExpandableCard({
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <a
-              href={`/${language}/${language === 'es' ? 'contacto' : 'contact'}`}
+              href={buildContactLink({
+                language,
+                sourceType: 'industry',
+                sourceSlug: industry.slug_es || industry.slug_en || '',
+                sourceTitle: title,
+                sourceCtaLabel: labels.talkToExpert,
+                intent: 'industry_consultation',
+              })}
               className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-blue-700 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-100 group"
             >
               {labels.talkToExpert}

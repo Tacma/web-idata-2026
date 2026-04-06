@@ -7,6 +7,7 @@ import { getPublished as getJobs } from '../../../services/jobsService';
 import { Briefcase, MapPin, Clock, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { mockJobs } from '../../data/mockData';
+import { buildContactLink } from '../../shared/utils/contactLinks';
 
 const allowMockFallback = import.meta.env.DEV;
 
@@ -210,7 +211,14 @@ export function CareersIndex() {
                 : 'Send us your resume anyway. We\'re always looking for exceptional talent.'}
             </p>
             <a
-              href={`/${language}/${language === 'es' ? 'contacto' : 'contact'}/`}
+              href={buildContactLink({
+                language,
+                sourceType: 'careers',
+                sourceTitle: language === 'es' ? 'Talento y vacantes' : 'Careers',
+                sourceCtaLabel: language === 'es' ? 'Contáctanos' : 'Contact us',
+                intent: 'careers_contact',
+                referrerPath: `/${language}/${language === 'es' ? 'trabaja-con-nosotros' : 'careers'}/`,
+              })}
               className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-medium hover:bg-blue-50 transition-colors"
             >
               {language === 'es' ? 'Contáctanos' : 'Contact us'}

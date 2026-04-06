@@ -25,6 +25,7 @@ import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
 import { FloatingElements } from '../components/FloatingElements';
 import { InternalPageHero } from '../components/InternalPageHero';
 import { serviceColors, type ServiceSlug } from './serviceColors';
+import { buildContactLink } from '../../shared/utils/contactLinks';
 import { getBySlug, getPublished as getPublishedServices } from '../../../services/servicesService';
 import { getPublished as getPublishedCaseStudies } from '../../../services/caseStudiesService';
 import { getPublished as getPublishedPartners } from '../../../services/partnersService';
@@ -372,7 +373,15 @@ export function ServiceDetailPage() {
           ? 'Hablemos sobre cómo estabilizar, optimizar y escalar tu ecosistema de datos'
           : 'Let\'s talk about how to stabilize, optimize and scale your data ecosystem',
         ctaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
-        ctaHref: `/${language}/${language === 'es' ? 'contacto' : 'contact'}?service=${serviceKey}`
+        ctaHref: buildContactLink({
+          language,
+          sourceType: 'service',
+          sourceSlug: serviceKey,
+          sourceTitle: getLocalizedValue(resolvedService?.title_es || '', resolvedService?.title_en || ''),
+          sourceCtaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
+          intent: 'service_consultation',
+          referrerPath: `/${language}/${language === 'es' ? 'servicios' : 'services'}/${slug}`,
+        })
       }
     : {
         title: language === 'es'
@@ -382,7 +391,15 @@ export function ServiceDetailPage() {
           ? 'Inicia una conversación con nuestros expertos'
           : 'Start a conversation with our experts',
         ctaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
-        ctaHref: `/${language}/${language === 'es' ? 'contacto' : 'contact'}?service=${serviceKey}`
+        ctaHref: buildContactLink({
+          language,
+          sourceType: 'service',
+          sourceSlug: serviceKey,
+          sourceTitle: getLocalizedValue(resolvedService?.title_es || '', resolvedService?.title_en || ''),
+          sourceCtaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
+          intent: 'service_consultation',
+          referrerPath: `/${language}/${language === 'es' ? 'servicios' : 'services'}/${slug}`,
+        })
       };
 
   return (
@@ -545,7 +562,7 @@ export function ServiceDetailPage() {
               >
                 {tech.logo ? (
                   <div className="w-32 lg:w-40 h-16 lg:h-20 flex items-center justify-center transition-all duration-300 hover:scale-110 grayscale hover:grayscale-0">
-                    <img src={tech.logo} alt={tech.name} className="max-w-full max-h-full object-contain" />
+                    <img src={tech.logo} alt={tech.name} className="partner-logo-adaptive max-w-full max-h-full object-contain" />
                   </div>
                 ) : (
                   <div className="px-5 py-3 rounded-2xl border border-gray-200 bg-gray-50 text-sm text-gray-700 font-light">

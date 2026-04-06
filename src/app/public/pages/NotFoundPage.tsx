@@ -5,6 +5,7 @@ import { GlassCard } from '../../shared/components/GlassCard';
 import { LinkCTA } from '../../shared/components/LinkCTA';
 import { SEOHead } from '../../shared/components/SEOHead';
 import type { Language } from '../../shared/types';
+import { buildContactLink } from '../../shared/utils/contactLinks';
 
 interface NotFoundPageProps {
   languageOverride?: Language;
@@ -55,7 +56,14 @@ export function NotFoundPage({ languageOverride, standalone = false }: NotFoundP
 
   const homeUrl = language === 'es' ? '/es/' : '/en/';
   const servicesUrl = language === 'es' ? '/es/servicios' : '/en/services';
-  const contactUrl = language === 'es' ? '/es/contacto' : '/en/contact';
+  const contactUrl = buildContactLink({
+    language,
+    sourceType: 'not_found',
+    sourceTitle: location.pathname,
+    sourceCtaLabel: copy.tertiaryCta,
+    intent: 'navigation_help',
+    referrerPath: location.pathname,
+  });
 
   const content = (
     <div className={standalone ? 'min-h-screen bg-[var(--page-bg)]' : ''}>

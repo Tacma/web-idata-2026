@@ -324,6 +324,7 @@ export function Contact() {
           'data-delivery': 'data-analytics',
           'strategy-consulting': 'data-strategy',
           'cloud-services': 'data-engineering',
+          'cloud-services-provider': 'data-engineering',
           'data-engineering': 'data-engineering',
           'data-analytics': 'data-analytics',
           'ai-ml': 'ai-ml',
@@ -383,7 +384,66 @@ export function Contact() {
         }));
       }
 
-      // RULE 5: If source_type = home or general_cta
+      // RULE 5: If source_type = insight_build
+      else if (sourceType === 'insight_build' && sourceTitle) {
+        setFormData(prev => ({
+          ...prev,
+          project_type: 'data-strategy',
+          message: language === 'es'
+            ? `Hola, quiero desarrollar un producto similar a "${sourceTitle}" y me gustaría conversar sobre cómo aterrizarlo en mi contexto.`
+            : `Hello, I want to build a product similar to "${sourceTitle}" and would like to discuss how to adapt it to my context.`,
+        }));
+      }
+
+      // RULE 6: If source_type = event
+      else if (sourceType === 'event' && sourceTitle) {
+        setFormData(prev => ({
+          ...prev,
+          message: language === 'es'
+            ? `Hola, vi el evento "${sourceTitle}" y quiero hablar sobre una iniciativa relacionada para mi organización.`
+            : `Hello, I saw the event "${sourceTitle}" and want to talk about a related initiative for my organization.`,
+        }));
+      }
+
+      // RULE 7: Resource follow-up
+      else if (sourceType === 'resource' && sourceTitle) {
+        setFormData(prev => ({
+          ...prev,
+          message: language === 'es'
+            ? `Hola, vi el recurso "${sourceTitle}" y quiero conversar sobre cómo aplicarlo en mi organización.`
+            : `Hello, I saw the resource "${sourceTitle}" and want to talk about how to apply it in my organization.`,
+        }));
+      }
+
+      // RULE 8: Regional / general navigation sources
+      else if (sourceType === 'commercial_team' && sourceTitle) {
+        setFormData(prev => ({
+          ...prev,
+          message: language === 'es'
+            ? `Hola, quiero hablar con el equipo comercial de iData para ${sourceTitle}.`
+            : `Hello, I would like to speak with the iData commercial team for ${sourceTitle}.`,
+        }));
+      }
+
+      else if (sourceType === 'careers') {
+        setFormData(prev => ({
+          ...prev,
+          message: language === 'es'
+            ? 'Hola, quiero compartir mi perfil y conocer oportunidades para colaborar con iData.'
+            : 'Hello, I would like to share my profile and explore opportunities to collaborate with iData.',
+        }));
+      }
+
+      else if (sourceType === 'about' || sourceType === 'services_page' || sourceType === 'industry_hub' || sourceType === 'not_found') {
+        setFormData(prev => ({
+          ...prev,
+          message: language === 'es'
+            ? `Hola, quiero conversar con iData sobre ${sourceTitle || 'una iniciativa de datos e IA'}.`
+            : `Hello, I would like to talk with iData about ${sourceTitle || 'a data and AI initiative'}.`,
+        }));
+      }
+
+      // RULE 9: If source_type = home or general_cta
       else if (sourceType === 'home' || sourceType === 'general_cta') {
         setFormData(prev => ({
           ...prev,
@@ -400,7 +460,39 @@ export function Contact() {
     const budgetRange = searchParams.get('budget_range');
     const timeline = searchParams.get('timeline');
 
-    if (projectType && !sourceType) {
+    const legacyService = searchParams.get('service');
+
+    if (legacyService && !sourceType) {
+      const serviceToProjectType: Record<string, string> = {
+        'data-operations': 'data-engineering',
+        'data-delivery': 'data-analytics',
+        'strategy-consulting': 'data-strategy',
+        'cloud-services': 'data-engineering',
+        'cloud-services-provider': 'data-engineering',
+        'data-engineering': 'data-engineering',
+        'data-analytics': 'data-analytics',
+        'ai-ml': 'ai-ml',
+      };
+
+      setLeadContext(prev => ({
+        ...prev,
+        source_type: 'service',
+        source_slug: legacyService,
+        source_title: legacyService,
+        source_language: language,
+      }));
+
+      setShowContextBanner(true);
+      setFormData(prev => ({
+        ...prev,
+        project_type: serviceToProjectType[legacyService] || prev.project_type,
+        message: language === 'es'
+          ? `Hola, quiero recibir más información sobre el servicio ${legacyService}.`
+          : `Hello, I would like to receive more information about the ${legacyService} service.`,
+      }));
+    }
+
+    if (projectType && !sourceType && !legacyService) {
       setFormData(prev => ({ ...prev, project_type: projectType }));
     }
     if (industry && !sourceType) {

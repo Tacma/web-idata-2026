@@ -6,6 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../shared/contexts/LanguageContext';
 import { useTheme } from '../../shared/contexts/ThemeContext';
 import { SEOHead } from '../../shared/components/SEOHead';
+import { buildContactLink } from '../../shared/utils/contactLinks';
 import { CaseStudyCard } from '../components/case-studies/CaseStudyCard';
 import { getPublished as getPublishedServices } from '../../../services/servicesService';
 import { getPublished as getPublishedCaseStudies } from '../../../services/caseStudiesService';
@@ -514,7 +515,14 @@ export function ServicesPage() {
   const ctaSection = {
     title: content.cta.title,
     ctaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
-    ctaHref: `/${language}/${language === 'es' ? 'contacto' : 'contact'}`,
+    ctaHref: buildContactLink({
+      language,
+      sourceType: 'services_page',
+      sourceTitle: language === 'es' ? 'Servicios' : 'Services',
+      sourceCtaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
+      intent: 'service_discovery',
+      referrerPath: `/${language}/${language === 'es' ? 'servicios' : 'services'}/`,
+    }),
   };
 
   function pickLocalizedText(
@@ -795,7 +803,15 @@ export function ServicesPage() {
                       </div>
 
                       <Link
-                        to={`/${language}/${language === 'es' ? 'contacto' : 'contact'}?service=${encodeURIComponent(serviceDisplay.slug)}`}
+                        to={buildContactLink({
+                          language,
+                          sourceType: 'service',
+                          sourceSlug: serviceDisplay.slug,
+                          sourceTitle: serviceDisplay.title,
+                          sourceCtaLabel: content.steps.cta,
+                          intent: 'service_consultation',
+                          referrerPath: `/${language}/${language === 'es' ? 'servicios' : 'services'}/`,
+                        })}
                         className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-4 text-sm font-medium text-white shadow-[0_18px_36px_rgba(15,23,42,0.14)] transition-transform duration-200 hover:-translate-y-0.5"
                         style={{ backgroundColor: serviceColor }}
                       >

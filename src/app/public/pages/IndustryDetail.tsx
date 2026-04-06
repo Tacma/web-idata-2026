@@ -8,6 +8,7 @@ import { ContentCard } from '../../shared/components/ContentCard';
 import { getPublished as getCaseStudies } from '../../../services/caseStudiesService';
 import { getBySlug as getIndustryBySlug } from '../../../services/industriesService';
 import { useState, useEffect } from 'react';
+import { buildContactLink } from '../../shared/utils/contactLinks';
 
 export function IndustryDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -140,7 +141,15 @@ export function IndustryDetail() {
                 : 'Let\'s talk about how we can help you'}
             </p>
             <a
-              href={`/${language}/${language === 'es' ? 'contacto' : 'contact'}/`}
+              href={buildContactLink({
+                language,
+                sourceType: 'industry',
+                sourceSlug: currentSlug,
+                sourceTitle: title,
+                sourceCtaLabel: language === 'es' ? 'Contactar' : 'Contact us',
+                intent: 'industry_consultation',
+                referrerPath: `${basePath}/${currentSlug}`,
+              })}
               className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-medium hover:bg-blue-50 transition-colors"
             >
               {language === 'es' ? 'Contactar' : 'Contact us'}

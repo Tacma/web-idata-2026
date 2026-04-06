@@ -15,7 +15,7 @@ import {
 import { Input } from '../../../components/ui/input';
 import { Textarea } from '../../../components/ui/textarea';
 import { getPublished as getPublishedBlogPosts } from '../../../../services/blogService';
-import { buildMomentumContent } from '../../../shared/data/momentumContent';
+import { getInsightEvents, getInsightLabs } from '../../../../services/insightMomentumService';
 import { EXTERNAL_DATA_POLICY_URL } from '../../../shared/constants/legalLinks';
 import { useTheme } from '../../../shared/contexts/ThemeContext';
 
@@ -55,6 +55,8 @@ function formatPublishDate(value: string | undefined, language: Language) {
 export function HomeMomentumSection({ language, getLocalizedValue }: HomeMomentumSectionProps) {
   const { isDark } = useTheme();
   const [articles, setArticles] = useState<any[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
+  const [labs, setLabs] = useState<any[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -78,14 +80,22 @@ export function HomeMomentumSection({ language, getLocalizedValue }: HomeMomentu
 
     async function load() {
       try {
-        const blogPosts = await getPublishedBlogPosts(language);
+        const [blogPosts, eventsData, labsData] = await Promise.all([
+          getPublishedBlogPosts(language),
+          getInsightEvents(language),
+          getInsightLabs(language),
+        ]);
         if (!cancelled) {
           setArticles(blogPosts.slice(0, 3));
+          setEvents(eventsData);
+          setLabs(labsData);
         }
       } catch (error) {
         console.error('Error loading momentum insights:', error);
         if (!cancelled) {
           setArticles([]);
+          setEvents([]);
+          setLabs([]);
         }
       }
     }
@@ -150,55 +160,49 @@ export function HomeMomentumSection({ language, getLocalizedValue }: HomeMomentu
     ];
   }, [articles, getLocalizedValue, insightsHref, language]);
 
-  const { events, labs } = useMemo(
-    () =>
-      buildMomentumContent({
-        language,
-        articles: newsCards,
-        insightsHref,
-      }),
-    [insightsHref, language, newsCards]
-  );
-
   const spotlightItems = useMemo<MomentumItem[]>(
-    () => [
-      {
-        category: 'events',
-        eyebrow: language === 'es' ? 'Próximo evento' : 'Upcoming event',
-        label: events[0].label,
-        title: events[0].title,
-        description: events[0].description,
-        href: events[0].href,
-        backgroundImage: events[0].image,
-        accentClass: 'bg-sky-100 text-sky-700 border-sky-200',
-        panelClass: 'from-sky-500/34 via-cyan-400/24 to-sky-950/18',
-        meta: events[0].meta,
-      },
-      {
-        category: 'news',
-        eyebrow: language === 'es' ? 'Última noticia' : 'Latest story',
-        label: newsCards[0].label,
-        title: newsCards[0].title,
-        description: newsCards[0].description,
-        href: newsCards[0].href,
-        backgroundImage: newsCards[0].image,
-        accentClass: 'bg-slate-100 text-slate-700 border-slate-200',
-        panelClass: 'from-slate-600/30 via-indigo-500/22 to-slate-950/20',
-        meta: newsCards[0].date,
-      },
-      {
-        category: 'labs',
-        eyebrow: language === 'es' ? 'Ahora construyendo' : 'Now building',
-        label: labs[0].label,
-        title: labs[0].title,
-        description: labs[0].description,
-        href: labs[0].href,
-        backgroundImage: labs[0].image,
-        accentClass: 'bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200',
-        panelClass: 'from-fuchsia-500/34 via-violet-500/24 to-slate-950/16',
-        meta: labs[0].meta,
-      },
-    ],
+    () => {
+      if (!events[0] || !labs[0] || !newsCards[0]) return [];
+
+      return [
+        {
+          category: 'events',
+          eyebrow: language === 'es' ? 'Próximo evento' : 'Upcoming event',
+          label: events[0].label,
+          title: events[0].title,
+          description: events[0].description,
+          href: events[0].href,
+          backgroundImage: events[0].image,
+          accentClass: 'bg-sky-100 text-sky-700 border-sky-200',
+          panelClass: 'from-sky-500/34 via-cyan-400/24 to-sky-950/18',
+          meta: events[0].meta,
+        },
+        {
+          category: 'news',
+          eyebrow: language === 'es' ? 'Última noticia' : 'Latest story',
+          label: newsCards[0].label,
+          title: newsCards[0].title,
+          description: newsCards[0].description,
+          href: newsCards[0].href,
+          backgroundImage: newsCards[0].image,
+          accentClass: 'bg-slate-100 text-slate-700 border-slate-200',
+          panelClass: 'from-slate-600/30 via-indigo-500/22 to-slate-950/20',
+          meta: newsCards[0].date,
+        },
+        {
+          category: 'labs',
+          eyebrow: language === 'es' ? 'Ahora construyendo' : 'Now building',
+          label: labs[0].label,
+          title: labs[0].title,
+          description: labs[0].description,
+          href: labs[0].href,
+          backgroundImage: labs[0].image,
+          accentClass: 'bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200',
+          panelClass: 'from-fuchsia-500/34 via-violet-500/24 to-slate-950/16',
+          meta: labs[0].meta,
+        },
+      ];
+    },
     [events, labs, language, newsCards]
   );
 
@@ -219,6 +223,10 @@ export function HomeMomentumSection({ language, getLocalizedValue }: HomeMomentu
   const sectionDescription = language === 'es'
     ? 'Entérate aquí de lo último que está pasando en iData, los próximos eventos y en qué estamos trabajando ahora.'
     : 'Stay up to date with the latest at iData, upcoming events, and what we are currently building.';
+
+  if (spotlightItems.length === 0) {
+    return null;
+  }
 
   function updateFormField<Key extends keyof typeof subscriptionForm>(field: Key, value: (typeof subscriptionForm)[Key]) {
     setSubscriptionForm((current) => ({ ...current, [field]: value }));

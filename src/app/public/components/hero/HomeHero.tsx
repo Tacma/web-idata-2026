@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useLanguage } from '../../../shared/contexts/LanguageContext';
 import { useTheme } from '../../../shared/contexts/ThemeContext';
+import { buildContactLink } from '../../../shared/utils/contactLinks';
 import { ClientLogosMarquee } from './ClientLogosMarquee';
 import { DataBlueprintJourney } from './DataBlueprintJourney';
 import { HeroLiquidBackdrop } from './HeroLiquidBackdrop';
@@ -92,7 +93,14 @@ export function HomeHero({
     primaryCtaLabel:
       primaryCtaLabel || (language === 'es' ? 'Hablar con un experto' : 'Talk to an expert'),
     primaryCtaHref:
-      primaryCtaHref || `/${language}/${language === 'es' ? 'contacto' : 'contact'}`,
+      primaryCtaHref || buildContactLink({
+        language,
+        sourceType: 'home',
+        sourceTitle: language === 'es' ? 'Home hero' : 'Home hero',
+        sourceCtaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
+        intent: 'general_consultation',
+        referrerPath: `/${language}/`,
+      }),
     secondaryCtaLabel:
       secondaryCtaLabel || (language === 'es' ? 'Explorar servicios' : 'Explore services'),
     secondaryCtaHref:

@@ -9,6 +9,7 @@ import {
   buildWhatsAppRegionUrl,
   getActiveWhatsAppRegions,
 } from '../../../shared/utils/whatsapp';
+import { buildContactLink } from '../../../shared/utils/contactLinks';
 
 import carlosPhoto from '/assets/images/team/commercial/carlos-luis-veracoechea-frisneda.png';
 import juanPhoto from '/assets/images/team/commercial/juan-ignacio-etcheberry-mason.png';
@@ -45,35 +46,35 @@ const profileByRegion: Record<string, CommercialProfile> = {
     name: 'Juan Ignacio Etcheberry',
     role_es: 'Director comercial',
     role_en: 'Sales Director',
-    imageClassName: 'object-contain object-bottom scale-[1.04]',
+    imageClassName: 'object-contain object-bottom',
   },
   colombia: {
     image: luisPhoto,
     name: 'Luis Fernando Casas',
     role_es: 'Director comercial',
     role_en: 'Sales Director',
-    imageClassName: 'object-contain object-bottom scale-[1.08]',
+    imageClassName: 'object-contain object-bottom',
   },
   'central-america': {
     image: carlosPhoto,
     name: 'Carlos Luis Veracoechea',
     role_es: 'Director comercial',
     role_en: 'Sales Director',
-    imageClassName: 'object-contain object-bottom scale-[1.02]',
+    imageClassName: 'object-contain object-bottom',
   },
   'centralamerica': {
     image: carlosPhoto,
     name: 'Carlos Luis Veracoechea',
     role_es: 'Director comercial',
     role_en: 'Sales Director',
-    imageClassName: 'object-contain object-bottom scale-[1.02]',
+    imageClassName: 'object-contain object-bottom',
   },
   usa: {
     image: nicholasPhoto,
     name: 'Nicholas Battista',
     role_es: 'Managing Director',
     role_en: 'Managing Director',
-    imageClassName: 'object-contain object-bottom scale-[1.04]',
+    imageClassName: 'object-contain object-bottom',
   },
 };
 
@@ -122,7 +123,6 @@ const commercialRegions: CommercialRegionDefinition[] = [
 
 export function HomeCommercialTeamSection({ language }: HomeCommercialTeamSectionProps) {
   const { settings } = useContactSettings();
-  const contactHref = `/${language}/${language === 'es' ? 'contacto' : 'contact'}`;
   const activeRegions = useMemo(
     () => getActiveWhatsAppRegions(settings.whatsapp),
     [settings.whatsapp]
@@ -177,7 +177,7 @@ export function HomeCommercialTeamSection({ language }: HomeCommercialTeamSectio
                 : 'bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.24),transparent_34%),linear-gradient(135deg,#dbeafe_0%,#eef2ff_48%,#f8fafc_100%)]',
       };
     });
-  }, [activeRegions, contactHref, language]);
+  }, [activeRegions, language]);
 
   return (
     <section className="relative overflow-hidden px-6 py-14 sm:px-8 lg:px-12 lg:py-18">
@@ -257,7 +257,15 @@ export function HomeCommercialTeamSection({ language }: HomeCommercialTeamSectio
                   </a>
 
                   <Link
-                    to={contactHref}
+                    to={buildContactLink({
+                      language,
+                      sourceType: 'commercial_team',
+                      sourceSlug: card.id,
+                      sourceTitle: card.regionName,
+                      sourceCtaLabel: language === 'es' ? 'Ir a contacto' : 'Go to contact',
+                      intent: 'regional_contact',
+                      referrerPath: `/${language}/`,
+                    })}
                     className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--line-soft)] bg-[var(--surface-0)] px-4 py-2.5 text-[13px] font-medium text-[var(--text-strong)] transition-all duration-300 hover:border-sky-300/40 hover:bg-[var(--surface-1)] sm:px-5 sm:py-3 sm:text-sm dark:border-white/12 dark:bg-[#16233a] dark:text-white dark:hover:border-sky-300/30 dark:hover:bg-[#1b2b45]"
                   >
                     <Mail className="h-4 w-4" />

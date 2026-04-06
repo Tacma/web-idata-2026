@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { Menu, X, ArrowRight } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLanguage } from '../../shared/contexts/LanguageContext';
 import { useTheme } from '../../shared/contexts/ThemeContext';
 import { t, getLocalizedRoute, getAlternateLanguage } from '../../shared/utils/i18n';
@@ -181,6 +181,10 @@ export function Header() {
   
   const alternatePath = getAlternatePath();
 
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [currentPath]);
+
   const preserveScrollForLanguageSwitch = () => {
     if (typeof window === 'undefined') return;
     window.sessionStorage.setItem('idata-preserve-scroll-y', String(window.scrollY));
@@ -223,7 +227,7 @@ export function Header() {
           </div>
 
           {/* Desktop Navigation - Center */}
-          <div className="hidden lg:flex lg:items-center lg:gap-8 lg:absolute lg:left-1/2 lg:-translate-x-1/2">
+          <div className="hidden xl:flex xl:items-center xl:gap-8 xl:absolute xl:left-1/2 xl:-translate-x-1/2">
             {navigation.map((item) => {
               const active = isActive(item.href);
               return (
@@ -249,7 +253,7 @@ export function Header() {
           </div>
 
           {/* Right Side - Language + Sign Up Button */}
-          <div className="hidden lg:flex lg:items-center lg:gap-4">
+          <div className="hidden xl:flex xl:items-center xl:gap-4">
             <ThemeToggle language={language} />
 
             {/* Language Switcher - With hover interaction */}
@@ -277,7 +281,7 @@ export function Header() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="lg:hidden">
+          <div className="xl:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-[var(--header-text-muted)] hover:text-[var(--header-text)] transition-colors duration-300"
@@ -290,7 +294,7 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden py-4 border-t" style={{ borderColor: 'var(--header-border)' }}>
+          <div className="xl:hidden py-4 border-t" style={{ borderColor: 'var(--header-border)' }}>
             {navigation.map((item) => {
               const active = isActive(item.href);
               return (

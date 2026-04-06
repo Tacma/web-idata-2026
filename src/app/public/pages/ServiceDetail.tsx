@@ -6,6 +6,7 @@ import { t, getAlternateLanguage } from '../../shared/utils/i18n';
 import { mockServiceCategories } from '../../data/mockData';
 import { getBySlug as getServiceBySlug } from '../../../services/servicesService';
 import { useState, useEffect } from 'react';
+import { buildContactLink } from '../../shared/utils/contactLinks';
 
 export function ServiceDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -109,7 +110,15 @@ export function ServiceDetail() {
               }
             </p>
             <a
-              href={`/${language}/${language === 'es' ? 'contacto' : 'contact'}/`}
+              href={buildContactLink({
+                language,
+                sourceType: 'service',
+                sourceSlug: getLocalizedValue((service as any)?.slug_es || '', (service as any)?.slug_en || ''),
+                sourceTitle: (service as any)?.title || '',
+                sourceCtaLabel: t('contact', language),
+                intent: 'service_consultation',
+                referrerPath: `/${language}/${language === 'es' ? 'servicios' : 'services'}/${slug}`,
+              })}
               className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
             >
               {t('contact', language)}

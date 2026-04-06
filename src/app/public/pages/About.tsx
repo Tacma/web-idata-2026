@@ -9,6 +9,7 @@ import { InternalPageHero } from '../components/InternalPageHero';
 import { useState, useEffect, useRef } from 'react';
 import { getPublished as getPublishedTeamMembers } from '../../../services/teamMembersService';
 import { getByKey as getPageByKey } from '../../../services/pagesService';
+import { buildContactLink } from '../../shared/utils/contactLinks';
 
 // Hero image from Figma
 import heroImage from '/assets/images/about/hero.png';
@@ -528,7 +529,14 @@ export function About() {
                     transition={{ duration: 0.6, delay: 0.4 }}
                   >
                     <Link
-                      to={`/${language}/${language === 'es' ? 'contacto' : 'contact'}/`}
+                      to={buildContactLink({
+                        language,
+                        sourceType: 'about',
+                        sourceTitle: language === 'es' ? 'Nosotros' : 'About',
+                        sourceCtaLabel: language === 'es' ? 'Hablemos' : "Let's talk",
+                        intent: 'general_consultation',
+                        referrerPath: `/${language}/${language === 'es' ? 'nosotros' : 'about'}/`,
+                      })}
                       className="inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-800 transition-all duration-250 hover:shadow-xl hover:scale-[1.02] active:scale-100 group whitespace-nowrap"
                     >
                       {language === 'es' ? 'Hablemos' : "Let's talk"}

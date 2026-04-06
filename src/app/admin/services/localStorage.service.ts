@@ -14,6 +14,8 @@ export type CollectionKey =
   | 'case_studies'
   | 'blog_posts'
   | 'blog_categories'
+  | 'insight_events'
+  | 'insight_labs'
   | 'jobs'
   | 'job_applications'
   | 'team_members'

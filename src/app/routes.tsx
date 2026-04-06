@@ -18,6 +18,8 @@ import { CaseStudiesIndex } from './public/pages/CaseStudiesIndex';
 import { CaseStudyDetail } from './public/pages/CaseStudyDetail';
 import { InsightsIndex } from './public/pages/InsightsIndex';
 import { InsightsDetail } from './public/pages/InsightsDetail';
+import { EventDetail } from './public/pages/EventDetail';
+import { BuildDetail } from './public/pages/BuildDetail';
 import { Careers } from './public/pages/Careers';
 import { JobsIndex } from './public/pages/JobsIndex';
 import { JobDetail } from './public/pages/JobDetail';
@@ -148,6 +150,30 @@ export const router = createBrowserRouter([
       {
         path: 'insights/:id/edit',
         element: <CollectionEditorPage collectionName="blogPosts" />
+      },
+      {
+        path: 'insight-events',
+        element: <CollectionAdmin collectionName="insightEvents" title="Insight Events" />
+      },
+      {
+        path: 'insight-events/new',
+        element: <CollectionEditorPage collectionName="insightEvents" />
+      },
+      {
+        path: 'insight-events/:id/edit',
+        element: <CollectionEditorPage collectionName="insightEvents" />
+      },
+      {
+        path: 'insight-labs',
+        element: <CollectionAdmin collectionName="insightLabs" title="Insight Radar" />
+      },
+      {
+        path: 'insight-labs/new',
+        element: <CollectionEditorPage collectionName="insightLabs" />
+      },
+      {
+        path: 'insight-labs/:id/edit',
+        element: <CollectionEditorPage collectionName="insightLabs" />
       },
       { 
         path: 'blog-categories', 
@@ -284,7 +310,15 @@ export const router = createBrowserRouter([
         path: 'insights', 
         element: <InsightsIndex /> 
       },
-      { 
+      {
+        path: 'insights/events/:slug',
+        element: <EventDetail />
+      },
+      {
+        path: 'insights/builds/:slug',
+        element: <BuildDetail />
+      },
+      {
         path: 'insights/:slug', 
         element: <InsightsDetail /> 
       },
@@ -407,7 +441,15 @@ export const router = createBrowserRouter([
         path: 'insights', 
         element: <InsightsIndex /> 
       },
-      { 
+      {
+        path: 'insights/events/:slug',
+        element: <EventDetail />
+      },
+      {
+        path: 'insights/builds/:slug',
+        element: <BuildDetail />
+      },
+      {
         path: 'insights/:slug', 
         element: <InsightsDetail /> 
       },

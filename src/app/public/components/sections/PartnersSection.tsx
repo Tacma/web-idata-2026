@@ -240,7 +240,7 @@ export function PartnersSection({ section }: PartnersSectionProps) {
                     <img
                       src={technology.logo}
                       alt={technology.name}
-                      className={`mx-auto h-8 w-auto max-w-[124px] object-contain transition-all duration-500 sm:h-11 sm:max-w-[132px] ${
+                      className={`partner-logo-adaptive mx-auto h-8 w-auto max-w-[124px] object-contain transition-all duration-500 sm:h-11 sm:max-w-[132px] ${
                         isActive ? 'opacity-100 saturate-100' : 'opacity-55 saturate-75'
                       }`}
                     />
@@ -268,7 +268,7 @@ export function PartnersSection({ section }: PartnersSectionProps) {
                   <img
                     src={activeTechnology.logo}
                     alt={activeTechnology.name}
-                    className="h-10 w-auto max-w-[160px] object-contain"
+                    className="partner-logo-adaptive h-10 w-auto max-w-[160px] object-contain"
                   />
                   <span className="text-sm font-medium text-[var(--text-faint)]">{activeTechnology.name}</span>
                 </div>
@@ -359,7 +359,7 @@ export function PartnersSection({ section }: PartnersSectionProps) {
                       <img
                         src={technology.logo}
                         alt={technology.name}
-                        className={`h-10 w-auto max-w-[148px] object-contain transition-all duration-300 sm:h-12 ${
+                        className={`partner-logo-adaptive h-10 w-auto max-w-[148px] object-contain transition-all duration-300 sm:h-12 ${
                           isActive ? 'opacity-100 saturate-100' : 'opacity-60 saturate-50'
                         }`}
                       />
@@ -402,7 +402,7 @@ export function PartnersSection({ section }: PartnersSectionProps) {
                   <img
                     src={activeTechnology.logo}
                     alt={activeTechnology.name}
-                    className="h-10 w-auto max-w-[160px] object-contain"
+                    className="partner-logo-adaptive h-10 w-auto max-w-[160px] object-contain"
                   />
                   <p className="mt-5 inline-flex w-fit items-center rounded-full border border-sky-300/30 bg-sky-500/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-sky-600 dark:text-sky-300">
                     {activeTechnology.badge[language]}

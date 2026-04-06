@@ -13,6 +13,7 @@ import {
 import { IndustryHubFilters } from '../components/industry-hub/IndustryHubFilters';
 import { IndustryHubSection } from '../components/industry-hub/IndustryHubSection';
 import { CaseHighlightsSection } from '../components/sections/CaseHighlightsSection';
+import { buildContactLink } from '../../shared/utils/contactLinks';
 
 function toggleArrayValue(values: string[], value: string) {
   return values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
@@ -86,7 +87,14 @@ export function IndustriesAndCasesPage() {
       ? 'Conversemos sobre los retos, tecnologías y resultados que más importan a tu equipo.'
       : 'Let’s talk about the challenges, technologies and outcomes that matter most to your team.',
     ctaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
-    ctaHref: `/${language}/${language === 'es' ? 'contacto' : 'contact'}`,
+    ctaHref: buildContactLink({
+      language,
+      sourceType: 'industry_hub',
+      sourceTitle: language === 'es' ? 'Casos de éxito e industrias' : 'Case studies and industries',
+      sourceCtaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
+      intent: 'industry_consultation',
+      referrerPath: location.pathname,
+    }),
   };
 
   const caseStatsSection = {

@@ -15,6 +15,7 @@ import {
 import { Link } from 'react-router';
 import { useTheme } from '../../../shared/contexts/ThemeContext';
 import type { Language } from '../../../shared/types';
+import { buildContactLink } from '../../../shared/utils/contactLinks';
 
 interface HomeWhyIDataSectionProps {
   language: Language;
@@ -326,7 +327,14 @@ export function HomeWhyIDataSection({ language }: HomeWhyIDataSectionProps) {
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              to={`/${language}/${isSpanish ? 'contacto' : 'contact'}/`}
+              to={buildContactLink({
+                language,
+                sourceType: 'home',
+                sourceTitle: isSpanish ? 'Home - Lo que podemos construir juntos' : 'Home - What we can build together',
+                sourceCtaLabel: isSpanish ? 'Hablar con un experto' : 'Talk to an expert',
+                intent: 'general_consultation',
+                referrerPath: `/${language}/`,
+              })}
               className={`inline-flex items-center gap-2 rounded-full border px-5 py-3 text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 ${isDark ? 'border-white/12 bg-white/6 text-white shadow-[0_16px_34px_rgba(2,6,23,0.22)] hover:bg-white/10' : 'border-slate-200 bg-white/78 text-slate-800 shadow-[0_16px_34px_rgba(148,163,184,0.12)]'}`}
             >
               <span>{isSpanish ? 'Hablar con un experto' : 'Talk to an expert'}</span>

@@ -221,6 +221,8 @@ export type CollectionName =
   | 'caseStudies'
   | 'blogPosts'
   | 'blogCategories'
+  | 'insightEvents'
+  | 'insightLabs'
   | 'jobs'
   | 'teamMembers'
   | 'resources'

@@ -12,4 +12,15 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;  /* Chrome, Safari and Opera */
   }
+
+  .partner-logo-adaptive {
+    transition:
+      filter 220ms ease,
+      opacity 220ms ease,
+      transform 220ms ease;
+  }
+
+  .dark .partner-logo-adaptive {
+    filter: brightness(0) saturate(100%) invert(1) contrast(1.08);
+  }
 }

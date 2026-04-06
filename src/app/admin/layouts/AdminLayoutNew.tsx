@@ -28,7 +28,9 @@ import {
   ChevronDown,
   ChevronRight,
   Info,
-  Send
+  Send,
+  CalendarDays,
+  Sparkles
 } from 'lucide-react';
 import { useState } from 'react';
 import { AdminMeta } from '../../shared/components/AdminMeta';
@@ -50,8 +52,10 @@ const navigationGroups = [
       { name: 'Partners', href: '/admin/partners', icon: Layers },
       { name: 'Industrias', href: '/admin/industries', icon: FolderOpen },
       { name: 'Casos de éxito', href: '/admin/case-studies', icon: MessageSquare },
-      { name: 'Insights', href: '/admin/insights', icon: BookOpen },
-      { name: 'Categorías', href: '/admin/blog-categories', icon: Tags },
+      { name: 'Insights artículos', href: '/admin/insights', icon: BookOpen },
+      { name: 'Insights categorías', href: '/admin/blog-categories', icon: Tags },
+      { name: 'Insights eventos', href: '/admin/insight-events', icon: CalendarDays },
+      { name: 'Insights radar', href: '/admin/insight-labs', icon: Sparkles },
     ]
   },
   {

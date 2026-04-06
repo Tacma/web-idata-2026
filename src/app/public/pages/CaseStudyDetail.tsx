@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../../shared/contexts/LanguageContext';
 import { SEOHead } from '../../shared/components/SEOHead';
+import { buildContactLink } from '../../shared/utils/contactLinks';
 import { CTABandSection } from '../components/sections/CTABandSection';
 import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
 import { CaseStudyCard } from '../components/case-studies/CaseStudyCard';
@@ -121,7 +122,15 @@ export function CaseStudyDetail() {
       ? '¿Quieres construir un caso similar para tu organización?'
       : 'Want to build a similar outcome for your organization?',
     ctaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
-    ctaHref: `/${language}/${language === 'es' ? 'contacto' : 'contact'}`,
+    ctaHref: buildContactLink({
+      language,
+      sourceType: 'case_study',
+      sourceSlug: currentSlug,
+      sourceTitle: publicCase?.title || '',
+      sourceCtaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
+      intent: 'case_study_follow_up',
+      referrerPath: `${basePath}/${currentSlug}`,
+    }),
   };
 
   const industryName = industry ? getLocalizedValue(industry.title_es, industry.title_en) : '';
@@ -406,7 +415,15 @@ export function CaseStudyDetail() {
               </div>
 
               <Link
-                to={`/${language}/${language === 'es' ? 'contacto' : 'contact'}?source_type=case_study&source_title=${encodeURIComponent(publicCase?.title || '')}`}
+                to={buildContactLink({
+                  language,
+                  sourceType: 'case_study',
+                  sourceSlug: currentSlug,
+                  sourceTitle: publicCase?.title || '',
+                  sourceCtaLabel: language === 'es' ? 'Hablar sobre un caso similar' : 'Talk about a similar case',
+                  intent: 'case_study_follow_up',
+                  referrerPath: `${basePath}/${currentSlug}`,
+                })}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--text-strong)] px-6 py-3 text-sm font-medium text-[var(--surface-0)] transition-all duration-300 hover:-translate-y-0.5 hover:opacity-90"
               >
                 {language === 'es' ? 'Hablar sobre un caso similar' : 'Talk about a similar case'}

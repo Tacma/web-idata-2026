@@ -9,6 +9,7 @@ import { formatDate } from '../../shared/utils/dateFormat';
 import { mockResources } from '../../data/mockData';
 import { Calendar, Download, FileText } from 'lucide-react';
 import { getBySlug as getResourceBySlug } from '../../../services/resourcesService';
+import { buildContactLink } from '../../shared/utils/contactLinks';
 
 const allowMockFallback = import.meta.env.DEV;
 
@@ -159,7 +160,15 @@ export function ResourceDetail() {
                 : 'Our team of experts can help you put them into practice'}
             </p>
             <a
-              href={`/${language}/${language === 'es' ? 'contacto' : 'contact'}/`}
+              href={buildContactLink({
+                language,
+                sourceType: 'resource',
+                sourceSlug: currentSlug,
+                sourceTitle: title,
+                sourceCtaLabel: language === 'es' ? 'Contáctanos' : 'Contact us',
+                intent: 'resource_follow_up',
+                referrerPath: `${basePath}/${currentSlug}`,
+              })}
               className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
             >
               {language === 'es' ? 'Contáctanos' : 'Contact us'}
