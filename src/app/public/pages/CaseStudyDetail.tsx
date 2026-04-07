@@ -12,6 +12,7 @@ import { getBySlug, getPublished as getPublishedCaseStudies } from '../../../ser
 import { getPublished as getPublishedIndustries } from '../../../services/industriesService';
 import { getPublished as getPublishedServices } from '../../../services/servicesService';
 import { buildPublicCaseStudyView } from '../../shared/utils/caseStudyPublic';
+import { buildPublicUrl } from '../../shared/utils/siteUrl';
 
 export function CaseStudyDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -134,17 +135,43 @@ export function CaseStudyDetail() {
   };
 
   const industryName = industry ? getLocalizedValue(industry.title_es, industry.title_en) : '';
+  const currentCanonical = `${basePath}/${currentSlug}/`;
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: language === 'es' ? 'Inicio' : 'Home',
+        item: buildPublicUrl(`/${language}/`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: language === 'es' ? 'Casos de éxito' : 'Case studies',
+        item: buildPublicUrl(`${basePath}/`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: publicCase?.title || '',
+        item: buildPublicUrl(currentCanonical),
+      },
+    ],
+  };
 
   return (
     <>
       <SEOHead
         title={seo?.metaTitle || publicCase?.title || ''}
         description={seo?.metaDescription || publicCase?.summary || ''}
-        canonical={`${basePath}/${currentSlug}`}
+        canonical={currentCanonical}
         ogImage={publicCase?.coverImage || undefined}
-        alternateES={`/es/casos/${caseStudy?.slug_es || slug}`}
-        alternateEN={`/en/case-studies/${caseStudy?.slug_en || slug}`}
+        alternateES={`/es/casos/${caseStudy?.slug_es || slug}/`}
+        alternateEN={`/en/case-studies/${caseStudy?.slug_en || slug}/`}
         language={language}
+        structuredData={breadcrumbSchema}
       />
 
       <section className="mt-20 px-6 pb-8 pt-8 sm:px-8 lg:px-12">

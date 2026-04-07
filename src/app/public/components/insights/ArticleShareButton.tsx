@@ -2,6 +2,8 @@ import { Share2, Linkedin, Link2, Mail, Instagram, Youtube } from 'lucide-react'
 import { useLanguage } from '../../../shared/contexts/LanguageContext';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useContactSettings } from '../../../shared/hooks/useContactSettings';
+import { getManagedSocialMedia } from '../../../shared/utils/socialLinks';
 
 interface ArticleShareButtonProps {
   title: string;
@@ -10,6 +12,7 @@ interface ArticleShareButtonProps {
 
 export function ArticleShareButton({ title, url }: ArticleShareButtonProps) {
   const { language } = useLanguage();
+  const { settings: contactSettings } = useContactSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -18,11 +21,7 @@ export function ArticleShareButton({ title, url }: ArticleShareButtonProps) {
   const copiedText = language === 'es' ? '¡Enlace copiado!' : 'Link copied!';
 
   // Official iData social media links
-  const OFFICIAL_SOCIAL_LINKS = {
-    instagram: 'https://www.instagram.com/idata.global/',
-    linkedin: 'https://www.linkedin.com/company/idata-global-latam/posts/?feedView=all',
-    youtube: 'https://www.youtube.com/@idata.global',
-  };
+  const managedSocialLinks = getManagedSocialMedia(contactSettings.socialMedia);
 
   // Share URLs
   const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
@@ -46,7 +45,7 @@ export function ArticleShareButton({ title, url }: ArticleShareButtonProps) {
   };
 
   const handleSocialVisit = (platform: 'instagram' | 'linkedin' | 'youtube') => {
-    window.open(OFFICIAL_SOCIAL_LINKS[platform], '_blank', 'noopener,noreferrer');
+    window.open(managedSocialLinks[platform], '_blank', 'noopener,noreferrer');
   };
 
   return (

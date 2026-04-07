@@ -5,7 +5,7 @@ import { useLanguage } from '../../shared/contexts/LanguageContext';
 import { useTheme } from '../../shared/contexts/ThemeContext';
 import { t, getLocalizedRoute, getAlternateLanguage } from '../../shared/utils/i18n';
 import { ThemeToggle } from '../../shared/components/ThemeToggle';
-import { findServiceByLocalizedSlug, getLocalizedServiceSlug } from '../pages/ServiceDetailPage';
+import { findServiceByLocalizedSlug, getLocalizedServiceSlug } from '../pages/serviceSlugs';
 import logoComplete from '/assets/logos/brand/logo-complete.png';
 import logoCompleteDark from '/assets/logos/brand/Logo_iData_Blanco.png';
 

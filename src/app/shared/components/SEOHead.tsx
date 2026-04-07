@@ -15,6 +15,7 @@ interface SEOHeadProps {
   noIndex?: boolean;
   noFollow?: boolean;
   disableStructuredData?: boolean;
+  structuredData?: Record<string, any> | Array<Record<string, any>>;
 }
 
 export function SEOHead({
@@ -29,6 +30,7 @@ export function SEOHead({
   noIndex = false,
   noFollow = false,
   disableStructuredData = false,
+  structuredData,
 }: SEOHeadProps) {
   useEffect(() => {
     let cancelled = false;
@@ -37,6 +39,7 @@ export function SEOHead({
       const fullCanonical = buildPublicUrl(canonical);
       const fullOgImage = buildPublicUrl(ogImage || settings.defaultOgImage);
       const locale = language === 'es' ? 'es_ES' : 'en_US';
+      const alternateLocale = language === 'es' ? 'en_US' : 'es_ES';
       const siteTitleTemplate =
         language === 'es' ? settings.siteTitleTemplate_es : settings.siteTitleTemplate_en;
       const defaultDescription =
@@ -52,7 +55,16 @@ export function SEOHead({
         .trim();
       const effectiveShareTitle = effectiveTitle;
       const effectiveShareDescription = effectiveDescription;
-      const socialProfiles = [settings.linkedinUrl, settings.instagramUrl, settings.youtubeUrl].filter(Boolean);
+      const socialProfiles = [
+        settings.facebookUrl,
+        settings.linkedinUrl,
+        settings.instagramUrl,
+        settings.youtubeUrl,
+        settings.xUrl,
+      ].filter(Boolean);
+      const robotsIndex = noIndex ? 'noindex' : settings.robotsIndex ? 'index' : 'noindex';
+      const robotsFollow = noFollow ? 'nofollow' : settings.robotsFollow ? 'follow' : 'nofollow';
+      const robotsDirectives = [robotsIndex, robotsFollow, 'max-image-preview:large', 'max-snippet:-1', 'max-video-preview:-1'].join(',');
 
       document.title = effectiveTitle;
       document.documentElement.lang = language;
@@ -73,23 +85,26 @@ export function SEOHead({
         setMetaTag('keywords', keywords.join(', '));
       }
 
-      const robotsIndex = noIndex ? 'noindex' : settings.robotsIndex ? 'index' : 'noindex';
-      const robotsFollow = noFollow ? 'nofollow' : settings.robotsFollow ? 'follow' : 'nofollow';
-      setMetaTag('robots', `${robotsIndex},${robotsFollow}`);
+      setMetaTag('robots', robotsDirectives);
+      setMetaTag('googlebot', robotsDirectives);
       setMetaTag('application-name', settings.brandName);
+      setMetaTag('referrer', 'strict-origin-when-cross-origin');
 
       setMetaTag('og:title', effectiveShareTitle, 'property');
       setMetaTag('og:description', effectiveShareDescription, 'property');
       setMetaTag('og:url', fullCanonical, 'property');
       setMetaTag('og:type', 'website', 'property');
       setMetaTag('og:image', fullOgImage, 'property');
+      setMetaTag('og:image:alt', settings.brandName, 'property');
       setMetaTag('og:locale', locale, 'property');
       setMetaTag('og:site_name', settings.brandName, 'property');
+      setMetaTag('og:locale:alternate', alternateLocale, 'property');
 
       setMetaTag('twitter:card', 'summary_large_image');
       setMetaTag('twitter:title', effectiveShareTitle);
       setMetaTag('twitter:description', effectiveShareDescription);
       setMetaTag('twitter:image', fullOgImage);
+      setMetaTag('twitter:image:alt', settings.brandName);
 
       if (settings.searchConsoleVerificationCode) {
         setMetaTag('google-site-verification', settings.searchConsoleVerificationCode);
@@ -124,7 +139,7 @@ export function SEOHead({
         const linkDefault = document.createElement('link');
         linkDefault.rel = 'alternate';
         linkDefault.hreflang = 'x-default';
-        linkDefault.href = buildPublicUrl(alternateEN);
+        linkDefault.href = buildPublicUrl(alternateEN || alternateES || canonical);
         document.head.appendChild(linkDefault);
       }
 
@@ -155,6 +170,7 @@ export function SEOHead({
         {
           '@context': 'https://schema.org',
           '@type': 'Organization',
+          '@id': `${settings.canonicalDomain}#organization`,
           name: settings.organizationName,
           legalName: settings.organizationLegalName,
           url: settings.canonicalDomain,
@@ -171,6 +187,8 @@ export function SEOHead({
             postalCode: settings.organizationAddress.postalCode,
             addressCountry: settings.organizationAddress.country,
           },
+          areaServed: ['Latin America', 'United States'],
+          knowsAbout: ['Data analytics', 'Data engineering', 'Artificial intelligence', 'Business intelligence'],
           contactPoint: [
             {
               '@type': 'ContactPoint',
@@ -185,12 +203,14 @@ export function SEOHead({
         {
           '@context': 'https://schema.org',
           '@type': 'WebSite',
+          '@id': `${settings.canonicalDomain}#website`,
           name: settings.brandName,
           url: settings.canonicalDomain,
           description: effectiveDescription,
           inLanguage: language,
           publisher: {
             '@type': 'Organization',
+            '@id': `${settings.canonicalDomain}#organization`,
             name: settings.organizationName,
           },
           hasPart: [
@@ -206,10 +226,14 @@ export function SEOHead({
             },
             ...socialProfiles.map((url) => ({
               '@type': 'SiteNavigationElement',
-              name: url.includes('linkedin')
+              name: url.includes('facebook')
+                ? 'Facebook'
+                : url.includes('linkedin')
                 ? 'LinkedIn'
                 : url.includes('instagram')
                   ? 'Instagram'
+                  : url.includes('x.com') || url.includes('twitter.com')
+                    ? 'X'
                   : 'YouTube',
               url,
             })),
@@ -218,12 +242,14 @@ export function SEOHead({
         {
           '@context': 'https://schema.org',
           '@type': 'WebPage',
+          '@id': `${fullCanonical}#webpage`,
           name: effectiveTitle,
           description: effectiveDescription,
           url: fullCanonical,
           inLanguage: language,
           isPartOf: {
             '@type': 'WebSite',
+            '@id': `${settings.canonicalDomain}#website`,
             name: settings.brandName,
             url: settings.canonicalDomain,
           },
@@ -231,10 +257,16 @@ export function SEOHead({
         },
       ];
 
+      const customSchemas = Array.isArray(structuredData)
+        ? structuredData.filter(Boolean)
+        : structuredData
+          ? [structuredData]
+          : [];
+
       const schemaScript = document.createElement('script');
       schemaScript.id = 'idata-global-seo-schema';
       schemaScript.type = 'application/ld+json';
-      schemaScript.text = JSON.stringify(schemas);
+      schemaScript.text = JSON.stringify([...schemas, ...customSchemas]);
       document.head.appendChild(schemaScript);
     };
 
@@ -252,7 +284,7 @@ export function SEOHead({
     return () => {
       cancelled = true;
     };
-  }, [title, description, canonical, ogImage, keywords, language, alternateES, alternateEN, noIndex, noFollow, disableStructuredData]);
+  }, [title, description, canonical, ogImage, keywords, language, alternateES, alternateEN, noIndex, noFollow, disableStructuredData, structuredData]);
 
   return null;
 }

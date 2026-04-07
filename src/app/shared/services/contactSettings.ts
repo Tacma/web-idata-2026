@@ -45,6 +45,7 @@ export interface ContactSettings {
   address_es: string;
   address_en: string;
   socialMedia: {
+    facebook?: string;
     instagram?: string;
     linkedin?: string;
     youtube?: string;
@@ -153,9 +154,10 @@ export const defaultContactSettings: ContactSettings = {
   address_es: 'Bogotá, Colombia',
   address_en: 'Bogota, Colombia',
   socialMedia: {
-    instagram: 'https://instagram.com/idata',
-    linkedin: 'https://linkedin.com/company/idata',
-    youtube: 'https://youtube.com/@idata',
+    facebook: 'https://www.facebook.com/iData.Global.IA/',
+    instagram: 'https://www.instagram.com/idata.global/',
+    linkedin: 'https://www.linkedin.com/company/idata-global-latam/posts/?feedView=all',
+    youtube: 'https://www.youtube.com/@idata.global',
   },
   businessHours_es: 'Lun-Vie 9:00-18:00',
   businessHours_en: 'Mon-Fri 9:00-18:00',

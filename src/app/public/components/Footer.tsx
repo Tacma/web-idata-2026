@@ -10,6 +10,7 @@ import {
 import { t, getLocalizedRoute } from '../../shared/utils/i18n';
 import { Facebook, Linkedin, Instagram, Youtube } from 'lucide-react';
 import logoComplete from '/assets/logos/brand/logo-complete.png';
+import { getManagedSocialMedia } from '../../shared/utils/socialLinks';
 
 export function Footer() {
   const { language } = useLanguage();
@@ -24,13 +25,7 @@ export function Footer() {
     usa: '🇺🇸',
   };
 
-  // Official iData social media links
-  const OFFICIAL_SOCIAL_LINKS = {
-    facebook: 'https://www.facebook.com/iData.Global.IA/',
-    instagram: 'https://www.instagram.com/idata.global/',
-    linkedin: 'https://www.linkedin.com/company/idata-global-latam/posts/?feedView=all',
-    youtube: 'https://www.youtube.com/@idata.global',
-  };
+  const managedSocialLinks = getManagedSocialMedia(settings.socialMedia);
 
   const footerLinks = {
     services: [
@@ -203,7 +198,7 @@ export function Footer() {
             </p>
             
             <a
-              href={OFFICIAL_SOCIAL_LINKS.facebook}
+              href={managedSocialLinks.facebook}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-gray-800 hover:bg-[#1877F2] text-gray-400 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110"
@@ -214,7 +209,7 @@ export function Footer() {
 
             {/* LinkedIn */}
             <a
-              href={OFFICIAL_SOCIAL_LINKS.linkedin}
+              href={managedSocialLinks.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-gray-800 hover:bg-[#0A66C2] text-gray-400 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110"
@@ -225,7 +220,7 @@ export function Footer() {
 
             {/* Instagram */}
             <a
-              href={OFFICIAL_SOCIAL_LINKS.instagram}
+              href={managedSocialLinks.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-gray-800 hover:bg-gradient-to-br hover:from-purple-600 hover:via-pink-500 hover:to-orange-400 text-gray-400 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110"
@@ -236,7 +231,7 @@ export function Footer() {
 
             {/* YouTube */}
             <a
-              href={OFFICIAL_SOCIAL_LINKS.youtube}
+              href={managedSocialLinks.youtube}
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-gray-800 hover:bg-red-600 text-gray-400 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110"

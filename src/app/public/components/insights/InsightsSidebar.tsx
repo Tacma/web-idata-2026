@@ -3,6 +3,8 @@ import { Link } from 'react-router';
 import { useLanguage } from '../../../shared/contexts/LanguageContext';
 import { ImageWithFallback } from '../../../components/figma/ImageWithFallback';
 import { useState } from 'react';
+import { useContactSettings } from '../../../shared/hooks/useContactSettings';
+import { getManagedSocialLinks } from '../../../shared/utils/socialLinks';
 
 interface SuggestedArticle {
   id: string;
@@ -37,6 +39,7 @@ export function InsightsSidebar({
   onCategorySelect
 }: InsightsSidebarProps) {
   const { language, getLocalizedValue } = useLanguage();
+  const { settings: contactSettings } = useContactSettings();
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (e: React.FormEvent) => {
@@ -59,32 +62,25 @@ export function InsightsSidebar({
   ];
 
   // Official iData social networks
-  const socialNetworks = [
-    {
-      name: 'Instagram',
-      icon: Instagram,
-      url: 'https://www.instagram.com/idata.global/',
-      color: 'hover:bg-gradient-to-br hover:from-purple-600 hover:via-pink-500 hover:to-orange-400',
-    },
-    {
-      name: 'LinkedIn',
-      icon: Linkedin,
-      url: 'https://www.linkedin.com/company/idata-global-latam/posts/?feedView=all',
-      color: 'hover:bg-[#0A66C2]',
-    },
-    {
-      name: 'YouTube',
-      icon: Youtube,
-      url: 'https://www.youtube.com/@idata.global',
-      color: 'hover:bg-red-600',
-    },
-    {
-      name: 'Facebook',
-      icon: Facebook,
-      url: 'https://www.facebook.com/iData.Global.IA/',
-      color: 'hover:bg-[#1877F2]',
-    },
-  ];
+  const socialNetworks = getManagedSocialLinks(contactSettings.socialMedia).map((item) => ({
+    ...item,
+    icon:
+      item.key === 'instagram'
+        ? Instagram
+        : item.key === 'linkedin'
+          ? Linkedin
+          : item.key === 'youtube'
+            ? Youtube
+            : Facebook,
+    color:
+      item.key === 'instagram'
+        ? 'hover:bg-gradient-to-br hover:from-purple-600 hover:via-pink-500 hover:to-orange-400'
+        : item.key === 'linkedin'
+          ? 'hover:bg-[#0A66C2]'
+          : item.key === 'youtube'
+            ? 'hover:bg-red-600'
+            : 'hover:bg-[#1877F2]',
+  }));
 
   return (
     <aside className="space-y-8 lg:sticky lg:top-24">
@@ -224,12 +220,12 @@ export function InsightsSidebar({
             const Icon = social.icon;
             return (
               <a
-                key={social.name}
-                href={social.url}
+                key={social.key}
+                href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`flex items-center justify-center w-12 h-12 rounded-xl bg-gray-100 text-gray-700 ${social.color} hover:text-white transition-all duration-300 hover:scale-110`}
-                title={social.name}
+                title={social.label}
               >
                 <Icon className="w-5 h-5" />
               </a>

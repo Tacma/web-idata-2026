@@ -58,6 +58,7 @@ export function AnalyticsManager() {
   const location = useLocation();
   const { language } = useLanguage();
   const previousLanguage = useRef(language);
+  const previousPageUrl = useRef<string>('');
   const trackedScrollMarks = useRef<Set<number>>(new Set());
   const [settings, setSettings] = useState<AnalyticsSettings>(getAnalyticsSettingsSnapshot());
 
@@ -127,14 +128,19 @@ export function AnalyticsManager() {
   }, [settings]);
 
   useEffect(() => {
-    const pagePayload = {
-      page_location: `${getSiteUrl()}${location.pathname}${location.search}`,
-      page_path: location.pathname,
-      page_language: language,
-      page_title: document.title,
-    };
+    const currentPageUrl = `${getSiteUrl()}${location.pathname}${location.search}`;
+    const frame = window.requestAnimationFrame(() => {
+      const pagePayload = {
+        page_location: currentPageUrl,
+        page_path: location.pathname,
+        page_language: language,
+        page_title: document.title,
+        page_referrer: previousPageUrl.current || document.referrer || undefined,
+      };
 
-    trackEvent('page_view', pagePayload, settings.ga4MeasurementId);
+      trackEvent('page_view', pagePayload, settings.ga4MeasurementId);
+      previousPageUrl.current = currentPageUrl;
+    });
 
     if (settings.trackLanguageChanges && previousLanguage.current !== language) {
       trackEvent(
@@ -150,6 +156,7 @@ export function AnalyticsManager() {
 
     previousLanguage.current = language;
     trackedScrollMarks.current.clear();
+    return () => window.cancelAnimationFrame(frame);
   }, [location.pathname, location.search, language, settings]);
 
   useEffect(() => {

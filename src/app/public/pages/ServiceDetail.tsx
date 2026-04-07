@@ -8,6 +8,7 @@ import { mockServiceCategories } from '../../data/mockData';
 import { getBySlug as getServiceBySlug } from '../../../services/servicesService';
 import { useState, useEffect } from 'react';
 import { buildContactLink } from '../../shared/utils/contactLinks';
+import { buildPublicUrl } from '../../shared/utils/siteUrl';
 
 export function ServiceDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -86,17 +87,43 @@ export function ServiceDetail() {
     createdAt: '',
     updatedAt: '',
   };
+  const currentCanonical = `/${language}/${language === 'es' ? 'servicios' : 'services'}/${slug}/`;
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: language === 'es' ? 'Inicio' : 'Home',
+        item: buildPublicUrl(`/${language}/`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: language === 'es' ? 'Servicios' : 'Services',
+        item: buildPublicUrl(`/${language}/${language === 'es' ? 'servicios' : 'services'}/`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: service.title,
+        item: buildPublicUrl(currentCanonical),
+      },
+    ],
+  };
 
   return (
     <>
       <SEOHead
         title={service.seo_title}
         description={service.seo_description}
-        canonical={`/${language}/${language === 'es' ? 'servicios' : 'services'}/${slug}`}
-        alternateES={`/es/servicios/${service.slug}`}
-        alternateEN={`/en/services/${service.slug}`}
+        canonical={currentCanonical}
+        alternateES={`/es/servicios/${service.slug}/`}
+        alternateEN={`/en/services/${service.slug}/`}
         ogImage={service.cover_image}
         language={language}
+        structuredData={breadcrumbSchema}
       />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

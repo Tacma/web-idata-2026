@@ -25,6 +25,7 @@ import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
 import { FloatingElements } from '../components/FloatingElements';
 import { InternalPageHero } from '../components/InternalPageHero';
 import { serviceColors, type ServiceSlug } from './serviceColors';
+import { findServiceByLocalizedSlug, getLocalizedServiceSlug, serviceSlugEntries } from './serviceSlugs';
 import { buildContactLink } from '../../shared/utils/contactLinks';
 import { getBySlug, getPublished as getPublishedServices } from '../../../services/servicesService';
 import { getPublished as getPublishedCaseStudies } from '../../../services/caseStudiesService';
@@ -40,13 +41,6 @@ import snowflakeLogo from '/assets/logos/partners/snowflake.png';
 import databricksLogo from '/assets/logos/partners/databricks.png';
 import googleCloudLogo from '/assets/logos/partners/google-cloud.png';
 import awsLogo from '/assets/logos/partners/aws.png';
-
-const serviceSlugEntries = [
-  { slug: 'strategy-consulting', slug_es: 'strategy-consulting', slug_en: 'strategy-consulting' },
-  { slug: 'data-delivery', slug_es: 'data-delivery', slug_en: 'data-delivery' },
-  { slug: 'data-operations', slug_es: 'data-operations', slug_en: 'data-operations' },
-  { slug: 'cloud-services-provider', slug_es: 'cloud-services-provider', slug_en: 'cloud-services-provider' },
-];
 
 const serviceImageMap: Record<string, string> = {
   'strategy-consulting': dataStrategyImage,
@@ -187,15 +181,6 @@ const serviceFallbackContent: Record<string, any> = {
 
 function getServiceKey(service: any) {
   return service?.slug_en || service?.slug_es || '';
-}
-
-export function findServiceByLocalizedSlug(slug: string, language: 'es' | 'en') {
-  const slugKey = language === 'es' ? 'slug_es' : 'slug_en';
-  return serviceSlugEntries.find((service) => service[slugKey] === slug) || null;
-}
-
-export function getLocalizedServiceSlug(service: any, language: 'es' | 'en') {
-  return language === 'es' ? service?.slug_es : service?.slug_en;
 }
 
 function findServiceFallbackBySlug(slug: string | undefined, language: 'es' | 'en') {

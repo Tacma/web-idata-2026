@@ -135,6 +135,59 @@ export function InsightsDetail() {
     .slice(0, 3);
 
   const publicShareUrl = buildPublicUrl(`/${language}/insights/${slug}/`);
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: language === 'es' ? 'Inicio' : 'Home',
+        item: buildPublicUrl(`/${language}/`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: language === 'es' ? 'Insights' : 'Insights',
+        item: buildPublicUrl(`/${language}/insights/`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: title,
+        item: publicShareUrl,
+      },
+    ],
+  };
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description: metaDescription,
+    image: article.featuredImage ? [buildPublicUrl(article.featuredImage)] : undefined,
+    datePublished: article.publishedDate || undefined,
+    dateModified: article.updatedAt || article.updated_at || article.publishedDate || undefined,
+    author: article.author
+      ? {
+          '@type': 'Person',
+          name: article.author,
+        }
+      : {
+          '@type': 'Organization',
+          name: 'iData Global',
+        },
+    publisher: {
+      '@type': 'Organization',
+      name: 'iData Global',
+      logo: {
+        '@type': 'ImageObject',
+        url: buildPublicUrl('/assets/logos/brand/logo-complete.png'),
+      },
+    },
+    mainEntityOfPage: publicShareUrl,
+    inLanguage: language,
+    articleSection: categoryTitle,
+  };
 
   return (
     <>
@@ -146,6 +199,7 @@ export function InsightsDetail() {
         alternateES={`/es/insights/${article.slug_es}/`}
         alternateEN={`/en/insights/${article.slug_en}/`}
         language={language}
+        structuredData={[breadcrumbSchema, articleSchema]}
       />
 
       <article className="bg-white pt-24 pb-16">

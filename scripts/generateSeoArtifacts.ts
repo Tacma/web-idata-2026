@@ -51,35 +51,40 @@ function toIsoDate(value?: string | null) {
 
 function normalizeRoute(route: string) {
   if (!route) return '/';
-  return route.startsWith('/') ? route : `/${route}`;
+  const normalized = route.startsWith('/') ? route : `/${route}`;
+  if (normalized === '/') return normalized;
+  if (/\.[a-z0-9]+$/i.test(normalized)) return normalized;
+  return normalized.endsWith('/') ? normalized : `${normalized}/`;
 }
 
 function createEntry(routePair: Entry) {
+  const normalizedEs = normalizeRoute(routePair.es);
+  const normalizedEn = normalizeRoute(routePair.en);
   return `
   <url>
-    <loc>${toAbsoluteUrl(routePair.en)}</loc>
+    <loc>${toAbsoluteUrl(normalizedEn)}</loc>
     <lastmod>${toIsoDate(routePair.lastmod)}</lastmod>
     <changefreq>${routePair.changefreq || 'weekly'}</changefreq>
     <priority>${routePair.priority || '0.7'}</priority>
-    <xhtml:link rel="alternate" hreflang="es" href="${toAbsoluteUrl(routePair.es)}" />
-    <xhtml:link rel="alternate" hreflang="en" href="${toAbsoluteUrl(routePair.en)}" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="${toAbsoluteUrl(routePair.en)}" />
+    <xhtml:link rel="alternate" hreflang="es" href="${toAbsoluteUrl(normalizedEs)}" />
+    <xhtml:link rel="alternate" hreflang="en" href="${toAbsoluteUrl(normalizedEn)}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${toAbsoluteUrl(normalizedEn)}" />
   </url>`.trim();
 }
 
 const staticRoutes: Entry[] = [
   { es: '/es/', en: '/en/', priority: '1.0', changefreq: 'weekly' },
-  { es: '/es/servicios', en: '/en/services', priority: '0.9', changefreq: 'weekly' },
-  { es: '/es/industrias', en: '/en/industries', priority: '0.9', changefreq: 'weekly' },
-  { es: '/es/casos', en: '/en/case-studies', priority: '0.9', changefreq: 'weekly' },
-  { es: '/es/insights', en: '/en/insights', priority: '0.9', changefreq: 'daily' },
-  { es: '/es/nosotros', en: '/en/about', priority: '0.8', changefreq: 'monthly' },
-  { es: '/es/trabaja-con-nosotros', en: '/en/work-with-us', priority: '0.8', changefreq: 'weekly' },
-  { es: '/es/trabaja-con-nosotros/ofertas', en: '/en/work-with-us/jobs', priority: '0.7', changefreq: 'weekly' },
-  { es: '/es/recursos', en: '/en/resources', priority: '0.8', changefreq: 'weekly' },
-  { es: '/es/contacto', en: '/en/contact', priority: '0.8', changefreq: 'monthly' },
-  { es: '/es/politica-de-privacidad', en: '/en/privacy-policies', priority: '0.3', changefreq: 'yearly' },
-  { es: '/es/politicas-de-cookies', en: '/en/cookie-policy', priority: '0.3', changefreq: 'yearly' },
+  { es: '/es/servicios/', en: '/en/services/', priority: '0.9', changefreq: 'weekly' },
+  { es: '/es/industrias/', en: '/en/industries/', priority: '0.9', changefreq: 'weekly' },
+  { es: '/es/casos/', en: '/en/case-studies/', priority: '0.9', changefreq: 'weekly' },
+  { es: '/es/insights/', en: '/en/insights/', priority: '0.9', changefreq: 'daily' },
+  { es: '/es/nosotros/', en: '/en/about/', priority: '0.8', changefreq: 'monthly' },
+  { es: '/es/trabaja-con-nosotros/', en: '/en/work-with-us/', priority: '0.8', changefreq: 'weekly' },
+  { es: '/es/trabaja-con-nosotros/ofertas/', en: '/en/work-with-us/jobs/', priority: '0.7', changefreq: 'weekly' },
+  { es: '/es/recursos/', en: '/en/resources/', priority: '0.8', changefreq: 'weekly' },
+  { es: '/es/contacto/', en: '/en/contact/', priority: '0.8', changefreq: 'monthly' },
+  { es: '/es/politica-de-privacidad/', en: '/en/privacy-policies/', priority: '0.3', changefreq: 'yearly' },
+  { es: '/es/politicas-de-cookies/', en: '/en/cookie-policy/', priority: '0.3', changefreq: 'yearly' },
 ];
 
 function uniqueEntries(entries: Entry[]) {
@@ -134,8 +139,8 @@ async function loadSupabaseEntries(): Promise<Entry[]> {
     ...(servicesResult.data || []).flatMap((item: any) =>
       item.slug_es && item.slug_en
         ? [{
-            es: `/es/servicios/${item.slug_es}`,
-            en: `/en/services/${item.slug_en}`,
+            es: `/es/servicios/${item.slug_es}/`,
+            en: `/en/services/${item.slug_en}/`,
             lastmod: item.updated_at,
             changefreq: 'monthly' as const,
             priority: '0.8',
@@ -145,8 +150,8 @@ async function loadSupabaseEntries(): Promise<Entry[]> {
     ...(industriesResult.data || []).flatMap((item: any) =>
       item.slug_es && item.slug_en
         ? [{
-            es: `/es/industrias/${item.slug_es}`,
-            en: `/en/industries/${item.slug_en}`,
+            es: `/es/industrias/${item.slug_es}/`,
+            en: `/en/industries/${item.slug_en}/`,
             lastmod: item.updated_at,
             changefreq: 'monthly' as const,
             priority: '0.8',
@@ -156,8 +161,8 @@ async function loadSupabaseEntries(): Promise<Entry[]> {
     ...(caseStudiesResult.data || []).flatMap((item: any) =>
       item.slug_es && item.slug_en
         ? [{
-            es: `/es/casos/${item.slug_es}`,
-            en: `/en/case-studies/${item.slug_en}`,
+            es: `/es/casos/${item.slug_es}/`,
+            en: `/en/case-studies/${item.slug_en}/`,
             lastmod: item.updated_at || item.published_date,
             changefreq: 'monthly' as const,
             priority: '0.8',
@@ -167,8 +172,8 @@ async function loadSupabaseEntries(): Promise<Entry[]> {
     ...(blogPostsResult.data || []).flatMap((item: any) =>
       item.slug_es && item.slug_en
         ? [{
-            es: `/es/insights/${item.slug_es}`,
-            en: `/en/insights/${item.slug_en}`,
+            es: `/es/insights/${item.slug_es}/`,
+            en: `/en/insights/${item.slug_en}/`,
             lastmod: item.updated_at || item.published_date,
             changefreq: 'monthly' as const,
             priority: '0.7',
@@ -178,8 +183,8 @@ async function loadSupabaseEntries(): Promise<Entry[]> {
     ...(jobsResult.data || []).flatMap((item: any) =>
       item.slug_es && item.slug_en && item.active !== false
         ? [{
-            es: `/es/trabaja-con-nosotros/ofertas/${item.slug_es}`,
-            en: `/en/work-with-us/jobs/${item.slug_en}`,
+            es: `/es/trabaja-con-nosotros/ofertas/${item.slug_es}/`,
+            en: `/en/work-with-us/jobs/${item.slug_en}/`,
             lastmod: item.updated_at || item.published_date,
             changefreq: 'weekly' as const,
             priority: '0.6',
@@ -189,8 +194,8 @@ async function loadSupabaseEntries(): Promise<Entry[]> {
     ...(resourcesResult.data || []).flatMap((item: any) =>
       item.slug_es && item.slug_en
         ? [{
-            es: `/es/recursos/${item.slug_es}`,
-            en: `/en/resources/${item.slug_en}`,
+            es: `/es/recursos/${item.slug_es}/`,
+            en: `/en/resources/${item.slug_en}/`,
             lastmod: item.updated_at || item.published_date,
             changefreq: 'monthly' as const,
             priority: '0.7',
@@ -222,8 +227,8 @@ function loadMockEntries(): Entry[] {
     ...mockServices
       .filter((item) => item.status === 'published')
       .map((item) => ({
-        es: `/es/servicios/${item.slug_es}`,
-        en: `/en/services/${item.slug_en}`,
+        es: `/es/servicios/${item.slug_es}/`,
+        en: `/en/services/${item.slug_en}/`,
         lastmod: item.updatedAt || item.updated_at,
         changefreq: 'monthly' as const,
         priority: '0.8',
@@ -231,8 +236,8 @@ function loadMockEntries(): Entry[] {
     ...mockIndustries
       .filter((item) => item.status === 'published')
       .map((item) => ({
-        es: `/es/industrias/${item.slug_es}`,
-        en: `/en/industries/${item.slug_en}`,
+        es: `/es/industrias/${item.slug_es}/`,
+        en: `/en/industries/${item.slug_en}/`,
         lastmod: item.updatedAt || item.updated_at,
         changefreq: 'monthly' as const,
         priority: '0.8',
@@ -240,8 +245,8 @@ function loadMockEntries(): Entry[] {
     ...mockCaseStudies
       .filter((item) => item.status === 'published')
       .map((item) => ({
-        es: `/es/casos/${item.slug_es}`,
-        en: `/en/case-studies/${item.slug_en}`,
+        es: `/es/casos/${item.slug_es}/`,
+        en: `/en/case-studies/${item.slug_en}/`,
         lastmod: item.updatedAt || item.updated_at || item.publishedDate,
         changefreq: 'monthly' as const,
         priority: '0.8',
@@ -249,8 +254,8 @@ function loadMockEntries(): Entry[] {
     ...mockInsights
       .filter((item) => item.status === 'published')
       .map((item) => ({
-        es: `/es/insights/${item.slug_es}`,
-        en: `/en/insights/${item.slug_en}`,
+        es: `/es/insights/${item.slug_es}/`,
+        en: `/en/insights/${item.slug_en}/`,
         lastmod: item.updatedAt || item.updated_at || item.publishedDate,
         changefreq: 'monthly' as const,
         priority: '0.7',
@@ -258,8 +263,8 @@ function loadMockEntries(): Entry[] {
     ...mockJobs
       .filter((item) => item.status === 'published' && item.active)
       .map((item) => ({
-        es: `/es/trabaja-con-nosotros/ofertas/${item.slug_es}`,
-        en: `/en/work-with-us/jobs/${item.slug_en}`,
+        es: `/es/trabaja-con-nosotros/ofertas/${item.slug_es}/`,
+        en: `/en/work-with-us/jobs/${item.slug_en}/`,
         lastmod: item.updatedAt || item.updated_at || item.publishedDate,
         changefreq: 'weekly' as const,
         priority: '0.6',
@@ -267,8 +272,8 @@ function loadMockEntries(): Entry[] {
     ...mockResources
       .filter((item) => item.status === 'published')
       .map((item) => ({
-        es: `/es/recursos/${item.slug_es}`,
-        en: `/en/resources/${item.slug_en}`,
+        es: `/es/recursos/${item.slug_es}/`,
+        en: `/en/resources/${item.slug_en}/`,
         lastmod: item.updatedAt || item.updated_at || item.publishedDate,
         changefreq: 'monthly' as const,
         priority: '0.7',

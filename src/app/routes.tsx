@@ -1,55 +1,67 @@
+import { Suspense, lazy } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router';
 
 // Layouts
 import { PublicLayout } from './public/layouts/PublicLayout';
 import { AdminLayoutNew } from './admin/layouts/AdminLayoutNew';
-
-// Public Pages
-import { Home } from './public/pages/Home';
-import { About } from './public/pages/About';
-import { ServicesPage } from './public/pages/ServicesPage';
-import { ServiceCategory } from './public/pages/ServiceCategory';
-import { ServiceDetail } from './public/pages/ServiceDetail';
-import { ServiceDetailPage } from './public/pages/ServiceDetailPage';
-import { PlaceholderPage } from './public/pages/PlaceholderPage';
-import { IndustriesIndex } from './public/pages/IndustriesIndex';
-import { IndustryDetail } from './public/pages/IndustryDetail';
-import { CaseStudiesIndex } from './public/pages/CaseStudiesIndex';
-import { CaseStudyDetail } from './public/pages/CaseStudyDetail';
-import { InsightsIndex } from './public/pages/InsightsIndex';
-import { InsightsDetail } from './public/pages/InsightsDetail';
-import { EventDetail } from './public/pages/EventDetail';
-import { BuildDetail } from './public/pages/BuildDetail';
-import { Careers } from './public/pages/Careers';
-import { JobsIndex } from './public/pages/JobsIndex';
-import { JobDetail } from './public/pages/JobDetail';
-import { ResourcesIndex } from './public/pages/ResourcesIndex';
-import { ResourceDetail } from './public/pages/ResourceDetail';
-import { Contact } from './public/pages/Contact';
-import { DynamicSitePage } from './public/pages/DynamicSitePage';
-import { LegalDocumentPage } from './public/pages/LegalDocumentPage';
-import { NotFoundPage } from './public/pages/NotFoundPage';
-
-// Admin Pages
-import { Dashboard } from './admin/pages/Dashboard';
-import { ContactSubmissionsAdmin } from './admin/pages/ContactSubmissionsAdmin';
-import { SEOSettingsAdmin } from './admin/pages/SEOSettingsAdmin';
-import { AnalyticsSettingsAdmin } from './admin/pages/AnalyticsSettingsAdmin';
-import { LegalPagesAdmin } from './admin/pages/LegalPagesAdmin';
-import { CollectionAdmin } from './admin/pages/CollectionAdmin';
-import { PagesAdmin } from './admin/pages/PagesAdmin';
-import { JobApplicationsAdmin } from './admin/pages/JobApplicationsAdmin';
-import { ContactSettingsAdmin } from './admin/pages/ContactSettingsAdmin';
-import { MediaLibraryAdmin } from './admin/pages/MediaLibraryAdmin';
-import { NavigationAdmin } from './admin/pages/NavigationAdmin';
-import { MarketsAdmin } from './admin/pages/MarketsAdmin';
-import { RedirectsAdmin } from './admin/pages/RedirectsAdmin';
-import { GlobalSettingsAdmin } from './admin/pages/GlobalSettingsAdmin';
-import { UsersAdmin } from './admin/pages/UsersAdmin';
-import { LoginPage } from './admin/pages/LoginPage';
 import { ProtectedRoute } from './admin/components/ProtectedRoute';
-import { CollectionEditorPage } from './admin/pages/CollectionEditorPage';
-import { PageEditorPage } from './admin/pages/PageEditorPage';
+
+const Home = lazy(() => import('./public/pages/Home').then((module) => ({ default: module.Home })));
+const About = lazy(() => import('./public/pages/About').then((module) => ({ default: module.About })));
+const ServicesPage = lazy(() => import('./public/pages/ServicesPage').then((module) => ({ default: module.ServicesPage })));
+const ServiceDetailPage = lazy(() => import('./public/pages/ServiceDetailPage').then((module) => ({ default: module.ServiceDetailPage })));
+const IndustryDetail = lazy(() => import('./public/pages/IndustryDetail').then((module) => ({ default: module.IndustryDetail })));
+const CaseStudiesIndex = lazy(() => import('./public/pages/CaseStudiesIndex').then((module) => ({ default: module.CaseStudiesIndex })));
+const CaseStudyDetail = lazy(() => import('./public/pages/CaseStudyDetail').then((module) => ({ default: module.CaseStudyDetail })));
+const InsightsIndex = lazy(() => import('./public/pages/InsightsIndex').then((module) => ({ default: module.InsightsIndex })));
+const InsightsDetail = lazy(() => import('./public/pages/InsightsDetail').then((module) => ({ default: module.InsightsDetail })));
+const EventDetail = lazy(() => import('./public/pages/EventDetail').then((module) => ({ default: module.EventDetail })));
+const BuildDetail = lazy(() => import('./public/pages/BuildDetail').then((module) => ({ default: module.BuildDetail })));
+const Careers = lazy(() => import('./public/pages/Careers').then((module) => ({ default: module.Careers })));
+const JobsIndex = lazy(() => import('./public/pages/JobsIndex').then((module) => ({ default: module.JobsIndex })));
+const JobDetail = lazy(() => import('./public/pages/JobDetail').then((module) => ({ default: module.JobDetail })));
+const ResourcesIndex = lazy(() => import('./public/pages/ResourcesIndex').then((module) => ({ default: module.ResourcesIndex })));
+const ResourceDetail = lazy(() => import('./public/pages/ResourceDetail').then((module) => ({ default: module.ResourceDetail })));
+const Contact = lazy(() => import('./public/pages/Contact').then((module) => ({ default: module.Contact })));
+const DynamicSitePage = lazy(() => import('./public/pages/DynamicSitePage').then((module) => ({ default: module.DynamicSitePage })));
+const LegalDocumentPage = lazy(() => import('./public/pages/LegalDocumentPage').then((module) => ({ default: module.LegalDocumentPage })));
+const NotFoundPage = lazy(() => import('./public/pages/NotFoundPage').then((module) => ({ default: module.NotFoundPage })));
+
+const Dashboard = lazy(() => import('./admin/pages/Dashboard').then((module) => ({ default: module.Dashboard })));
+const ContactSubmissionsAdmin = lazy(() => import('./admin/pages/ContactSubmissionsAdmin').then((module) => ({ default: module.ContactSubmissionsAdmin })));
+const SEOSettingsAdmin = lazy(() => import('./admin/pages/SEOSettingsAdmin').then((module) => ({ default: module.SEOSettingsAdmin })));
+const AnalyticsSettingsAdmin = lazy(() => import('./admin/pages/AnalyticsSettingsAdmin').then((module) => ({ default: module.AnalyticsSettingsAdmin })));
+const LegalPagesAdmin = lazy(() => import('./admin/pages/LegalPagesAdmin').then((module) => ({ default: module.LegalPagesAdmin })));
+const CollectionAdmin = lazy(() => import('./admin/pages/CollectionAdmin').then((module) => ({ default: module.CollectionAdmin })));
+const PagesAdmin = lazy(() => import('./admin/pages/PagesAdmin').then((module) => ({ default: module.PagesAdmin })));
+const JobApplicationsAdmin = lazy(() => import('./admin/pages/JobApplicationsAdmin').then((module) => ({ default: module.JobApplicationsAdmin })));
+const ContactSettingsAdmin = lazy(() => import('./admin/pages/ContactSettingsAdmin').then((module) => ({ default: module.ContactSettingsAdmin })));
+const MediaLibraryAdmin = lazy(() => import('./admin/pages/MediaLibraryAdmin').then((module) => ({ default: module.MediaLibraryAdmin })));
+const NavigationAdmin = lazy(() => import('./admin/pages/NavigationAdmin').then((module) => ({ default: module.NavigationAdmin })));
+const MarketsAdmin = lazy(() => import('./admin/pages/MarketsAdmin').then((module) => ({ default: module.MarketsAdmin })));
+const RedirectsAdmin = lazy(() => import('./admin/pages/RedirectsAdmin').then((module) => ({ default: module.RedirectsAdmin })));
+const GlobalSettingsAdmin = lazy(() => import('./admin/pages/GlobalSettingsAdmin').then((module) => ({ default: module.GlobalSettingsAdmin })));
+const UsersAdmin = lazy(() => import('./admin/pages/UsersAdmin').then((module) => ({ default: module.UsersAdmin })));
+const LoginPage = lazy(() => import('./admin/pages/LoginPage').then((module) => ({ default: module.LoginPage })));
+const CollectionEditorPage = lazy(() => import('./admin/pages/CollectionEditorPage').then((module) => ({ default: module.CollectionEditorPage })));
+const PageEditorPage = lazy(() => import('./admin/pages/PageEditorPage').then((module) => ({ default: module.PageEditorPage })));
+const BrandCenterAdmin = lazy(() => import('./admin/pages/BrandCenterAdmin').then((module) => ({ default: module.BrandCenterAdmin })));
+const IntegrationsAdmin = lazy(() => import('./admin/pages/IntegrationsAdmin').then((module) => ({ default: module.IntegrationsAdmin })));
+const AboutPageAdmin = lazy(() => import('./admin/pages/AboutPageAdmin').then((module) => ({ default: module.AboutPageAdmin })));
+const ContactPageAdmin = lazy(() => import('./admin/pages/ContactPageAdmin').then((module) => ({ default: module.ContactPageAdmin })));
+const HomePageAdmin = lazy(() => import('./admin/pages/HomePageAdmin').then((module) => ({ default: module.HomePageAdmin })));
+
+function withRouteLoader(element: React.ReactNode, minHeightClass = 'min-h-[40vh]') {
+  return (
+    <Suspense
+      fallback={
+        <div className={`${minHeightClass} bg-transparent`} aria-busy="true" aria-live="polite" />
+      }
+    >
+      {element}
+    </Suspense>
+  );
+}
 
 export const router = createBrowserRouter([
   // Root redirect to English home (changed from Spanish)
@@ -61,7 +73,7 @@ export const router = createBrowserRouter([
   // Admin Routes
   {
     path: '/admin/login',
-    element: <LoginPage />,
+    element: withRouteLoader(<LoginPage />, 'min-h-screen'),
   },
   {
     path: '/admin',
@@ -71,201 +83,206 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { index: true, element: <Dashboard /> },
-      { path: 'pages', element: <PagesAdmin /> },
-      { path: 'pages/new', element: <PageEditorPage /> },
-      { path: 'pages/:id/edit', element: <PageEditorPage /> },
-      { path: 'contact-submissions', element: <ContactSubmissionsAdmin /> },
-      { path: 'seo-settings', element: <SEOSettingsAdmin /> },
-      { path: 'legal-pages', element: <LegalPagesAdmin /> },
-      { path: 'analytics', element: <AnalyticsSettingsAdmin /> },
+      { index: true, element: withRouteLoader(<Dashboard />) },
+      { path: 'home-page', element: withRouteLoader(<HomePageAdmin />) },
+      { path: 'brand', element: withRouteLoader(<BrandCenterAdmin />) },
+      { path: 'integrations', element: withRouteLoader(<IntegrationsAdmin />) },
+      { path: 'about-page', element: withRouteLoader(<AboutPageAdmin />) },
+      { path: 'contact-page', element: withRouteLoader(<ContactPageAdmin />) },
+      { path: 'pages', element: withRouteLoader(<PagesAdmin />) },
+      { path: 'pages/new', element: withRouteLoader(<PageEditorPage />) },
+      { path: 'pages/:id/edit', element: withRouteLoader(<PageEditorPage />) },
+      { path: 'contact-submissions', element: withRouteLoader(<ContactSubmissionsAdmin />) },
+      { path: 'seo-settings', element: withRouteLoader(<SEOSettingsAdmin />) },
+      { path: 'legal-pages', element: withRouteLoader(<LegalPagesAdmin />) },
+      { path: 'analytics', element: withRouteLoader(<AnalyticsSettingsAdmin />) },
       { 
         path: 'service-categories', 
-        element: <CollectionAdmin collectionName="serviceCategories" title="Service Categories" /> 
+        element: withRouteLoader(<CollectionAdmin collectionName="serviceCategories" title="Service Categories" />)
       },
       {
         path: 'service-categories/new',
-        element: <CollectionEditorPage collectionName="serviceCategories" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="serviceCategories" />)
       },
       {
         path: 'service-categories/:id/edit',
-        element: <CollectionEditorPage collectionName="serviceCategories" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="serviceCategories" />)
       },
       { 
         path: 'services', 
-        element: <CollectionAdmin collectionName="services" title="Services" /> 
+        element: withRouteLoader(<CollectionAdmin collectionName="services" title="Services" />)
       },
       {
         path: 'services/new',
-        element: <CollectionEditorPage collectionName="services" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="services" />)
       },
       {
         path: 'services/:id/edit',
-        element: <CollectionEditorPage collectionName="services" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="services" />)
       },
       { 
         path: 'partners', 
-        element: <CollectionAdmin collectionName="partners" title="Partners" /> 
+        element: withRouteLoader(<CollectionAdmin collectionName="partners" title="Partners" />)
       },
       {
         path: 'partners/new',
-        element: <CollectionEditorPage collectionName="partners" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="partners" />)
       },
       {
         path: 'partners/:id/edit',
-        element: <CollectionEditorPage collectionName="partners" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="partners" />)
       },
       { 
         path: 'industries', 
-        element: <CollectionAdmin collectionName="industries" title="Industries" /> 
+        element: withRouteLoader(<CollectionAdmin collectionName="industries" title="Industries" />)
       },
       {
         path: 'industries/new',
-        element: <CollectionEditorPage collectionName="industries" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="industries" />)
       },
       {
         path: 'industries/:id/edit',
-        element: <CollectionEditorPage collectionName="industries" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="industries" />)
       },
       { 
         path: 'case-studies', 
-        element: <CollectionAdmin collectionName="caseStudies" title="Case Studies" /> 
+        element: withRouteLoader(<CollectionAdmin collectionName="caseStudies" title="Case Studies" />)
       },
       {
         path: 'case-studies/new',
-        element: <CollectionEditorPage collectionName="caseStudies" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="caseStudies" />)
       },
       {
         path: 'case-studies/:id/edit',
-        element: <CollectionEditorPage collectionName="caseStudies" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="caseStudies" />)
       },
       { 
         path: 'insights', 
-        element: <CollectionAdmin collectionName="blogPosts" title="Insights" /> 
+        element: withRouteLoader(<CollectionAdmin collectionName="blogPosts" title="Insights" />)
       },
       {
         path: 'insights/new',
-        element: <CollectionEditorPage collectionName="blogPosts" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="blogPosts" />)
       },
       {
         path: 'insights/:id/edit',
-        element: <CollectionEditorPage collectionName="blogPosts" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="blogPosts" />)
       },
       {
         path: 'insight-events',
-        element: <CollectionAdmin collectionName="insightEvents" title="Insight Events" />
+        element: withRouteLoader(<CollectionAdmin collectionName="insightEvents" title="Insight Events" />)
       },
       {
         path: 'insight-events/new',
-        element: <CollectionEditorPage collectionName="insightEvents" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="insightEvents" />)
       },
       {
         path: 'insight-events/:id/edit',
-        element: <CollectionEditorPage collectionName="insightEvents" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="insightEvents" />)
       },
       {
         path: 'insight-labs',
-        element: <CollectionAdmin collectionName="insightLabs" title="Insight Radar" />
+        element: withRouteLoader(<CollectionAdmin collectionName="insightLabs" title="Insight Radar" />)
       },
       {
         path: 'insight-labs/new',
-        element: <CollectionEditorPage collectionName="insightLabs" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="insightLabs" />)
       },
       {
         path: 'insight-labs/:id/edit',
-        element: <CollectionEditorPage collectionName="insightLabs" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="insightLabs" />)
       },
       { 
         path: 'blog-categories', 
-        element: <CollectionAdmin collectionName="blogCategories" title="Blog Categories" /> 
+        element: withRouteLoader(<CollectionAdmin collectionName="blogCategories" title="Blog Categories" />)
       },
       {
         path: 'blog-categories/new',
-        element: <CollectionEditorPage collectionName="blogCategories" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="blogCategories" />)
       },
       {
         path: 'blog-categories/:id/edit',
-        element: <CollectionEditorPage collectionName="blogCategories" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="blogCategories" />)
       },
       { 
         path: 'jobs', 
-        element: <CollectionAdmin collectionName="jobs" title="Jobs" /> 
+        element: withRouteLoader(<CollectionAdmin collectionName="jobs" title="Jobs" />)
       },
       {
         path: 'jobs/new',
-        element: <CollectionEditorPage collectionName="jobs" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="jobs" />)
       },
       {
         path: 'jobs/:id/edit',
-        element: <CollectionEditorPage collectionName="jobs" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="jobs" />)
       },
       { 
         path: 'team-members', 
-        element: <CollectionAdmin collectionName="teamMembers" title="Team Members" /> 
+        element: withRouteLoader(<CollectionAdmin collectionName="teamMembers" title="Team Members" />)
       },
       {
         path: 'team-members/new',
-        element: <CollectionEditorPage collectionName="teamMembers" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="teamMembers" />)
       },
       {
         path: 'team-members/:id/edit',
-        element: <CollectionEditorPage collectionName="teamMembers" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="teamMembers" />)
       },
       { 
         path: 'resources', 
-        element: <CollectionAdmin collectionName="resources" title="Resources" /> 
+        element: withRouteLoader(<CollectionAdmin collectionName="resources" title="Resources" />)
       },
       {
         path: 'resources/new',
-        element: <CollectionEditorPage collectionName="resources" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="resources" />)
       },
       {
         path: 'resources/:id/edit',
-        element: <CollectionEditorPage collectionName="resources" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="resources" />)
       },
       { 
         path: 'testimonials', 
-        element: <CollectionAdmin collectionName="testimonials" title="Testimonials" /> 
+        element: withRouteLoader(<CollectionAdmin collectionName="testimonials" title="Testimonials" />)
       },
       {
         path: 'testimonials/new',
-        element: <CollectionEditorPage collectionName="testimonials" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="testimonials" />)
       },
       {
         path: 'testimonials/:id/edit',
-        element: <CollectionEditorPage collectionName="testimonials" />
+        element: withRouteLoader(<CollectionEditorPage collectionName="testimonials" />)
       },
       { 
         path: 'job-applications', 
-        element: <JobApplicationsAdmin /> 
+        element: withRouteLoader(<JobApplicationsAdmin />)
       },
       { 
         path: 'contact-settings', 
-        element: <ContactSettingsAdmin /> 
+        element: withRouteLoader(<ContactSettingsAdmin />)
       },
       { 
         path: 'media-library', 
-        element: <MediaLibraryAdmin /> 
+        element: withRouteLoader(<MediaLibraryAdmin />)
       },
       { 
         path: 'navigation', 
-        element: <NavigationAdmin /> 
+        element: withRouteLoader(<NavigationAdmin />)
       },
       { 
         path: 'markets', 
-        element: <MarketsAdmin /> 
+        element: withRouteLoader(<MarketsAdmin />)
       },
       { 
         path: 'redirects', 
-        element: <RedirectsAdmin /> 
+        element: withRouteLoader(<RedirectsAdmin />)
       },
       { 
         path: 'global-settings', 
-        element: <GlobalSettingsAdmin /> 
+        element: withRouteLoader(<GlobalSettingsAdmin />)
       },
       { 
         path: 'users', 
-        element: <UsersAdmin /> 
+        element: withRouteLoader(<UsersAdmin />)
       },
     ],
   },
@@ -275,11 +292,11 @@ export const router = createBrowserRouter([
     path: '/es',
     element: <PublicLayout />,
     children: [
-      { index: true, element: <Home /> },
+      { index: true, element: withRouteLoader(<Home />) },
       
       // Services
-      { path: 'servicios', element: <ServicesPage /> },
-      { path: 'servicios/:slug', element: <ServiceDetailPage /> },
+      { path: 'servicios', element: withRouteLoader(<ServicesPage />) },
+      { path: 'servicios/:slug', element: withRouteLoader(<ServiceDetailPage />) },
       
       // Industries
       { 
@@ -288,11 +305,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'casos-de-exito',
-        element: <CaseStudiesIndex />
+        element: withRouteLoader(<CaseStudiesIndex />)
       },
       { 
         path: 'industrias/:slug', 
-        element: <IndustryDetail /> 
+        element: withRouteLoader(<IndustryDetail />)
       },
       
       // Case Studies
@@ -302,85 +319,85 @@ export const router = createBrowserRouter([
       },
       { 
         path: 'casos/:slug', 
-        element: <CaseStudyDetail /> 
+        element: withRouteLoader(<CaseStudyDetail />)
       },
       
       // Insights (Blog)
       { 
         path: 'insights', 
-        element: <InsightsIndex /> 
+        element: withRouteLoader(<InsightsIndex />)
       },
       {
         path: 'insights/events/:slug',
-        element: <EventDetail />
+        element: withRouteLoader(<EventDetail />)
       },
       {
         path: 'insights/builds/:slug',
-        element: <BuildDetail />
+        element: withRouteLoader(<BuildDetail />)
       },
       {
         path: 'insights/:slug', 
-        element: <InsightsDetail /> 
+        element: withRouteLoader(<InsightsDetail />)
       },
       
       // About
       { 
         path: 'nosotros', 
-        element: <About /> 
+        element: withRouteLoader(<About />)
       },
       
       // Careers
       { 
         path: 'trabaja-con-nosotros', 
-        element: <Careers /> 
+        element: withRouteLoader(<Careers />)
       },
       {
         path: 'talento',
-        element: <Careers />
+        element: withRouteLoader(<Careers />)
       },
       {
         path: 'trabaja-con-nosotros/ofertas',
-        element: <JobsIndex />
+        element: withRouteLoader(<JobsIndex />)
       },
       {
         path: 'talento/ofertas',
-        element: <JobsIndex />
+        element: withRouteLoader(<JobsIndex />)
       },
       { 
         path: 'trabaja-con-nosotros/:slug', 
-        element: <JobDetail /> 
+        element: withRouteLoader(<JobDetail />)
       },
       {
         path: 'trabaja-con-nosotros/ofertas/:slug',
-        element: <JobDetail />
+        element: withRouteLoader(<JobDetail />)
       },
       {
         path: 'talento/ofertas/:slug',
-        element: <JobDetail />
+        element: withRouteLoader(<JobDetail />)
       },
       
       // Resources
       { 
         path: 'recursos', 
-        element: <ResourcesIndex /> 
+        element: withRouteLoader(<ResourcesIndex />)
       },
       { 
         path: 'recursos/:slug', 
-        element: <ResourceDetail /> 
+        element: withRouteLoader(<ResourceDetail />)
       },
       
       // Contact
       { 
         path: 'contacto', 
-        element: <Contact /> 
+        element: withRouteLoader(<Contact />)
       },
       {
         path: '404',
-        element: <NotFoundPage languageOverride="es" />,
+        element: withRouteLoader(<NotFoundPage languageOverride="es" />),
       },
       {
         path: 'politica-de-privacidad',
-        element: (
+        element: withRouteLoader(
           <LegalDocumentPage
             documentKey="privacy"
             canonicalEs="/es/politica-de-privacidad/"
@@ -390,7 +407,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'politicas-de-cookies',
-        element: (
+        element: withRouteLoader(
           <LegalDocumentPage
             documentKey="cookies"
             canonicalEs="/es/politicas-de-cookies/"
@@ -400,7 +417,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '*',
-        element: <DynamicSitePage />
+        element: withRouteLoader(<DynamicSitePage />)
       },
     ],
   },
@@ -410,11 +427,11 @@ export const router = createBrowserRouter([
     path: '/en',
     element: <PublicLayout />,
     children: [
-      { index: true, element: <Home /> },
+      { index: true, element: withRouteLoader(<Home />) },
       
       // Services
-      { path: 'services', element: <ServicesPage /> },
-      { path: 'services/:slug', element: <ServiceDetailPage /> },
+      { path: 'services', element: withRouteLoader(<ServicesPage />) },
+      { path: 'services/:slug', element: withRouteLoader(<ServiceDetailPage />) },
       
       // Industries
       { 
@@ -423,95 +440,95 @@ export const router = createBrowserRouter([
       },
       { 
         path: 'industries/:slug', 
-        element: <IndustryDetail /> 
+        element: withRouteLoader(<IndustryDetail />)
       },
       
       // Case Studies
       { 
         path: 'case-studies', 
-        element: <CaseStudiesIndex /> 
+        element: withRouteLoader(<CaseStudiesIndex />)
       },
       { 
         path: 'case-studies/:slug', 
-        element: <CaseStudyDetail /> 
+        element: withRouteLoader(<CaseStudyDetail />)
       },
       
       // Insights (Blog)
       { 
         path: 'insights', 
-        element: <InsightsIndex /> 
+        element: withRouteLoader(<InsightsIndex />)
       },
       {
         path: 'insights/events/:slug',
-        element: <EventDetail />
+        element: withRouteLoader(<EventDetail />)
       },
       {
         path: 'insights/builds/:slug',
-        element: <BuildDetail />
+        element: withRouteLoader(<BuildDetail />)
       },
       {
         path: 'insights/:slug', 
-        element: <InsightsDetail /> 
+        element: withRouteLoader(<InsightsDetail />)
       },
       
       // About
       { 
         path: 'about', 
-        element: <About /> 
+        element: withRouteLoader(<About />)
       },
       
       // Careers
       { 
         path: 'work-with-us', 
-        element: <Careers /> 
+        element: withRouteLoader(<Careers />)
       },
       {
         path: 'careers',
-        element: <Careers />
+        element: withRouteLoader(<Careers />)
       },
       {
         path: 'work-with-us/jobs',
-        element: <JobsIndex />
+        element: withRouteLoader(<JobsIndex />)
       },
       {
         path: 'careers/jobs',
-        element: <JobsIndex />
+        element: withRouteLoader(<JobsIndex />)
       },
       { 
         path: 'work-with-us/:slug', 
-        element: <JobDetail /> 
+        element: withRouteLoader(<JobDetail />)
       },
       {
         path: 'work-with-us/jobs/:slug',
-        element: <JobDetail />
+        element: withRouteLoader(<JobDetail />)
       },
       {
         path: 'careers/jobs/:slug',
-        element: <JobDetail />
+        element: withRouteLoader(<JobDetail />)
       },
       
       // Resources
       { 
         path: 'resources', 
-        element: <ResourcesIndex /> 
+        element: withRouteLoader(<ResourcesIndex />)
       },
       { 
         path: 'resources/:slug', 
-        element: <ResourceDetail /> 
+        element: withRouteLoader(<ResourceDetail />)
       },
       
       // Contact
       { 
         path: 'contact', 
-        element: <Contact /> 
+        element: withRouteLoader(<Contact />)
       },
       {
         path: '404',
-        element: <NotFoundPage languageOverride="en" />,
+        element: withRouteLoader(<NotFoundPage languageOverride="en" />),
       },
       {
         path: 'privacy-policies',
-        element: (
+        element: withRouteLoader(
           <LegalDocumentPage
             documentKey="privacy"
             canonicalEs="/es/politica-de-privacidad/"
@@ -521,7 +538,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'privacy-policy',
-        element: (
+        element: withRouteLoader(
           <LegalDocumentPage
             documentKey="privacy"
             canonicalEs="/es/politica-de-privacidad/"
@@ -531,7 +548,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'politicas-de-cookies',
-        element: (
+        element: withRouteLoader(
           <LegalDocumentPage
             documentKey="cookies"
             canonicalEs="/es/politicas-de-cookies/"
@@ -541,7 +558,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'cookie-policy',
-        element: (
+        element: withRouteLoader(
           <LegalDocumentPage
             documentKey="cookies"
             canonicalEs="/es/politicas-de-cookies/"
@@ -551,7 +568,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '*',
-        element: <DynamicSitePage />
+        element: withRouteLoader(<DynamicSitePage />)
       },
     ],
   },
@@ -559,6 +576,6 @@ export const router = createBrowserRouter([
   // 404 catch-all - redirect to English (default language)
   {
     path: '*',
-    element: <NotFoundPage languageOverride="en" standalone />,
+    element: withRouteLoader(<NotFoundPage languageOverride="en" standalone />, 'min-h-screen'),
   },
 ]);

@@ -23,6 +23,7 @@ import { getPublished as getPublishedTeamMembers } from '../../../services/teamM
 import { getByKey as getPageByKey } from '../../../services/pagesService';
 import { getPublished as getPublishedPartners } from '../../../services/partnersService';
 import { buildContactLink } from '../../shared/utils/contactLinks';
+import { defaultAboutPageContent, getAboutPageContent, type AboutPageContent } from '../../admin/services/aboutPageContent.service';
 
 import teamImage from '/assets/images/about/team.png';
 import purposeGlobeImage from '/assets/images/about/purpose-globe.jpg';
@@ -223,28 +224,32 @@ export function About() {
   const [leadership, setLeadership] = useState<any[]>([]);
   const [partnerCount, setPartnerCount] = useState(0);
   const [pageRecord, setPageRecord] = useState<any | null>(null);
+  const [editableContent, setEditableContent] = useState<AboutPageContent>(defaultAboutPageContent);
 
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
       try {
-        const [record, teamMembers, partners] = await Promise.all([
+        const [record, teamMembers, partners, aboutContent] = await Promise.all([
           getPageByKey('about'),
           getPublishedTeamMembers(),
           getPublishedPartners(),
+          getAboutPageContent().catch(() => null),
         ]);
 
         if (!cancelled) {
           setPageRecord(record);
           setLeadership(teamMembers);
           setPartnerCount(partners.length);
+          setEditableContent(aboutContent ?? defaultAboutPageContent);
         }
       } catch (error) {
         console.error('Error loading about page:', error);
         if (!cancelled) {
           setLeadership([]);
           setPartnerCount(0);
+          setEditableContent(defaultAboutPageContent);
         }
       }
     }
@@ -257,92 +262,61 @@ export function About() {
   }, []);
 
   const content = {
-    heroTitle:
-      language === 'es'
-        ? 'Personas, datos e impacto real.'
-        : 'People, data, real impact.',
-    heroPrimaryCta: language === 'es' ? 'Explorar vacantes' : 'Explore careers',
-    heroSecondaryCta: language === 'es' ? 'Hablar con nosotros' : 'Work with us',
-    whoEyebrow: language === 'es' ? 'Quiénes somos' : 'Who we are',
-    whoTitle: language === 'es' ? 'Una compañía global de datos, analítica e IA' : 'A global data, analytics and AI company',
+    heroTitle: language === 'es' ? editableContent?.heroTitle_es || 'Personas, datos e impacto real.' : editableContent?.heroTitle_en || 'People, data, real impact.',
+    heroPrimaryCta: language === 'es' ? editableContent?.heroPrimaryCta_es || 'Explorar vacantes' : editableContent?.heroPrimaryCta_en || 'Explore careers',
+    heroSecondaryCta: language === 'es' ? editableContent?.heroSecondaryCta_es || 'Hablar con nosotros' : editableContent?.heroSecondaryCta_en || 'Work with us',
+    whoEyebrow: language === 'es' ? editableContent?.whoEyebrow_es || 'Quiénes somos' : editableContent?.whoEyebrow_en || 'Who we are',
+    whoTitle: language === 'es' ? editableContent?.whoTitle_es || 'Una compañía global de datos, analítica e IA' : editableContent?.whoTitle_en || 'A global data, analytics and AI company',
     whoDescription:
       language === 'es'
-        ? 'iData Global es una compañía multinacional especializada en soluciones de datos, analítica e inteligencia artificial. Trabajamos con organizaciones de múltiples industrias combinando visión estratégica, ejecución técnica y entendimiento del negocio para acelerar resultados medibles.'
-        : 'iData Global is a multinational company specialized in data, analytics and AI solutions. We work with organizations across industries, combining strategic thinking, technical execution and business understanding to accelerate measurable outcomes.',
-    whoPills:
-      language === 'es'
-        ? ['Multinacional', 'Data + AI solutions', 'Múltiples industrias', 'Estrategia + delivery']
-        : ['Multinational', 'Data + AI solutions', 'Cross-industry expertise', 'Strategy + delivery'],
-    cultureEyebrow: language === 'es' ? 'COOLTURA' : 'COOLTURA',
-    cultureTitle: language === 'es' ? 'Cooltura' : 'Cooltura',
-    cultureDescription:
-      language === 'es'
-        ? 'En iData Global, nuestra cultura, o COOLTURA, es el equilibrio entre personas, datos y soluciones. Es lo que nos permite combinar excelencia técnica, empatía y pensamiento estratégico para crear impacto significativo.'
-        : 'At iData Global, our culture, or COOLTURA, is the balance between people, data and solutions. It is what allows us to combine technical excellence, empathy and strategic thinking to create meaningful impact.',
-    purposeEyebrow: language === 'es' ? 'Nuestro propósito' : 'Our Purpose',
+        ? editableContent?.whoDescription_es || 'iData Global es una compañía multinacional especializada en soluciones de datos, analítica e inteligencia artificial. Trabajamos con organizaciones de múltiples industrias combinando visión estratégica, ejecución técnica y entendimiento del negocio para acelerar resultados medibles.'
+        : editableContent?.whoDescription_en || 'iData Global is a multinational company specialized in data, analytics and AI solutions. We work with organizations across industries, combining strategic thinking, technical execution and business understanding to accelerate measurable outcomes.',
+    whoPills: language === 'es' ? editableContent.whoPills_es : editableContent.whoPills_en,
+    cultureEyebrow: language === 'es' ? editableContent.cultureEyebrow_es : editableContent.cultureEyebrow_en,
+    cultureTitle: language === 'es' ? editableContent.cultureTitle_es : editableContent.cultureTitle_en,
+    cultureDescription: language === 'es' ? editableContent.cultureDescription_es : editableContent.cultureDescription_en,
+    purposeEyebrow: language === 'es' ? editableContent?.purposeEyebrow_es || 'Nuestro propósito' : editableContent?.purposeEyebrow_en || 'Our Purpose',
     purposeTitle:
       language === 'es'
-        ? 'Transformar nuestro entorno a través del poder de los datos'
-        : 'Transforming our environment through the power of data.',
+        ? editableContent?.purposeTitle_es || 'Transformar nuestro entorno a través del poder de los datos'
+        : editableContent?.purposeTitle_en || 'Transforming our environment through the power of data.',
     purposeDescription:
       language === 'es'
-        ? 'Creemos que los datos no son solo información: son la base para decisiones más inteligentes, más humanas y más sostenibles.'
-        : 'We believe data is not just information — it is the foundation for smarter, more human and more sustainable decisions.',
-    mindsetEyebrow: language === 'es' ? 'Evolución' : 'Evolution',
-    mindsetTitle:
-      language === 'es'
-        ? 'De la excelencia individual al impacto colectivo'
-        : 'From individual excellence to collective impact',
-    mindsetDescription:
-      language === 'es'
-        ? 'En iData evolucionamos de una mentalidad orientada al rendimiento individual hacia una cultura basada en colaboración, propósito compartido e impacto de largo plazo.'
-        : 'At iData, we evolved from a performance-driven mindset to a culture built on collaboration, shared purpose and long-term impact.',
-    mindsetBeforeTitle: language === 'es' ? 'Antes' : 'Before',
-    mindsetAfterTitle: language === 'es' ? 'Ahora' : 'Now',
-    mindsetBeforePoints:
-      language === 'es'
-        ? ['Excelencia medida por capacidad individual', 'Éxito entendido como entrega puntual', 'Resolución enfocada en disciplinas aisladas']
-        : ['Excellence measured by individual capability', 'Success understood as on-time delivery', 'Problem solving centered on isolated disciplines'],
-    mindsetAfterPoints:
-      language === 'es'
-        ? ['Equipos multidisciplinarios con ownership real', 'Impacto compartido entre negocio, datos y experiencia', 'Relaciones de largo plazo y mejora continua']
-        : ['Multidisciplinary teams with real ownership', 'Shared impact across business, data and experience', 'Long-term relationships and continuous improvement'],
-    valuesEyebrow: language === 'es' ? 'Valores en acción' : 'Values in action',
-    valuesTitle: language === 'es' ? 'Lo que nos define en el día a día' : 'What defines us in action',
-    values: language === 'es'
-      ? [
-          'Lideramos con empatía e intención.',
-          'Tomamos decisiones basadas en datos y ética.',
-          'Innovamos con propósito.',
-          'Comunicamos con claridad y actuamos con responsabilidad.',
-          'Nos enfocamos en impacto real, no solo en entrega.',
-        ]
-      : [
-          'We lead with empathy and intention.',
-          'We make decisions based on data and ethics.',
-          'We innovate with purpose.',
-          'We communicate clearly and act with responsibility.',
-          'We focus on real impact, not just delivery.',
-        ],
-    humanEyebrow: language === 'es' ? 'Cooltura' : 'Cooltura',
+        ? editableContent?.purposeDescription_es || 'Creemos que los datos no son solo información: son la base para decisiones más inteligentes, más humanas y más sostenibles.'
+        : editableContent?.purposeDescription_en || 'We believe data is not just information — it is the foundation for smarter, more human and more sustainable decisions.',
+    purposeHighlights: editableContent.purposeHighlights.map((item) => ({
+      label: language === 'es' ? item.label_es : item.label_en,
+      text: language === 'es' ? item.text_es : item.text_en,
+    })),
+    mindsetEyebrow: language === 'es' ? editableContent.mindsetEyebrow_es : editableContent.mindsetEyebrow_en,
+    mindsetTitle: language === 'es' ? editableContent.mindsetTitle_es : editableContent.mindsetTitle_en,
+    mindsetDescription: language === 'es' ? editableContent.mindsetDescription_es : editableContent.mindsetDescription_en,
+    mindsetBeforeTitle: language === 'es' ? editableContent.mindsetBeforeTitle_es : editableContent.mindsetBeforeTitle_en,
+    mindsetAfterTitle: language === 'es' ? editableContent.mindsetAfterTitle_es : editableContent.mindsetAfterTitle_en,
+    mindsetBeforePoints: language === 'es' ? editableContent.mindsetBeforePoints_es : editableContent.mindsetBeforePoints_en,
+    mindsetAfterPoints: language === 'es' ? editableContent.mindsetAfterPoints_es : editableContent.mindsetAfterPoints_en,
+    valuesEyebrow: language === 'es' ? editableContent?.valuesEyebrow_es || 'Valores en acción' : editableContent?.valuesEyebrow_en || 'Values in action',
+    valuesTitle: language === 'es' ? editableContent?.valuesTitle_es || 'Lo que nos define en el día a día' : editableContent?.valuesTitle_en || 'What defines us in action',
+    values: language === 'es' ? editableContent.values_es : editableContent.values_en,
+    humanEyebrow: language === 'es' ? editableContent?.humanEyebrow_es || 'Cooltura' : editableContent?.humanEyebrow_en || 'Cooltura',
     humanTitle:
       language === 'es'
-        ? 'La cultura se construye en cómo colaboramos, aprendemos y respondemos'
-        : 'Culture is built in how we collaborate, learn and respond',
+        ? editableContent?.humanTitle_es || 'La cultura se construye en cómo colaboramos, aprendemos y respondemos'
+        : editableContent?.humanTitle_en || 'Culture is built in how we collaborate, learn and respond',
     humanDescription:
       language === 'es'
-        ? 'Nuestra manera de trabajar combina cercanía, rigor y una vocación real por resolver problemas complejos con equipos diversos, curiosos y comprometidos.'
-        : 'Our way of working combines proximity, rigor and a real vocation for solving complex problems with diverse, curious and committed teams.',
+        ? editableContent?.humanDescription_es || 'Nuestra manera de trabajar combina cercanía, rigor y una vocación real por resolver problemas complejos con equipos diversos, curiosos y comprometidos.'
+        : editableContent?.humanDescription_en || 'Our way of working combines proximity, rigor and a real vocation for solving complex problems with diverse, curious and committed teams.',
     ctaEyebrow: language === 'es' ? 'Siguiente paso' : 'Next step',
     ctaTitle:
       language === 'es'
-        ? '¿Listo para transformar tu negocio con datos?'
-        : 'Ready to transform your business with data?',
+        ? editableContent?.ctaTitle_es || '¿Listo para transformar tu negocio con datos?'
+        : editableContent?.ctaTitle_en || 'Ready to transform your business with data?',
     ctaDescription:
       language === 'es'
-        ? 'Si buscas un socio para acelerar decisiones, modernizar capacidades o escalar una operación de datos e IA, conversemos.'
-        : 'If you are looking for a partner to accelerate decisions, modernize capabilities or scale a data and AI operation, let’s talk.',
-    ctaLabel: language === 'es' ? 'Contactarnos' : 'Talk to an expert',
+        ? editableContent?.ctaDescription_es || 'Si buscas un socio para acelerar decisiones, modernizar capacidades o escalar una operación de datos e IA, conversemos.'
+        : editableContent?.ctaDescription_en || 'If you are looking for a partner to accelerate decisions, modernize capabilities or scale a data and AI operation, let’s talk.',
+    ctaLabel: language === 'es' ? editableContent?.ctaLabel_es || 'Contactarnos' : editableContent?.ctaLabel_en || 'Talk to an expert',
     careersPath: `/${language}/${language === 'es' ? 'trabaja-con-nosotros' : 'work-with-us'}/`,
     aboutPath: `/${language}/${language === 'es' ? 'nosotros' : 'about'}/`,
   };
@@ -428,97 +402,20 @@ export function About() {
     updatedAt: '',
   };
 
-  const cultureCards = [
-    {
-      title: language === 'es' ? 'Cool People' : 'Cool People',
-      description:
-        language === 'es'
-          ? 'Creemos en la colaboración, la empatía y el crecimiento continuo. Las personas están en el centro de todo lo que construimos.'
-          : 'We believe in collaboration, empathy and continuous growth. People are at the center of everything we build.',
-      icon: HeartHandshake,
-      accentClass: 'bg-[linear-gradient(90deg,#5ec8ff,#9be7ff)]',
-    },
-    {
-      title: language === 'es' ? 'Cool Tech' : 'Cool Tech',
-      description:
-        language === 'es'
-          ? 'Usamos los datos con rigor, ética e innovación, transformando información en decisiones estratégicas.'
-          : 'We use data with rigor, ethics and innovation, transforming information into strategic decisions.',
-      icon: Sparkles,
-      accentClass: 'bg-[linear-gradient(90deg,#7c3aed,#d946ef)]',
-    },
-    {
-      title: language === 'es' ? 'Cool Solutions' : 'Cool Solutions',
-      description:
-        language === 'es'
-          ? 'Diseñamos soluciones prácticas, creativas y centradas en el usuario que generan valor real para el negocio.'
-          : 'We design practical, creative and user-centered solutions that generate real business value.',
-      icon: Target,
-      accentClass: 'bg-[linear-gradient(90deg,#10b981,#7dd3fc)]',
-    },
-  ];
+  const cultureCards = (editableContent?.cultureCards || []).slice(0, 3).map((card: any, index: number) => ({
+    title: language === 'es' ? card.title_es : card.title_en,
+    description: language === 'es' ? card.description_es : card.description_en,
+    icon: index === 0 ? HeartHandshake : index === 1 ? Sparkles : Target,
+    accentClass: index === 0 ? 'bg-[linear-gradient(90deg,#5ec8ff,#9be7ff)]' : index === 1 ? 'bg-[linear-gradient(90deg,#7c3aed,#d946ef)]' : 'bg-[linear-gradient(90deg,#10b981,#7dd3fc)]',
+  }));
 
-  const recognitionCards = language === 'es'
-    ? [
-        {
-          title: 'Partners reconocidos',
-          description: 'Fortalecemos nuestro impacto con alianzas estratégicas, especializaciones y reconocimientos que respaldan nuestras implementaciones.',
-          detail: 'Ecosistema partner, especializaciones y presencia regional',
-          metric: '05+',
-          icon: Trophy,
-        },
-        {
-          title: 'Talento certificado',
-          description: 'Nuestro equipo crece con certificaciones técnicas y formación continua en plataformas, analítica avanzada e inteligencia artificial.',
-          detail: 'Certificaciones activas y aprendizaje continuo',
-          metric: '40+',
-          icon: BadgeCheck,
-        },
-        {
-          title: 'Confianza enterprise',
-          description: 'Los logros del equipo se reflejan en programas, credenciales y entregables que generan confianza en operaciones de alto nivel.',
-          detail: 'Estándares, validaciones y ejecución confiable',
-          metric: 'Enterprise',
-          icon: ShieldCheck,
-        },
-        {
-          title: 'Premios que elevan la práctica',
-          description: 'Celebramos hitos que combinan excelencia técnica, colaboración y resultados de negocio en proyectos reales.',
-          detail: 'Reconocimientos, hitos y cultura de excelencia',
-          metric: 'Top Team',
-          icon: Award,
-        },
-      ]
-    : [
-        {
-          title: 'Recognized partnerships',
-          description: 'We expand our impact through strategic alliances, specializations and recognitions that support our implementations.',
-          detail: 'Partner ecosystem, specializations and regional presence',
-          metric: '05+',
-          icon: Trophy,
-        },
-        {
-          title: 'Certified talent',
-          description: 'Our team grows through technical certifications and continuous learning across platforms, advanced analytics and AI.',
-          detail: 'Active certifications and continuous learning',
-          metric: '40+',
-          icon: BadgeCheck,
-        },
-        {
-          title: 'Enterprise trust',
-          description: 'Team achievements show up in programs, credentials and deliverables that build confidence in high-level operations.',
-          detail: 'Standards, validations and dependable execution',
-          metric: 'Enterprise',
-          icon: ShieldCheck,
-        },
-        {
-          title: 'Awards that elevate the craft',
-          description: 'We celebrate milestones that combine technical excellence, collaboration and business results in real engagements.',
-          detail: 'Recognitions, milestones and a culture of excellence',
-          metric: 'Top Team',
-          icon: Award,
-        },
-      ];
+  const recognitionCards = (editableContent?.recognitionCards || []).slice(0, 4).map((card: any, index: number) => ({
+    title: language === 'es' ? card.title_es : card.title_en,
+    description: language === 'es' ? card.description_es : card.description_en,
+    detail: language === 'es' ? card.detail_es : card.detail_en,
+    metric: card.metric,
+    icon: index === 0 ? Trophy : index === 1 ? BadgeCheck : index === 2 ? ShieldCheck : Award,
+  }));
 
   const humanCards = leadership.length > 0
     ? leadership
@@ -740,20 +637,7 @@ export function About() {
               />
 
               <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                {[
-                  {
-                    label: language === 'es' ? 'Más claridad' : 'More clarity',
-                    text: language === 'es' ? 'Decisiones con mejor contexto' : 'Decisions with better context',
-                  },
-                  {
-                    label: language === 'es' ? 'Más confianza' : 'More trust',
-                    text: language === 'es' ? 'Modelos y procesos con criterio' : 'Models and processes with accountability',
-                  },
-                  {
-                    label: language === 'es' ? 'Más impacto' : 'More impact',
-                    text: language === 'es' ? 'Resultados conectados al negocio' : 'Outcomes tied to business value',
-                  },
-                ].map((item) => (
+                {content.purposeHighlights.map((item) => (
                   <div
                     key={item.label}
                     className={`rounded-[24px] border p-5 ${isDark ? 'border-white/10 bg-white/6' : 'border-slate-200 bg-slate-50/80'}`}
@@ -933,11 +817,9 @@ export function About() {
             <div className="relative z-10">
               <div className="max-w-3xl">
                 <SectionHeading
-                  eyebrow={language === 'es' ? 'Reconocimientos' : 'Recognition'}
-                  title={language === 'es' ? 'Premios, credenciales y logros que respaldan nuestro trabajo' : 'Awards, credentials and achievements behind our work'}
-                  description={language === 'es'
-                    ? 'Esta sección resume la solidez de nuestro ecosistema partner, la evolución de nuestro talento certificado y los hitos que demuestran capacidad real de ejecución.'
-                    : 'This section highlights the strength of our partner ecosystem, the growth of our certified talent and the milestones that demonstrate real execution capability.'}
+                  eyebrow={language === 'es' ? editableContent.recognitionEyebrow_es : editableContent.recognitionEyebrow_en}
+                  title={language === 'es' ? editableContent.recognitionTitle_es : editableContent.recognitionTitle_en}
+                  description={language === 'es' ? editableContent.recognitionDescription_es : editableContent.recognitionDescription_en}
                   isDark={isDark}
                 />
               </div>

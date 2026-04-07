@@ -10,6 +10,8 @@ import { getByKey as getPageByKey } from '../../../services/pagesService';
 import { useContactSettings } from '../../shared/hooks/useContactSettings';
 import { EXTERNAL_DATA_POLICY_URL } from '../../shared/constants/legalLinks';
 import { buildWhatsAppRegionUrl, getActiveWhatsAppRegions, getLocalizedRegionAvailability, getLocalizedRegionHelper, getLocalizedRegionName } from '../../shared/utils/whatsapp';
+import { getManagedSocialLinks } from '../../shared/utils/socialLinks';
+import { defaultContactPageContent, getContactPageContent, type ContactPageContent } from '../../admin/services/contactPageContent.service';
 
 const NAME_PATTERN = "[A-Za-zÀ-ÿ' -]+";
 const PHONE_PATTERN = "[0-9+() -]{8,20}";
@@ -25,6 +27,7 @@ export function Contact() {
   const secondaryWhatsAppRegion = activeWhatsAppRegions[1];
   const [searchParams] = useSearchParams();
   const [pageRecord, setPageRecord] = useState<any | null>(null);
+  const [pageContent, setPageContent] = useState<ContactPageContent>(defaultContactPageContent);
 
   // Lead context state (hidden metadata from URL params)
   const [leadContext, setLeadContext] = useState({
@@ -68,9 +71,13 @@ export function Contact() {
 
     async function loadPageRecord() {
       try {
-        const record = await getPageByKey('contact');
+        const [record, content] = await Promise.all([
+          getPageByKey('contact'),
+          getContactPageContent().catch(() => defaultContactPageContent),
+        ]);
         if (!cancelled) {
           setPageRecord(record);
+          setPageContent(content);
         }
       } catch (error) {
         console.error('Error loading contact page metadata:', error);
@@ -137,32 +144,17 @@ export function Contact() {
     },
   ];
 
-  const socialLinks = [
-    {
-      key: 'facebook',
-      label: 'Facebook',
-      href: 'https://www.facebook.com/iData.Global.IA/',
-      icon: Facebook,
-    },
-    {
-      key: 'linkedin',
-      label: 'LinkedIn',
-      href: contactSettings.socialMedia.linkedin,
-      icon: Linkedin,
-    },
-    {
-      key: 'instagram',
-      label: 'Instagram',
-      href: contactSettings.socialMedia.instagram,
-      icon: Instagram,
-    },
-    {
-      key: 'youtube',
-      label: 'YouTube',
-      href: contactSettings.socialMedia.youtube,
-      icon: Youtube,
-    },
-  ].filter((item) => Boolean(item.href));
+  const socialLinks = getManagedSocialLinks(contactSettings.socialMedia).map((item) => ({
+    ...item,
+    icon:
+      item.key === 'facebook'
+        ? Facebook
+        : item.key === 'linkedin'
+          ? Linkedin
+          : item.key === 'instagram'
+            ? Instagram
+            : Youtube,
+  }));
 
   const compactWhatsAppRegions = getActiveWhatsAppRegions(contactSettings.whatsapp);
 
@@ -509,11 +501,11 @@ export function Contact() {
           >
             <div className={`rounded-[28px] border p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] ${isDark ? 'border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(34,197,94,0.12),transparent_22%),radial-gradient(circle_at_top_right,rgba(59,130,246,0.12),transparent_22%),linear-gradient(180deg,#0f172a,#020617)]' : 'border-purple-100 bg-gradient-to-r from-green-50 via-white to-blue-50'}`}>
               <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0088FF]">
-                {language === 'es' ? 'Contacto directo' : 'Direct contact'}
+                {language === 'es' ? pageContent.directEyebrow_es : pageContent.directEyebrow_en}
               </p>
               <div className="mt-3 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                 <h2 className={`text-2xl font-light tracking-[-0.05em] md:text-3xl ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {language === 'es' ? 'Escríbenos por WhatsApp o también déjanos tu mensaje' : 'Message us on WhatsApp or leave us your message below'}
+                  {language === 'es' ? pageContent.directTitle_es : pageContent.directTitle_en}
                 </h2>
               </div>
 
@@ -576,12 +568,10 @@ export function Contact() {
               >
                 <div className="mb-6">
                   <h1 className={`text-2xl md:text-3xl font-light ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {language === 'es' ? 'Hablemos de tu iniciativa' : 'Let us talk about your initiative'}
+                    {language === 'es' ? pageContent.formTitle_es : pageContent.formTitle_en}
                   </h1>
                   <p className={`mt-3 text-sm md:text-base ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                    {language === 'es'
-                      ? 'Déjanos tus datos y un breve contexto. Nuestro equipo te contactará pronto.'
-                      : 'Leave your details and a brief context. Our team will contact you shortly.'}
+                    {language === 'es' ? pageContent.formDescription_es : pageContent.formDescription_en}
                   </p>
                 </div>
 
@@ -617,10 +607,10 @@ export function Contact() {
                       <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
                       <div>
                         <h3 className={`mb-1 font-medium ${isDark ? 'text-green-100' : 'text-green-900'}`}>
-                          {language === 'es' ? 'Gracias por tu mensaje.' : 'Thank you for your message.'}
+                          {language === 'es' ? pageContent.successTitle_es : pageContent.successTitle_en}
                         </h3>
                         <p className={`text-sm ${isDark ? 'text-green-200' : 'text-green-700'}`}>
-                          {language === 'es' ? 'Nuestro equipo te responderá pronto.' : 'Our team will respond shortly.'}
+                          {language === 'es' ? pageContent.successDescription_es : pageContent.successDescription_en}
                         </p>
                       </div>
                     </motion.div>
@@ -635,12 +625,10 @@ export function Contact() {
                       <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
                       <div>
                         <h3 className={`mb-1 font-medium ${isDark ? 'text-red-100' : 'text-red-900'}`}>
-                          {language === 'es'
-                            ? 'Hubo un problema enviando el mensaje.'
-                            : 'There was a problem sending your message.'}
+                          {language === 'es' ? pageContent.errorTitle_es : pageContent.errorTitle_en}
                         </h3>
                         <p className={`text-sm ${isDark ? 'text-red-200' : 'text-red-700'}`}>
-                          {language === 'es' ? 'Intenta nuevamente.' : 'Please try again.'}
+                          {language === 'es' ? pageContent.errorDescription_es : pageContent.errorDescription_en}
                         </p>
                       </div>
                     </motion.div>
@@ -761,7 +749,7 @@ export function Contact() {
 
                   <div>
                     <label htmlFor="message" className={`mb-2 block text-sm font-medium ${isDark ? 'text-slate-200' : 'text-gray-700'}`}>
-                      {language === 'es' ? 'Cuéntanos brevemente qué necesitas' : 'Briefly tell us what you need'} *
+                      {language === 'es' ? pageContent.formMessageLabel_es : pageContent.formMessageLabel_en} *
                     </label>
                     <textarea
                       id="message"
@@ -771,8 +759,8 @@ export function Contact() {
                       minLength={10}
                       maxLength={1200}
                       placeholder={language === 'es'
-                        ? 'Cuéntanos el reto, el objetivo o la conversación que te gustaría tener.'
-                        : 'Tell us the challenge, goal or conversation you would like to have.'}
+                        ? pageContent.formMessagePlaceholder_es
+                        : pageContent.formMessagePlaceholder_en}
                       value={formData.message}
                       onChange={handleInputChange}
                       className={`w-full resize-none rounded-xl border px-4 py-3.5 transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500 ${isDark ? 'border-white/10 bg-slate-950 text-white placeholder:text-slate-500 hover:border-white/20' : 'border-gray-300 bg-white hover:border-gray-400 placeholder:text-gray-400'}`}
@@ -811,7 +799,8 @@ export function Contact() {
                       </a>
                       {language === 'es'
                         ? ' y el tratamiento de mis datos personales para fines de contacto comercial.'
-                        : ' and the processing of my personal data for commercial contact purposes.'} *
+                        : ' '}
+                      <span>{language === 'es' ? pageContent.privacyText_es : pageContent.privacyText_en}</span> *
                     </label>
                   </div>
 
@@ -821,14 +810,14 @@ export function Contact() {
                       disabled={isSubmitting}
                       className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-purple-600 px-8 py-4 font-medium text-white transition-all duration-300 hover:scale-[1.02] hover:bg-purple-700 hover:shadow-lg active:scale-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
                     >
-                      {isSubmitting ? (
+                          {isSubmitting ? (
                         <>
                           <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                           {language === 'es' ? 'Enviando...' : 'Sending...'}
                         </>
-                      ) : (
-                        <>
-                          {language === 'es' ? 'Enviar mensaje' : 'Send message'}
+                        ) : (
+                          <>
+                          {language === 'es' ? pageContent.submitLabel_es : pageContent.submitLabel_en}
                           <Send className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                         </>
                       )}
@@ -848,7 +837,7 @@ export function Contact() {
               >
                 <div className={`rounded-2xl border p-8 shadow-xl ${isDark ? 'border-white/10 bg-slate-900' : 'border-gray-200 bg-white'}`}>
                   <h3 className={`mb-6 text-xl font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {language === 'es' ? 'Información de contacto' : 'Contact information'}
+                    {language === 'es' ? pageContent.contactInfoTitle_es : pageContent.contactInfoTitle_en}
                   </h3>
                   <div className="space-y-6">
                     {contactInfo.map((info, index) => {
@@ -877,12 +866,10 @@ export function Contact() {
                 {socialLinks.length > 0 && (
                   <div className={`rounded-2xl border p-8 shadow-xl ${isDark ? 'border-white/10 bg-slate-900' : 'border-gray-200 bg-white'}`}>
                     <h3 className={`mb-3 text-xl font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      {language === 'es' ? 'Síguenos en redes sociales' : 'Follow us on social media'}
+                      {language === 'es' ? pageContent.socialTitle_es : pageContent.socialTitle_en}
                     </h3>
                     <p className={`mb-5 text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
-                      {language === 'es'
-                        ? 'También puedes seguir la conversación y conocer lo que estamos construyendo.'
-                        : 'You can also follow the conversation and see what we are building.'}
+                      {language === 'es' ? pageContent.socialDescription_es : pageContent.socialDescription_en}
                     </p>
                     <div className="flex flex-wrap gap-3">
                       {socialLinks.map((item) => {
@@ -906,10 +893,10 @@ export function Contact() {
 
                 <div className={`rounded-2xl border p-6 ${isDark ? 'border-white/10 bg-[linear-gradient(180deg,#111827,#0f172a)]' : 'border-purple-100 bg-gradient-to-br from-purple-50 to-blue-50'}`}>
                   <h4 className={`mb-3 font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    {language === 'es' ? 'Tiempo de respuesta' : 'Response time'}
+                    {language === 'es' ? pageContent.responseTitle_es : pageContent.responseTitle_en}
                   </h4>
                   <p className={`text-sm font-light leading-relaxed ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                    {language === 'es' ? 'Respondemos en un máximo de 24 horas hábiles.' : 'We reply within 24 business hours.'}
+                    {language === 'es' ? pageContent.responseDescription_es : pageContent.responseDescription_en}
                   </p>
                 </div>
               </motion.div>

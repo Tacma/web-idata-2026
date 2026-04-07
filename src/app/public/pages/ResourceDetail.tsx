@@ -10,6 +10,7 @@ import { mockResources } from '../../data/mockData';
 import { Calendar, Download, FileText } from 'lucide-react';
 import { getBySlug as getResourceBySlug } from '../../../services/resourcesService';
 import { buildContactLink } from '../../shared/utils/contactLinks';
+import { buildPublicUrl } from '../../shared/utils/siteUrl';
 
 const allowMockFallback = import.meta.env.DEV;
 
@@ -82,17 +83,43 @@ export function ResourceDetail() {
   const currentSlug = getLocalizedValue(resource.slug_es, resource.slug_en);
   const basePath = language === 'es' ? '/es/recursos' : '/en/resources';
   const seo = language === 'es' ? resource.seo_es : resource.seo_en;
+  const currentCanonical = `${basePath}/${currentSlug}/`;
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: language === 'es' ? 'Inicio' : 'Home',
+        item: buildPublicUrl(`/${language}/`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: language === 'es' ? 'Recursos' : 'Resources',
+        item: buildPublicUrl(`${basePath}/`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: title,
+        item: buildPublicUrl(currentCanonical),
+      },
+    ],
+  };
 
   return (
     <>
       <SEOHead
         title={seo?.metaTitle || `${title} - iData`}
         description={seo?.metaDescription || description}
-        canonical={`${basePath}/${currentSlug}`}
+        canonical={currentCanonical}
         ogImage={resource.featuredImage}
-        alternateES={`/es/recursos/${resource.slug_es}`}
-        alternateEN={`/en/resources/${resource.slug_en}`}
+        alternateES={`/es/recursos/${resource.slug_es}/`}
+        alternateEN={`/en/resources/${resource.slug_en}/`}
         language={language}
+        structuredData={breadcrumbSchema}
       />
 
       {/* Header */}

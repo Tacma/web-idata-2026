@@ -35,6 +35,10 @@ export function InternalPageHero({
                 src={imageSrc}
                 alt={imageAlt}
                 className="h-full w-full object-cover"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+                sizes="100vw"
               />
               <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(2,6,23,0.78)_0%,rgba(8,15,30,0.72)_46%,rgba(15,23,42,0.68)_100%)]" />
             </motion.div>

@@ -7,6 +7,8 @@
 const PREFIX = 'cms_';
 
 export type CollectionKey =
+  | 'about_page_content'
+  | 'contact_page_content'
   | 'home_sections'
   | 'service_categories'
   | 'services'

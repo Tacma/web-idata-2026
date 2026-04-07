@@ -30,7 +30,9 @@ import {
   Info,
   Send,
   CalendarDays,
-  Sparkles
+  Sparkles,
+  Palette,
+  Workflow
 } from 'lucide-react';
 import { useState } from 'react';
 import { AdminMeta } from '../../shared/components/AdminMeta';
@@ -39,15 +41,29 @@ import { ThemeToggle } from '../../shared/components/ThemeToggle';
 // Navigation structure with grouped sections (Spanish)
 const navigationGroups = [
   {
-    name: 'Resumen',
+    name: 'Inicio',
     items: [
-      { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+      { name: 'Centro de control', href: '/admin', icon: LayoutDashboard, exact: true },
     ]
   },
   {
-    name: 'Contenido',
+    name: 'Base del sitio',
     items: [
+      { name: 'Marca y datos globales', href: '/admin/brand', icon: Palette },
+      { name: 'Navegación y footer', href: '/admin/navigation', icon: NavigationIcon },
+      { name: 'SEO y Google', href: '/admin/integrations', icon: Workflow },
+      { name: 'Mercados y dominios', href: '/admin/markets', icon: Globe },
+      { name: 'Redirecciones', href: '/admin/redirects', icon: Link2 },
+      { name: 'Páginas legales', href: '/admin/legal-pages', icon: Info },
+    ]
+  },
+  {
+    name: 'Contenido editable',
+    items: [
+      { name: 'Página Inicio', href: '/admin/home-page', icon: Home },
       { name: 'Páginas', href: '/admin/pages', icon: FileText },
+      { name: 'Página Nosotros', href: '/admin/about-page', icon: Sparkles },
+      { name: 'Página Contacto', href: '/admin/contact-page', icon: Mail },
       { name: 'Servicios', href: '/admin/services', icon: Briefcase },
       { name: 'Partners', href: '/admin/partners', icon: Layers },
       { name: 'Industrias', href: '/admin/industries', icon: FolderOpen },
@@ -59,7 +75,7 @@ const navigationGroups = [
     ]
   },
   {
-    name: 'Equipo y Empleo',
+    name: 'Talento y oportunidades',
     items: [
       { name: 'Miembros del equipo', href: '/admin/team-members', icon: Users },
       { name: 'Vacantes', href: '/admin/jobs', icon: JobsIcon },
@@ -67,29 +83,25 @@ const navigationGroups = [
     ]
   },
   {
-    name: 'Leads y Contacto',
+    name: 'Mensajes y atención',
     items: [
       { name: 'Leads de contacto', href: '/admin/contact-submissions', icon: Mail },
-      { name: 'Configuración de contacto', href: '/admin/contact-settings', icon: Settings },
+      { name: 'WhatsApp y canales', href: '/admin/contact-settings', icon: Settings },
     ]
   },
   {
-    name: 'Medios y Recursos',
+    name: 'Biblioteca',
     items: [
       { name: 'Biblioteca de medios', href: '/admin/media-library', icon: Image },
       { name: 'Recursos', href: '/admin/resources', icon: Download },
     ]
   },
   {
-    name: 'Configuración del Sitio',
+    name: 'Configuración avanzada',
     items: [
-      { name: 'Navegación', href: '/admin/navigation', icon: NavigationIcon },
       { name: 'SEO y metadata', href: '/admin/seo-settings', icon: Search },
-      { name: 'Páginas legales', href: '/admin/legal-pages', icon: Info },
       { name: 'Analítica', href: '/admin/analytics', icon: BarChart3 },
-      { name: 'Mercados y dominios', href: '/admin/markets', icon: Globe },
-      { name: 'Redirecciones', href: '/admin/redirects', icon: Link2 },
-      { name: 'Configuración global', href: '/admin/global-settings', icon: Settings },
+      { name: 'Configuración global', href: '/admin/global-settings', icon: Globe },
     ]
   },
   {
@@ -134,7 +146,7 @@ export function AdminLayoutNew() {
           <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">iD</span>
           </div>
-          <h1 className="text-lg font-semibold text-gray-900">iData CMS</h1>
+          <h1 className="text-lg font-semibold text-gray-900">iData Control</h1>
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle language="es" className="px-2.5 py-2 text-xs" />
@@ -164,8 +176,8 @@ export function AdminLayoutNew() {
                 <span className="text-white font-bold">iD</span>
               </div>
               <div>
-                <div className="text-lg font-bold text-gray-900">iData CMS</div>
-                <div className="text-xs text-gray-500">Administrador</div>
+                <div className="text-lg font-bold text-gray-900">iData Control</div>
+                <div className="text-xs text-gray-500">Edición y operación</div>
               </div>
             </Link>
             <ThemeToggle language="es" className="shrink-0 px-2.5 py-2 text-xs" />

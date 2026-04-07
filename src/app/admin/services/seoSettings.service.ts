@@ -31,6 +31,8 @@ export interface SEOSettings {
   contactPageUrl_en: string;
   careersPageUrl_es: string;
   careersPageUrl_en: string;
+  facebookUrl: string;
+  xUrl: string;
   linkedinUrl: string;
   instagramUrl: string;
   youtubeUrl: string;
@@ -74,6 +76,8 @@ const defaultSettings: SEOSettings = {
   contactPageUrl_en: '/en/contact/',
   careersPageUrl_es: '/es/trabaja-con-nosotros/',
   careersPageUrl_en: '/en/work-with-us/',
+  facebookUrl: 'https://www.facebook.com/iData.Global.IA/',
+  xUrl: '',
   linkedinUrl: 'https://www.linkedin.com/company/idata-global-latam/posts/?feedView=all',
   instagramUrl: 'https://www.instagram.com/idata.global/',
   youtubeUrl: 'https://www.youtube.com/@idata.global',
@@ -137,6 +141,15 @@ function normalizeSettings(raw: any): SEOSettings {
     contactPageUrl_en: raw?.contactPageUrl_en || defaultSettings.contactPageUrl_en,
     careersPageUrl_es: raw?.careersPageUrl_es || defaultSettings.careersPageUrl_es,
     careersPageUrl_en: raw?.careersPageUrl_en || defaultSettings.careersPageUrl_en,
+    facebookUrl:
+      raw?.facebookUrl ||
+      raw?.organization_schema?.social_profiles?.find((url: string) => url.includes('facebook')) ||
+      defaultSettings.facebookUrl,
+    xUrl:
+      raw?.xUrl ||
+      raw?.twitterUrl ||
+      raw?.organization_schema?.social_profiles?.find((url: string) => url.includes('x.com') || url.includes('twitter.com')) ||
+      defaultSettings.xUrl,
     linkedinUrl:
       raw?.linkedinUrl ||
       raw?.organization_schema?.social_profiles?.find((url: string) => url.includes('linkedin')) ||

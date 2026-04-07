@@ -10,6 +10,7 @@ import { getPublished as getCaseStudies } from '../../../services/caseStudiesSer
 import { getBySlug as getIndustryBySlug } from '../../../services/industriesService';
 import { useState, useEffect } from 'react';
 import { buildContactLink } from '../../shared/utils/contactLinks';
+import { buildPublicUrl } from '../../shared/utils/siteUrl';
 
 export function IndustryDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -53,21 +54,31 @@ export function IndustryDetail() {
     .filter((c: any) => c.industryId === industry.id || c.industry_id === industry.id)
     .slice(0, 3);
 
-  // Breadcrumb data for schema
-  const breadcrumbs = [
-    {
-      label: language === 'es' ? 'Inicio' : 'Home',
-      href: `/${language}/`,
-    },
-    {
-      label: language === 'es' ? 'Casos de éxito' : 'Case Studies',
-      href: `${basePath}/`,
-    },
-    {
-      label: title,
-      href: `${basePath}/${currentSlug}`,
-    },
-  ];
+  const currentCanonical = `${basePath}/${currentSlug}/`;
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: language === 'es' ? 'Inicio' : 'Home',
+        item: buildPublicUrl(`/${language}/`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: language === 'es' ? 'Casos de éxito' : 'Case studies',
+        item: buildPublicUrl(`${basePath}/`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: title,
+        item: buildPublicUrl(currentCanonical),
+      },
+    ],
+  };
 
   const ctaSection = {
     id: `industry-detail-cta-${language}-${currentSlug}`,
@@ -101,11 +112,12 @@ export function IndustryDetail() {
       <SEOHead
         title={seo?.metaTitle || title}
         description={seo?.metaDescription || getLocalizedValue(industry.excerpt_es, industry.excerpt_en)}
-        canonical={`${basePath}/${currentSlug}`}
+        canonical={currentCanonical}
         ogImage={industry.featuredImage}
-        alternateES={`/es/industrias/${industry.slug_es}`}
-        alternateEN={`/en/industries/${industry.slug_en}`}
+        alternateES={`/es/industrias/${industry.slug_es}/`}
+        alternateEN={`/en/industries/${industry.slug_en}/`}
         language={language}
+        structuredData={breadcrumbSchema}
       />
 
       {/* Header */}

@@ -19,6 +19,7 @@ import { SEOHead } from '../../shared/components/SEOHead';
 import { getBySlug } from '../../../services/jobsService';
 import { mockJobs } from '../../data/mockData';
 import { JobApplicationForm } from '../components/careers/JobApplicationForm';
+import { buildPublicUrl } from '../../shared/utils/siteUrl';
 
 const allowMockFallback = import.meta.env.DEV;
 
@@ -76,6 +77,16 @@ function getDefaultEqualOpportunity(language: 'es' | 'en') {
   return language === 'es'
     ? 'En iData valoramos la diversidad de trayectorias, identidades y perspectivas. Nuestras decisiones de selección se basan en capacidades, potencial y ajuste al rol.'
     : 'At iData we value diverse backgrounds, identities and perspectives. Our hiring decisions are based on capabilities, potential and role fit.';
+}
+
+function mapEmploymentTypeToSchema(value?: string | null) {
+  const normalized = String(value || '').toLowerCase();
+  if (normalized.includes('full')) return 'FULL_TIME';
+  if (normalized.includes('part')) return 'PART_TIME';
+  if (normalized.includes('contract')) return 'CONTRACTOR';
+  if (normalized.includes('intern')) return 'INTERN';
+  if (normalized.includes('temporary') || normalized.includes('temp')) return 'TEMPORARY';
+  return undefined;
 }
 
 function buildFallbackSectionItems(
@@ -335,16 +346,95 @@ export function JobDetail() {
     toolsRaw.length >= 2 ? toolsRaw : buildFallbackSectionItems(language, 'tools', fallbackContext);
   const whatWeOffer =
     whatWeOfferRaw.length >= 2 ? whatWeOfferRaw : buildFallbackSectionItems(language, 'offer', fallbackContext);
+  const canonicalPath = `/${language}/${language === 'es' ? 'trabaja-con-nosotros/ofertas' : 'work-with-us/jobs'}/${slug}/`;
+  const publicUrl = buildPublicUrl(canonicalPath);
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: language === 'es' ? 'Inicio' : 'Home',
+        item: buildPublicUrl(`/${language}/`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: language === 'es' ? 'Trabaja con nosotros' : 'Work with us',
+        item: buildPublicUrl(`/${language}/${language === 'es' ? 'trabaja-con-nosotros' : 'work-with-us'}/`),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: title,
+        item: publicUrl,
+      },
+    ],
+  };
+  const jobPostingSchema: Record<string, any> = {
+    '@context': 'https://schema.org',
+    '@type': 'JobPosting',
+    title,
+    description: [summary, aboutRole, ...responsibilities.slice(0, 6), ...qualifications.slice(0, 6)].filter(Boolean).join('\n'),
+    datePosted: job.posted_at || job.publishedDate || job.published_date || undefined,
+    directApply: true,
+    employmentType: mapEmploymentTypeToSchema(employmentType) || employmentType || undefined,
+    hiringOrganization: {
+      '@type': 'Organization',
+      name: 'iData Global',
+      sameAs: 'https://idata.global',
+      logo: buildPublicUrl('/assets/logos/brand/logo-complete.png'),
+    },
+    title_es: undefined,
+    identifier: {
+      '@type': 'PropertyValue',
+      name: 'iData Global',
+      value: job.id || slug,
+    },
+    applicantLocationRequirements: location
+      ? {
+          '@type': 'Country',
+          name: location,
+        }
+      : undefined,
+    jobLocationType: job.modality === 'remote' ? 'TELECOMMUTE' : undefined,
+    jobLocation:
+      job.modality !== 'remote' && location
+        ? {
+            '@type': 'Place',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: location,
+            },
+          }
+        : undefined,
+    baseSalary:
+      job.salary_visible && job.salary_min && job.salary_max
+        ? {
+            '@type': 'MonetaryAmount',
+            currency: job.currency || 'USD',
+            value: {
+              '@type': 'QuantitativeValue',
+              minValue: job.salary_min,
+              maxValue: job.salary_max,
+              unitText: 'MONTH',
+            },
+          }
+        : undefined,
+  };
+  Object.keys(jobPostingSchema).forEach((key) => jobPostingSchema[key] === undefined && delete jobPostingSchema[key]);
 
   return (
     <>
       <SEOHead
         title={seo?.metaTitle || `${title} - ${language === 'es' ? 'Trabaja con nosotros' : 'Work with us'} - iData`}
         description={seo?.metaDescription || summary}
-        canonical={`/${language}/${language === 'es' ? 'trabaja-con-nosotros/ofertas' : 'work-with-us/jobs'}/${slug}/`}
+        canonical={canonicalPath}
         alternateES={`/es/trabaja-con-nosotros/ofertas/${job.slug_es}/`}
         alternateEN={`/en/work-with-us/jobs/${job.slug_en}/`}
         language={language}
+        structuredData={[breadcrumbSchema, jobPostingSchema]}
       />
 
       <div className={`min-h-screen pt-24 pb-20 ${isDark ? 'bg-slate-950 text-white' : 'bg-white text-slate-950'}`}>
