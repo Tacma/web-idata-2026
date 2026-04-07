@@ -3,17 +3,22 @@ import { Link } from 'react-router';
 import { motion } from 'motion/react';
 import {
   ArrowRight,
+  Award,
+  BadgeCheck,
   Briefcase,
   Globe2,
   Handshake,
   HeartHandshake,
+  ShieldCheck,
   Sparkles,
   Target,
+  Trophy,
 } from 'lucide-react';
 import { SEOHead } from '../../shared/components/SEOHead';
 import { useLanguage } from '../../shared/contexts/LanguageContext';
 import { useTheme } from '../../shared/contexts/ThemeContext';
 import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
+import { CTABandSection } from '../components/sections/CTABandSection';
 import { getPublished as getPublishedTeamMembers } from '../../../services/teamMembersService';
 import { getByKey as getPageByKey } from '../../../services/pagesService';
 import { getPublished as getPublishedPartners } from '../../../services/partnersService';
@@ -22,7 +27,6 @@ import { buildContactLink } from '../../shared/utils/contactLinks';
 import teamImage from '/assets/images/about/team.png';
 import purposeGlobeImage from '/assets/images/about/purpose-globe.jpg';
 import transformamosImage from '/assets/images/about/transformamos.png';
-import globalPresenceGlobeImage from '/assets/images/about/global-presence-globe.jpg';
 import angelaMoralesImage from '/assets/images/about/angela-morales-herrera.png';
 import bayronQuinteroImage from '/assets/images/about/bayron-elias-quintero-sandoval.png';
 import dayanaRomanImage from '/assets/images/about/dayana-roman-castillo.png';
@@ -115,129 +119,100 @@ function ValueItem({
   );
 }
 
-function GlobalFootprintMap({
+function FloatingAwardShape({
+  className,
+  variant,
   isDark,
-  language,
 }: {
+  className: string;
+  variant: 'obelisk' | 'gem' | 'prism';
   isDark: boolean;
-  language: 'es' | 'en';
 }) {
-  const labels = {
-    us: language === 'es' ? 'Estados Unidos' : 'United States',
-    mx: language === 'es' ? 'México' : 'Mexico',
-    ca: language === 'es' ? 'Centroamérica' : 'Central America',
-    pa: 'Panamá',
-    co: 'Colombia',
-    cl: 'Chile',
-  };
+  const sharedGlass = isDark
+    ? 'border-white/28 bg-white/[0.1] shadow-[0_24px_90px_rgba(0,0,0,0.36)]'
+    : 'border-white/90 bg-white/42 shadow-[0_24px_90px_rgba(15,23,42,0.16)]';
 
-  const markers = [
-    {
-      id: 'us',
-      dotLeft: '41.5%',
-      dotTop: '29.5%',
-      labelLeft: '7.5%',
-      labelTop: '19.5%',
-      accent: 'sky',
-      anchor: 'left',
-      lineTo: { x1: 152, y1: 76, x2: 404, y2: 110 },
-    },
-    {
-      id: 'mx',
-      dotLeft: '36.3%',
-      dotTop: '44.2%',
-      labelLeft: '6.2%',
-      labelTop: '43.2%',
-      accent: 'fuchsia',
-      anchor: 'left',
-      lineTo: { x1: 142, y1: 160, x2: 353, y2: 168 },
-    },
-    {
-      id: 'ca',
-      dotLeft: '38%',
-      dotTop: '49.2%',
-      labelLeft: '8.4%',
-      labelTop: '58.5%',
-      accent: 'sky',
-      anchor: 'left',
-      lineTo: { x1: 172, y1: 224, x2: 370, y2: 187 },
-    },
-    {
-      id: 'pa',
-      dotLeft: '39.5%',
-      dotTop: '52.1%',
-      labelLeft: '63.2%',
-      labelTop: '47.5%',
-      accent: 'sky',
-      anchor: 'right',
-      lineTo: { x1: 616, y1: 182, x2: 384, y2: 198 },
-    },
-    {
-      id: 'co',
-      dotLeft: '40.7%',
-      dotTop: '58.6%',
-      labelLeft: '66.4%',
-      labelTop: '59.5%',
-      accent: 'fuchsia',
-      anchor: 'right',
-      lineTo: { x1: 648, y1: 228, x2: 396, y2: 223 },
-    },
-    {
-      id: 'cl',
-      dotLeft: '42.8%',
-      dotTop: '79.8%',
-      labelLeft: '62.2%',
-      labelTop: '79.2%',
-      accent: 'sky',
-      anchor: 'right',
-      lineTo: { x1: 606, y1: 302, x2: 418, y2: 303 },
-    },
-  ] as const;
+  if (variant === 'obelisk') {
+    return (
+      <div className={`pointer-events-none absolute ${className}`}>
+        <div className="relative h-52 w-32 rotate-[-14deg] opacity-95">
+          <div
+            className={`absolute inset-0 border backdrop-blur-[18px] ${sharedGlass}`}
+            style={{ clipPath: 'polygon(18% 0%, 76% 0%, 100% 88%, 26% 100%, 0% 14%)' }}
+          />
+          <div
+            className={`absolute left-[8%] top-[4%] h-[90%] w-[26%] ${isDark ? 'bg-white/40' : 'bg-white/88'}`}
+            style={{ clipPath: 'polygon(26% 0%, 100% 6%, 74% 100%, 0% 92%)' }}
+          />
+          <div
+            className={`absolute right-[10%] top-[6%] h-[82%] w-[18%] ${isDark ? 'bg-cyan-200/24' : 'bg-cyan-100/75'}`}
+            style={{ clipPath: 'polygon(18% 0%, 100% 10%, 74% 100%, 0% 86%)' }}
+          />
+          <div
+            className={`absolute bottom-[4%] left-[20%] h-[12%] w-[58%] ${isDark ? 'bg-white/24' : 'bg-white/68'}`}
+            style={{ clipPath: 'polygon(0% 36%, 100% 0%, 90% 100%, 10% 92%)' }}
+          />
+          <div className={`absolute inset-x-[14%] bottom-[2%] h-6 rounded-full blur-md ${isDark ? 'bg-cyan-300/22' : 'bg-cyan-200/72'}`} />
+          <div className={`absolute left-[22%] top-[6%] h-[10%] w-[44%] rounded-full blur-sm ${isDark ? 'bg-white/28' : 'bg-white/85'}`} />
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === 'gem') {
+    return (
+      <div className={`pointer-events-none absolute ${className}`}>
+        <div
+          className={`relative h-36 w-36 rotate-[14deg] border backdrop-blur-[18px] opacity-95 ${sharedGlass}`}
+          style={{ clipPath: 'polygon(48% 0%, 88% 18%, 100% 60%, 68% 100%, 18% 92%, 0% 42%)' }}
+        >
+          <div
+            className={`absolute inset-[10%] ${isDark ? 'bg-white/10' : 'bg-white/36'}`}
+            style={{ clipPath: 'polygon(48% 0%, 88% 18%, 100% 60%, 68% 100%, 18% 92%, 0% 42%)' }}
+          />
+          <div
+            className={`absolute left-[10%] top-[12%] h-[62%] w-[30%] ${isDark ? 'bg-white/30' : 'bg-white/78'}`}
+            style={{ clipPath: 'polygon(52% 0%, 100% 24%, 64% 100%, 0% 74%)' }}
+          />
+          <div
+            className={`absolute right-[10%] top-[16%] h-[56%] w-[22%] ${isDark ? 'bg-cyan-100/24' : 'bg-cyan-50/80'}`}
+            style={{ clipPath: 'polygon(20% 0%, 100% 16%, 78% 100%, 0% 82%)' }}
+          />
+          <div
+            className={`absolute bottom-[10%] left-[28%] h-[18%] w-[44%] ${isDark ? 'bg-white/22' : 'bg-white/62'}`}
+            style={{ clipPath: 'polygon(0% 28%, 100% 0%, 84% 100%, 10% 92%)' }}
+          />
+          <div className={`absolute inset-x-[18%] bottom-[2%] h-5 rounded-full blur-md ${isDark ? 'bg-fuchsia-300/20' : 'bg-fuchsia-200/60'}`} />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className={`relative h-[240px] overflow-hidden rounded-[20px] border md:h-[320px] ${isDark ? 'border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))]' : 'border-slate-200 bg-[linear-gradient(180deg,#fbfdff,#f5f9ff)]'}`}>
-      <ImageWithFallback
-        src={globalPresenceGlobeImage}
-        alt="Global footprint map"
-        className={`h-full w-full object-cover object-center ${isDark ? 'brightness-[0.96] contrast-[1.08]' : 'brightness-[1.02] contrast-[1.02]'}`}
-      />
-
-      <div className={`pointer-events-none absolute inset-0 ${isDark ? 'bg-[radial-gradient(circle_at_32%_42%,rgba(56,189,248,0.12),transparent_20%),radial-gradient(circle_at_64%_34%,rgba(217,70,239,0.12),transparent_18%),linear-gradient(180deg,rgba(4,10,20,0.14),rgba(4,10,20,0.24))]' : 'bg-[radial-gradient(circle_at_32%_42%,rgba(56,189,248,0.06),transparent_20%),radial-gradient(circle_at_64%_34%,rgba(217,70,239,0.06),transparent_18%),linear-gradient(180deg,rgba(255,255,255,0.10),rgba(255,255,255,0.18))]'}`} />
-
-      <svg viewBox="0 0 1000 380" className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
-        <g fill="none" stroke={isDark ? 'rgba(255,255,255,0.42)' : 'rgba(255,255,255,0.86)'} strokeWidth="1.8">
-          {markers.map((marker) => (
-            <path
-              key={`line-${marker.id}`}
-              d={`M ${marker.lineTo.x1} ${marker.lineTo.y1} C ${(marker.lineTo.x1 + marker.lineTo.x2) / 2} ${marker.lineTo.y1}, ${(marker.lineTo.x1 + marker.lineTo.x2) / 2} ${marker.lineTo.y2}, ${marker.lineTo.x2} ${marker.lineTo.y2}`}
-              opacity="0.9"
-            />
-          ))}
-        </g>
-      </svg>
-
-      {markers.map((marker) => (
+    <div className={`pointer-events-none absolute ${className}`}>
+      <div className="relative h-40 w-44 rotate-[8deg] opacity-95">
         <div
-          key={marker.id}
-          className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2"
-          style={{ left: marker.dotLeft, top: marker.dotTop }}
-        >
-          <span className={`absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full blur-md ${marker.accent === 'sky' ? (isDark ? 'bg-sky-300/28' : 'bg-sky-400/18') : (isDark ? 'bg-fuchsia-400/28' : 'bg-fuchsia-400/18')}`} />
-          <span className={`relative flex h-6 w-6 items-center justify-center rounded-full border-[3px] border-white shadow-[0_0_0_4px_rgba(255,255,255,0.12)] ${marker.accent === 'sky' ? (isDark ? 'bg-sky-300' : 'bg-sky-500') : (isDark ? 'bg-fuchsia-400' : 'bg-fuchsia-600')}`}>
-            <span className={`h-1.5 w-1.5 rounded-full ${isDark ? 'bg-slate-950' : 'bg-white'}`} />
-          </span>
-        </div>
-      ))}
-
-      {markers.map((marker) => (
+          className={`absolute inset-0 border backdrop-blur-[18px] ${sharedGlass}`}
+          style={{ clipPath: 'polygon(50% 0%, 100% 78%, 0% 78%)' }}
+        />
         <div
-          key={`label-${marker.id}`}
-          className={`pointer-events-none absolute hidden rounded-full border px-3 py-1.5 text-[11px] font-semibold tracking-[0.04em] shadow-[0_12px_30px_rgba(15,23,42,0.18)] md:block ${marker.anchor === 'right' ? '-translate-y-1/2' : '-translate-y-1/2'} ${isDark ? 'border-white/14 bg-slate-950/72 text-white backdrop-blur-sm' : 'border-white/80 bg-white/88 text-slate-900 backdrop-blur-sm'}`}
-          style={{ left: marker.labelLeft, top: marker.labelTop }}
-        >
-          {labels[marker.id as keyof typeof labels]}
-        </div>
-      ))}
+          className={`absolute left-[50%] top-[10%] h-[58%] w-[22%] -translate-x-1/2 ${isDark ? 'bg-white/32' : 'bg-white/86'}`}
+          style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}
+        />
+        <div
+          className={`absolute bottom-[22%] left-[10%] h-[44%] w-[30%] ${isDark ? 'bg-white/24' : 'bg-white/68'}`}
+          style={{ clipPath: 'polygon(100% 0%, 70% 100%, 0% 82%, 18% 14%)' }}
+        />
+        <div
+          className={`absolute bottom-[20%] right-[10%] h-[40%] w-[28%] ${isDark ? 'bg-cyan-100/24' : 'bg-cyan-50/84'}`}
+          style={{ clipPath: 'polygon(0% 0%, 100% 16%, 80% 100%, 26% 84%)' }}
+        />
+        <div
+          className={`absolute bottom-[6%] left-[18%] h-[12%] w-[64%] ${isDark ? 'bg-white/24' : 'bg-white/60'}`}
+          style={{ clipPath: 'polygon(12% 0%, 100% 28%, 76% 100%, 0% 80%)' }}
+        />
+        <div className={`absolute inset-x-[20%] bottom-[2%] h-5 rounded-full blur-md ${isDark ? 'bg-cyan-300/18' : 'bg-cyan-200/58'}`} />
+      </div>
     </div>
   );
 }
@@ -361,8 +336,8 @@ export function About() {
     ctaEyebrow: language === 'es' ? 'Siguiente paso' : 'Next step',
     ctaTitle:
       language === 'es'
-        ? '¿Listo para construir el futuro con datos?'
-        : 'Ready to build the future with data?',
+        ? '¿Listo para transformar tu negocio con datos?'
+        : 'Ready to transform your business with data?',
     ctaDescription:
       language === 'es'
         ? 'Si buscas un socio para acelerar decisiones, modernizar capacidades o escalar una operación de datos e IA, conversemos.'
@@ -374,20 +349,20 @@ export function About() {
 
   const regions = language === 'es'
     ? [
-        { name: 'Colombia', flag: '🇨🇴' },
-        { name: 'Chile', flag: '🇨🇱' },
-        { name: 'Panamá', flag: '🇵🇦' },
-        { name: 'Centroamérica', flag: '🌎' },
-        { name: 'México', flag: '🇲🇽' },
-        { name: 'Estados Unidos', flag: '🇺🇸' },
+        { name: 'Colombia', flag: '🇨🇴', detail: 'Operaciones y delivery regional', accent: 'sky' },
+        { name: 'Chile', flag: '🇨🇱', detail: 'Analítica aplicada y transformación', accent: 'emerald' },
+        { name: 'Panamá', flag: '🇵🇦', detail: 'Conexión estratégica y expansión', accent: 'fuchsia' },
+        { name: 'Centroamérica', flag: '🌎', detail: 'Cobertura regional para equipos distribuidos', accent: 'sky' },
+        { name: 'México', flag: '🇲🇽', detail: 'Escalamiento comercial y consultoría', accent: 'fuchsia' },
+        { name: 'Estados Unidos', flag: '🇺🇸', detail: 'Proyectos enterprise y alcance internacional', accent: 'emerald' },
       ]
     : [
-        { name: 'Colombia', flag: '🇨🇴' },
-        { name: 'Chile', flag: '🇨🇱' },
-        { name: 'Panama', flag: '🇵🇦' },
-        { name: 'Central America', flag: '🌎' },
-        { name: 'Mexico', flag: '🇲🇽' },
-        { name: 'United States', flag: '🇺🇸' },
+        { name: 'Colombia', flag: '🇨🇴', detail: 'Regional operations and delivery', accent: 'sky' },
+        { name: 'Chile', flag: '🇨🇱', detail: 'Applied analytics and transformation', accent: 'emerald' },
+        { name: 'Panama', flag: '🇵🇦', detail: 'Strategic connection and expansion', accent: 'fuchsia' },
+        { name: 'Central America', flag: '🌎', detail: 'Regional coverage for distributed teams', accent: 'sky' },
+        { name: 'Mexico', flag: '🇲🇽', detail: 'Commercial scaling and consulting', accent: 'fuchsia' },
+        { name: 'United States', flag: '🇺🇸', detail: 'Enterprise projects with international reach', accent: 'emerald' },
       ];
 
   const proofCards = [
@@ -402,6 +377,12 @@ export function About() {
       value: `${Math.max(partnerCount, 5)}+`,
       suffix: language === 'es' ? 'alianzas tecnológicas' : 'technology alliances',
       icon: Handshake,
+    },
+    {
+      label: language === 'es' ? 'Certificaciones' : 'Certifications',
+      value: '40+',
+      suffix: language === 'es' ? 'credenciales activas' : 'active credentials',
+      icon: BadgeCheck,
     },
     {
       label: language === 'es' ? 'Regiones activas' : 'Active regions',
@@ -432,6 +413,21 @@ export function About() {
     referrerPath: content.aboutPath,
   });
 
+  const ctaSection = {
+    id: `about-cta-${language}`,
+    language,
+    type: 'ctaBand' as const,
+    isEnabled: true,
+    order: 0,
+    title: content.ctaTitle,
+    subtitle: content.ctaDescription,
+    ctaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
+    ctaHref: contactHref,
+    referencedIds: [],
+    createdAt: '',
+    updatedAt: '',
+  };
+
   const cultureCards = [
     {
       title: language === 'es' ? 'Cool People' : 'Cool People',
@@ -461,6 +457,68 @@ export function About() {
       accentClass: 'bg-[linear-gradient(90deg,#10b981,#7dd3fc)]',
     },
   ];
+
+  const recognitionCards = language === 'es'
+    ? [
+        {
+          title: 'Partners reconocidos',
+          description: 'Fortalecemos nuestro impacto con alianzas estratégicas, especializaciones y reconocimientos que respaldan nuestras implementaciones.',
+          detail: 'Ecosistema partner, especializaciones y presencia regional',
+          metric: '05+',
+          icon: Trophy,
+        },
+        {
+          title: 'Talento certificado',
+          description: 'Nuestro equipo crece con certificaciones técnicas y formación continua en plataformas, analítica avanzada e inteligencia artificial.',
+          detail: 'Certificaciones activas y aprendizaje continuo',
+          metric: '40+',
+          icon: BadgeCheck,
+        },
+        {
+          title: 'Confianza enterprise',
+          description: 'Los logros del equipo se reflejan en programas, credenciales y entregables que generan confianza en operaciones de alto nivel.',
+          detail: 'Estándares, validaciones y ejecución confiable',
+          metric: 'Enterprise',
+          icon: ShieldCheck,
+        },
+        {
+          title: 'Premios que elevan la práctica',
+          description: 'Celebramos hitos que combinan excelencia técnica, colaboración y resultados de negocio en proyectos reales.',
+          detail: 'Reconocimientos, hitos y cultura de excelencia',
+          metric: 'Top Team',
+          icon: Award,
+        },
+      ]
+    : [
+        {
+          title: 'Recognized partnerships',
+          description: 'We expand our impact through strategic alliances, specializations and recognitions that support our implementations.',
+          detail: 'Partner ecosystem, specializations and regional presence',
+          metric: '05+',
+          icon: Trophy,
+        },
+        {
+          title: 'Certified talent',
+          description: 'Our team grows through technical certifications and continuous learning across platforms, advanced analytics and AI.',
+          detail: 'Active certifications and continuous learning',
+          metric: '40+',
+          icon: BadgeCheck,
+        },
+        {
+          title: 'Enterprise trust',
+          description: 'Team achievements show up in programs, credentials and deliverables that build confidence in high-level operations.',
+          detail: 'Standards, validations and dependable execution',
+          metric: 'Enterprise',
+          icon: ShieldCheck,
+        },
+        {
+          title: 'Awards that elevate the craft',
+          description: 'We celebrate milestones that combine technical excellence, collaboration and business results in real engagements.',
+          detail: 'Recognitions, milestones and a culture of excellence',
+          metric: 'Top Team',
+          icon: Award,
+        },
+      ];
 
   const humanCards = leadership.length > 0
     ? leadership
@@ -541,20 +599,20 @@ export function About() {
 
             </div>
 
-            <div className="grid grid-cols-3 gap-2.5 sm:gap-4">
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3 lg:gap-4">
               {proofCards.map((item) => {
                 const Icon = item.icon;
                 return (
                   <div
                     key={item.label}
-                    className={`rounded-[20px] border p-3 sm:rounded-[26px] sm:p-5 md:p-6 ${isDark ? 'border-white/10 bg-white/6' : 'border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.06)]'}`}
+                    className={`rounded-[20px] border p-3 sm:rounded-[24px] sm:p-4 md:p-5 ${isDark ? 'border-white/10 bg-white/6' : 'border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.06)]'}`}
                   >
-                    <span className={`flex h-9 w-9 items-center justify-center rounded-xl sm:h-12 sm:w-12 sm:rounded-2xl ${isDark ? 'bg-white/8 text-white' : 'bg-slate-100 text-slate-900'}`}>
-                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <span className={`flex h-9 w-9 items-center justify-center rounded-xl sm:h-10 sm:w-10 sm:rounded-2xl md:h-11 md:w-11 ${isDark ? 'bg-white/8 text-white' : 'bg-slate-100 text-slate-900'}`}>
+                      <Icon className="h-4 w-4 sm:h-[18px] sm:w-[18px] md:h-5 md:w-5" />
                     </span>
-                    <p className={`mt-4 text-[8px] font-semibold uppercase tracking-[0.18em] sm:mt-6 sm:text-[10px] sm:tracking-[0.24em] ${isDark ? 'text-slate-300' : 'text-slate-500'}`}>{item.label}</p>
-                    <p className={`mt-2 text-2xl font-medium tracking-[-0.05em] sm:mt-3 sm:text-3xl ${isDark ? 'text-white' : 'text-slate-950'}`}>{item.value}</p>
-                    <p className={`mt-2 text-[11px] leading-4 sm:mt-3 sm:text-sm sm:leading-6 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{item.suffix}</p>
+                    <p className={`mt-4 text-[8px] font-semibold uppercase tracking-[0.14em] sm:mt-5 sm:text-[9px] sm:tracking-[0.18em] md:text-[10px] md:tracking-[0.22em] ${isDark ? 'text-slate-300' : 'text-slate-500'}`}>{item.label}</p>
+                    <p className={`mt-2 text-2xl font-medium tracking-[-0.05em] sm:mt-2.5 sm:text-[1.7rem] md:text-3xl ${isDark ? 'text-white' : 'text-slate-950'}`}>{item.value}</p>
+                    <p className={`mt-2 text-[11px] leading-4 sm:text-[12px] sm:leading-5 md:text-sm md:leading-6 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{item.suffix}</p>
                   </div>
                 );
               })}
@@ -598,22 +656,42 @@ export function About() {
                 <div className={`relative mt-5 overflow-hidden rounded-[24px] border p-5 ${isDark ? 'border-white/10 bg-[#0b1527]' : 'border-slate-200 bg-white'}`}>
                   <div className={`pointer-events-none absolute inset-0 opacity-70 ${isDark ? 'bg-[radial-gradient(circle_at_20%_30%,rgba(56,189,248,0.16),transparent_28%),radial-gradient(circle_at_75%_35%,rgba(217,70,239,0.12),transparent_24%),radial-gradient(circle_at_58%_70%,rgba(16,185,129,0.12),transparent_22%)]' : 'bg-[radial-gradient(circle_at_20%_30%,rgba(56,189,248,0.10),transparent_28%),radial-gradient(circle_at_75%_35%,rgba(217,70,239,0.08),transparent_24%),radial-gradient(circle_at_58%_70%,rgba(16,185,129,0.08),transparent_22%)]'}`} />
                   <div className="relative">
-                    <GlobalFootprintMap isDark={isDark} language={language} />
-
-                    <p className={`mt-4 text-[10px] font-semibold uppercase tracking-[0.24em] ${isDark ? 'text-slate-300' : 'text-slate-500'}`}>
-                      {language === 'es' ? 'Regiones donde trabajamos' : 'Regions where we work'}
+                    <p className={`text-[10px] font-semibold uppercase tracking-[0.24em] ${isDark ? 'text-slate-300' : 'text-slate-500'}`}>
+                      {language === 'es' ? 'Países y regiones' : 'Countries and regions'}
                     </p>
-                    <div className="mt-4 flex flex-wrap gap-2.5">
+                    <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                       {regions.map((region) => (
-                        <span
+                        <motion.article
                           key={region.name}
-                          className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium ${isDark ? 'bg-white/8 text-slate-100' : 'bg-white text-slate-700 shadow-[0_8px_18px_rgba(15,23,42,0.05)]'}`}
+                          initial={{ opacity: 0, y: 16 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, amount: 0.25 }}
+                          transition={{ duration: 0.4 }}
+                          className={`group relative overflow-hidden rounded-[22px] border p-4 transition-transform duration-300 hover:-translate-y-1 ${isDark ? 'border-white/10 bg-white/6' : 'border-slate-200 bg-white shadow-[0_12px_30px_rgba(15,23,42,0.06)]'}`}
                         >
-                          <span className={`inline-flex h-7 min-w-7 items-center justify-center rounded-full px-1.5 text-sm ${isDark ? 'bg-white/10' : 'bg-sky-50'}`}>
-                            {region.flag}
-                          </span>
-                          {region.name}
-                        </span>
+                          <div
+                            className={`pointer-events-none absolute inset-x-0 top-0 h-1 ${
+                              region.accent === 'sky'
+                                ? 'bg-[linear-gradient(90deg,#38bdf8,#7dd3fc)]'
+                                : region.accent === 'fuchsia'
+                                  ? 'bg-[linear-gradient(90deg,#c026d3,#f472b6)]'
+                                  : 'bg-[linear-gradient(90deg,#10b981,#67e8f9)]'
+                            }`}
+                          />
+                          <div className="flex items-start gap-3">
+                            <span className={`inline-flex h-11 min-w-11 items-center justify-center rounded-2xl text-lg ${isDark ? 'bg-white/10' : 'bg-slate-100'}`}>
+                              {region.flag}
+                            </span>
+                            <div className="min-w-0">
+                              <p className={`text-sm font-semibold tracking-[-0.02em] ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                                {region.name}
+                              </p>
+                              <p className={`mt-2 text-sm leading-6 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                                {region.detail}
+                              </p>
+                            </div>
+                          </div>
+                        </motion.article>
                       ))}
                     </div>
                   </div>
@@ -748,11 +826,11 @@ export function About() {
               isDark={isDark}
             />
 
-            <div className="relative mt-10 overflow-hidden">
+            <div className="relative mt-10 overflow-x-auto overflow-y-hidden pb-2 scrollbar-hide">
               <div className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-10 ${isDark ? 'bg-[linear-gradient(90deg,#0b1527,transparent)]' : 'bg-[linear-gradient(90deg,#ffffff,transparent)]'}`} />
               <div className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-10 ${isDark ? 'bg-[linear-gradient(270deg,#0b1527,transparent)]' : 'bg-[linear-gradient(270deg,#ffffff,transparent)]'}`} />
               <motion.ul
-                className="flex w-max gap-4 pb-2"
+                className="flex w-max gap-4 pr-6"
                 animate={{ x: ['0%', '-50%'] }}
                 transition={{
                   duration: 28,
@@ -781,7 +859,7 @@ export function About() {
               <ImageWithFallback
                 src={teamImage}
                 alt="iData team collaboration"
-                className="h-full w-full object-cover opacity-20"
+                className="h-full w-full object-cover opacity-[0.26]"
               />
               <div className={`absolute inset-0 ${isDark ? 'bg-[linear-gradient(90deg,rgba(9,17,31,0.96)_0%,rgba(9,17,31,0.9)_48%,rgba(9,17,31,0.82)_100%)]' : 'bg-[linear-gradient(90deg,rgba(255,255,255,0.95)_0%,rgba(255,255,255,0.9)_46%,rgba(248,251,255,0.84)_100%)]'}`} />
             </div>
@@ -840,38 +918,92 @@ export function About() {
         </div>
       </section>
 
-      <section className={`${isDark ? 'bg-[#0b1527]' : 'bg-white'} pb-20 pt-10 md:pb-24`}>
+      <section className={`${isDark ? 'bg-[#08101d]' : 'bg-[linear-gradient(180deg,#ffffff_0%,#f3f8ff_100%)]'} py-16 md:py-20`}>
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-          <div className={`relative overflow-hidden rounded-[34px] border p-7 md:p-10 ${isDark ? 'border-sky-300/16 bg-[linear-gradient(135deg,rgba(8,18,34,0.98),rgba(11,30,52,0.92))]' : 'border-slate-200 bg-[linear-gradient(135deg,#f7fbff_0%,#ffffff_70%)] shadow-[0_24px_60px_rgba(15,23,42,0.08)]'}`}>
+          <div className={`relative overflow-hidden rounded-[36px] border p-6 md:p-8 lg:p-10 ${isDark ? 'border-white/10 bg-[linear-gradient(135deg,rgba(7,13,24,0.98),rgba(10,18,34,0.96))]' : 'border-slate-200 bg-[linear-gradient(135deg,rgba(255,255,255,0.9),rgba(245,249,255,0.92))] shadow-[0_24px_70px_rgba(15,23,42,0.08)]'}`}>
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
-              <div className={`absolute -right-10 top-0 h-44 w-44 rounded-full blur-3xl ${isDark ? 'bg-fuchsia-500/12' : 'bg-fuchsia-300/18'}`} />
-              <div className={`absolute left-0 top-8 h-40 w-40 rounded-full blur-3xl ${isDark ? 'bg-sky-400/12' : 'bg-sky-200/24'}`} />
+              <div className={`absolute left-[-8%] top-[12%] h-56 w-56 rounded-full blur-3xl ${isDark ? 'bg-cyan-400/12' : 'bg-cyan-200/40'}`} />
+              <div className={`absolute right-[8%] top-[8%] h-64 w-64 rounded-full blur-3xl ${isDark ? 'bg-fuchsia-500/12' : 'bg-fuchsia-200/35'}`} />
+              <div className={`absolute bottom-[-8%] left-[30%] h-56 w-56 rounded-full blur-3xl ${isDark ? 'bg-amber-300/10' : 'bg-amber-100/40'}`} />
+              <FloatingAwardShape className="left-[-2.8rem] top-[7.5rem] hidden lg:block xl:left-[-2rem]" variant="obelisk" isDark={isDark} />
+              <FloatingAwardShape className="bottom-[-1.25rem] left-[47%] hidden lg:block" variant="gem" isDark={isDark} />
+              <FloatingAwardShape className="right-[-1.5rem] top-[7.5rem] hidden lg:block xl:right-[-0.5rem]" variant="prism" isDark={isDark} />
             </div>
 
-            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="relative z-10">
               <div className="max-w-3xl">
-                <p className={`text-[11px] font-semibold uppercase tracking-[0.28em] ${isDark ? 'text-sky-300' : 'text-sky-600'}`}>
-                  {content.ctaEyebrow}
-                </p>
-                <h2 className={`mt-3 text-3xl font-medium tracking-[-0.05em] md:text-4xl ${isDark ? 'text-white' : 'text-slate-950'}`}>
-                  {content.ctaTitle}
-                </h2>
-                <p className={`mt-4 text-base leading-7 md:text-lg ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                  {content.ctaDescription}
-                </p>
+                <SectionHeading
+                  eyebrow={language === 'es' ? 'Reconocimientos' : 'Recognition'}
+                  title={language === 'es' ? 'Premios, credenciales y logros que respaldan nuestro trabajo' : 'Awards, credentials and achievements behind our work'}
+                  description={language === 'es'
+                    ? 'Esta sección resume la solidez de nuestro ecosistema partner, la evolución de nuestro talento certificado y los hitos que demuestran capacidad real de ejecución.'
+                    : 'This section highlights the strength of our partner ecosystem, the growth of our certified talent and the milestones that demonstrate real execution capability.'}
+                  isDark={isDark}
+                />
               </div>
 
-              <Link
-                to={contactHref}
-                className={`inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition md:text-base ${isDark ? 'bg-white text-slate-950 hover:bg-slate-100' : 'bg-slate-950 text-white hover:bg-slate-800'}`}
-              >
-                {content.ctaLabel}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+              <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+                {recognitionCards.map((card, index) => {
+                  const Icon = card.icon;
+
+                  return (
+                    <motion.article
+                      key={card.title}
+                      initial={{ opacity: 0, y: 18 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ duration: 0.45, delay: index * 0.06 }}
+                      className={`group relative min-h-[320px] overflow-hidden rounded-[30px] border p-5 backdrop-blur-[22px] md:min-h-[360px] md:p-6 ${isDark ? 'border-white/12 bg-white/[0.06] shadow-[0_24px_80px_rgba(0,0,0,0.28)]' : 'border-white/70 bg-white/35 shadow-[0_24px_80px_rgba(15,23,42,0.12)]'}`}
+                    >
+                      <div className={`pointer-events-none absolute inset-0 ${index % 4 === 0
+                        ? 'bg-[radial-gradient(circle_at_bottom_left,rgba(34,211,238,0.22),transparent_34%),radial-gradient(circle_at_top_right,rgba(59,130,246,0.14),transparent_28%)]'
+                        : index % 4 === 1
+                          ? 'bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.22),transparent_34%),radial-gradient(circle_at_top_right,rgba(244,114,182,0.14),transparent_28%)]'
+                          : index % 4 === 2
+                            ? 'bg-[radial-gradient(circle_at_bottom_left,rgba(251,146,60,0.20),transparent_34%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.14),transparent_28%)]'
+                            : 'bg-[radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.20),transparent_34%),radial-gradient(circle_at_top_right,rgba(34,197,94,0.14),transparent_28%)]'}`}
+                      />
+                      <div className={`pointer-events-none absolute inset-x-5 top-0 h-px ${isDark ? 'bg-white/30' : 'bg-white/90'}`} />
+                      <div className={`pointer-events-none absolute inset-x-8 top-4 h-16 rounded-full blur-2xl ${isDark ? 'bg-white/8' : 'bg-white/35'}`} />
+
+                      <div className="relative flex h-full flex-col">
+                        <div className="flex items-start justify-between gap-4">
+                          <span className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl border ${isDark ? 'border-white/12 bg-white/8 text-white' : 'border-white/80 bg-white/50 text-slate-950'}`}>
+                            <Icon className="h-5 w-5" />
+                          </span>
+                          <span className={`text-[2rem] font-medium tracking-[-0.06em] ${isDark ? 'text-white/28' : 'text-slate-900/18'}`}>
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                        </div>
+
+                        <div className="mt-8">
+                          <p className={`text-[10px] font-semibold uppercase tracking-[0.26em] ${isDark ? 'text-sky-300' : 'text-sky-700'}`}>
+                            {card.metric}
+                          </p>
+                          <h3 className={`mt-3 text-[1.8rem] font-medium leading-[1.02] tracking-[-0.05em] ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                            {card.title}
+                          </h3>
+                          <p className={`mt-4 text-sm leading-6 md:text-[15px] ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                            {card.description}
+                          </p>
+                        </div>
+
+                        <div className="mt-auto pt-8">
+                          <div className={`inline-flex rounded-full border px-3 py-2 text-xs font-medium ${isDark ? 'border-white/12 bg-white/8 text-slate-200' : 'border-white/80 bg-white/55 text-slate-700'}`}>
+                            {card.detail}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.article>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
       </section>
+
+      <CTABandSection section={ctaSection} />
     </>
   );
 }

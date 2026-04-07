@@ -5,6 +5,7 @@ import { Container } from '../../shared/components/Container';
 import { Section } from '../../shared/components/Section';
 import { RichText } from '../../shared/components/RichText';
 import { ContentCard } from '../../shared/components/ContentCard';
+import { CTABandSection } from '../components/sections/CTABandSection';
 import { getPublished as getCaseStudies } from '../../../services/caseStudiesService';
 import { getBySlug as getIndustryBySlug } from '../../../services/industriesService';
 import { useState, useEffect } from 'react';
@@ -68,6 +69,33 @@ export function IndustryDetail() {
     },
   ];
 
+  const ctaSection = {
+    id: `industry-detail-cta-${language}-${currentSlug}`,
+    language,
+    type: 'ctaBand' as const,
+    isEnabled: true,
+    order: 0,
+    title: language === 'es'
+      ? '¿Listo para transformar tu negocio con datos?'
+      : 'Ready to transform your business with data?',
+    subtitle: language === 'es'
+      ? 'Hablemos sobre cómo podemos ayudarte'
+      : 'Let\'s talk about how we can help you',
+    ctaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
+    ctaHref: buildContactLink({
+      language,
+      sourceType: 'industry',
+      sourceSlug: currentSlug,
+      sourceTitle: title,
+      sourceCtaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
+      intent: 'industry_consultation',
+      referrerPath: `${basePath}/${currentSlug}`,
+    }),
+    referencedIds: [],
+    createdAt: '',
+    updatedAt: '',
+  };
+
   return (
     <>
       <SEOHead
@@ -126,37 +154,7 @@ export function IndustryDetail() {
         </Section>
       )}
 
-      {/* CTA */}
-      <Section background="white" padding="lg">
-        <Container>
-          <div className="bg-blue-600 rounded-2xl p-8 md:p-12 text-center text-white">
-            <h2 className="text-3xl font-bold mb-4">
-              {language === 'es'
-                ? '¿Listo para transformar tu negocio con datos?'
-                : 'Ready to transform your business with data?'}
-            </h2>
-            <p className="text-xl mb-6 text-blue-100">
-              {language === 'es'
-                ? 'Hablemos sobre cómo podemos ayudarte'
-                : 'Let\'s talk about how we can help you'}
-            </p>
-            <a
-              href={buildContactLink({
-                language,
-                sourceType: 'industry',
-                sourceSlug: currentSlug,
-                sourceTitle: title,
-                sourceCtaLabel: language === 'es' ? 'Contactar' : 'Contact us',
-                intent: 'industry_consultation',
-                referrerPath: `${basePath}/${currentSlug}`,
-              })}
-              className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-medium hover:bg-blue-50 transition-colors"
-            >
-              {language === 'es' ? 'Contactar' : 'Contact us'}
-            </a>
-          </div>
-        </Container>
-      </Section>
+      <CTABandSection section={ctaSection} />
     </>
   );
 }

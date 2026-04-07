@@ -2,6 +2,7 @@ import { useParams } from 'react-router';
 import { useLanguage } from '../../shared/contexts/LanguageContext';
 import { SEOHead } from '../../shared/components/SEOHead';
 import { Breadcrumb } from '../../shared/components/Breadcrumb';
+import { CTABandSection } from '../components/sections/CTABandSection';
 import { t, getAlternateLanguage } from '../../shared/utils/i18n';
 import { mockServiceCategories } from '../../data/mockData';
 import { getBySlug as getServiceBySlug } from '../../../services/servicesService';
@@ -61,6 +62,31 @@ export function ServiceDetail() {
     { label: service.title }
   ];
 
+  const ctaSection = {
+    id: `service-detail-cta-${language}-${slug || 'unknown'}`,
+    language,
+    type: 'ctaBand' as const,
+    isEnabled: true,
+    order: 0,
+    title: language === 'es' ? '¿Listo para empezar?' : 'Ready to get started?',
+    subtitle: language === 'es'
+      ? 'Contáctanos para discutir cómo podemos ayudarte con este servicio'
+      : 'Contact us to discuss how we can help you with this service',
+    ctaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
+    ctaHref: buildContactLink({
+      language,
+      sourceType: 'service',
+      sourceSlug: getLocalizedValue((service as any)?.slug_es || '', (service as any)?.slug_en || ''),
+      sourceTitle: (service as any)?.title || '',
+      sourceCtaLabel: language === 'es' ? 'Hablar con un experto' : 'Talk to an expert',
+      intent: 'service_consultation',
+      referrerPath: `/${language}/${language === 'es' ? 'servicios' : 'services'}/${slug}`,
+    }),
+    referencedIds: [],
+    createdAt: '',
+    updatedAt: '',
+  };
+
   return (
     <>
       <SEOHead
@@ -98,34 +124,9 @@ export function ServiceDetail() {
           }} />
         </div>
 
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <div className="bg-blue-50 rounded-lg p-6">
-            <h2 className="text-2xl font-light text-gray-900 mb-4">
-              {language === 'es' ? '¿Listo para empezar?' : 'Ready to get started?'}
-            </h2>
-            <p className="text-gray-700 mb-4">
-              {language === 'es' 
-                ? 'Contáctanos para discutir cómo podemos ayudarte con este servicio'
-                : 'Contact us to discuss how we can help you with this service'
-              }
-            </p>
-            <a
-              href={buildContactLink({
-                language,
-                sourceType: 'service',
-                sourceSlug: getLocalizedValue((service as any)?.slug_es || '', (service as any)?.slug_en || ''),
-                sourceTitle: (service as any)?.title || '',
-                sourceCtaLabel: t('contact', language),
-                intent: 'service_consultation',
-                referrerPath: `/${language}/${language === 'es' ? 'servicios' : 'services'}/${slug}`,
-              })}
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-            >
-              {t('contact', language)}
-            </a>
-          </div>
-        </div>
       </div>
+
+      <CTABandSection section={ctaSection} />
     </>
   );
 }
