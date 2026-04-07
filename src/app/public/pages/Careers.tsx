@@ -1,72 +1,269 @@
-import { useLanguage } from '../../shared/contexts/LanguageContext';
-import { SEOHead } from '../../shared/components/SEOHead';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router';
 import { motion } from 'motion/react';
-import { ArrowRight, Search, MapPin, Briefcase, Clock, Users, Target, TrendingUp, Award, CheckCircle, Heart, Lightbulb, ChevronDown } from 'lucide-react';
-import { Link } from 'react-router';
-import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import {
+  ArrowRight,
+  Briefcase,
+  CheckCircle2,
+  ChevronDown,
+  Compass,
+  Filter,
+  Globe,
+  MapPin,
+  Search,
+  Sparkles,
+  Users,
+} from 'lucide-react';
+import { useLanguage } from '../../shared/contexts/LanguageContext';
+import { useTheme } from '../../shared/contexts/ThemeContext';
+import { SEOHead } from '../../shared/components/SEOHead';
 import { getByKey as getPageByKey } from '../../../services/pagesService';
 import { getPublished as getJobs } from '../../../services/jobsService';
+import { getHomeSections } from '../../../services/homeSectionsService';
 import { mockJobs } from '../../data/mockData';
-import { InternalPageHero } from '../components/InternalPageHero';
-import { EXTERNAL_DATA_POLICY_URL } from '../../shared/constants/legalLinks';
+import { JobApplicationForm } from '../components/careers/JobApplicationForm';
+import { CTABandSection } from '../components/sections/CTABandSection';
+
+import cultureImage from '/assets/images/careers/culture.png';
 
 const allowMockFallback = import.meta.env.DEV;
-const NAME_PATTERN = "[A-Za-zÀ-ÿ' -]+";
-const PHONE_PATTERN = "[0-9+() -]{8,20}";
 
-// Hero banner image
-import careersBannerImage from '/assets/images/careers/careers-banner.png';
+function getModalityLabel(language: 'es' | 'en', modality?: string | null) {
+  if (modality === 'hybrid') return language === 'es' ? 'Híbrido' : 'Hybrid';
+  if (modality === 'onsite') return language === 'es' ? 'Presencial' : 'On-site';
+  return language === 'es' ? 'Remoto' : 'Remote';
+}
 
-// Culture section image
-import cultureImage from '/assets/images/careers/culture.png';
+function getSeniorityLabel(language: 'es' | 'en', seniority?: string | null) {
+  const normalized = String(seniority || '').toLowerCase();
+  const labels: Record<string, { es: string; en: string }> = {
+    junior: { es: 'Junior', en: 'Junior' },
+    mid: { es: 'Mid-level', en: 'Mid-level' },
+    senior: { es: 'Senior', en: 'Senior' },
+    lead: { es: 'Lead', en: 'Lead' },
+    manager: { es: 'Manager', en: 'Manager' },
+  };
+
+  return labels[normalized] ? (language === 'es' ? labels[normalized].es : labels[normalized].en) : seniority || '';
+}
+
+function findSectionByVariant(sections: any[], variant: string) {
+  return sections.find((section) => section?.config?.variant === variant || section?.config?.key === variant) || null;
+}
+
+function getCareersDefaults(language: 'es' | 'en') {
+  const isEs = language === 'es';
+
+  return {
+    hero: {
+      eyebrow: isEs ? 'Talento iData' : 'iData Talent',
+      title: isEs ? 'Únete a iData Global' : 'Join iData Global',
+      subtitle: isEs
+        ? 'Buscamos personas que quieran transformar negocios con datos, analítica e inteligencia artificial, trabajando en una cultura donde importan tanto la excelencia técnica como el impacto humano.'
+        : 'We are looking for people who want to transform businesses with data, analytics and artificial intelligence, in a culture where technical excellence matters as much as human impact.',
+    },
+    culture: {
+      title: isEs ? 'Por qué es cool trabajar con nosotros' : 'Why it is cool to work with us',
+      subtitle: isEs
+        ? 'En iData Global creemos que el mejor trabajo sucede cuando se unen grandes personas, decisiones basadas en datos y soluciones que realmente generan impacto.'
+        : 'At iData Global we believe the best work happens when great people, data-driven decisions and solutions that truly create impact come together.',
+      closing: isEs
+        ? 'Nuestra cultura está diseñada para que el talento crezca con propósito, colabore con confianza y deje huella en proyectos que importan.'
+        : 'Our culture is designed so talent can grow with purpose, collaborate with confidence and leave a mark on projects that matter.',
+      cards: [
+        {
+          eyebrow: 'Cool People',
+          title: isEs ? 'Personas que elevan al equipo' : 'People who elevate the team',
+          description: isEs
+            ? 'Trabajamos con empatía, liderazgo con ejemplo, colaboración real y una mentalidad de crecimiento continuo.'
+            : 'We work with empathy, lead by example, collaborate for real and keep a mindset of continuous growth.',
+        },
+        {
+          eyebrow: 'Cool Tech',
+          title: isEs ? 'Tecnología con criterio' : 'Technology with purpose',
+          description: isEs
+            ? 'Usamos datos, analítica e inteligencia artificial con rigor, curiosidad y un enfoque ético para tomar mejores decisiones.'
+            : 'We use data, analytics and AI with rigor, curiosity and an ethical approach to make better decisions.',
+        },
+        {
+          eyebrow: 'Cool Solutions',
+          title: isEs ? 'Soluciones que aterrizan en negocio' : 'Solutions grounded in business',
+          description: isEs
+            ? 'Nos enfocamos en resolver problemas reales con creatividad, visión de usuario e impacto sostenible.'
+            : 'We focus on solving real problems with creativity, user perspective and sustainable impact.',
+        },
+      ],
+    },
+    benefits: {
+      title: isEs ? 'Algunos beneficios de crecer con iData' : 'Some benefits of growing with iData',
+      subtitle: isEs
+        ? 'Queremos que trabajar en iData también se sienta bien en lo cotidiano, con beneficios que acompañen tu bienestar, tu crecimiento y tu vida personal.'
+        : 'We want working at iData to feel good in everyday life too, with benefits that support your wellbeing, growth and personal life.',
+      cards: [
+        {
+          eyebrow: isEs ? 'Tiempo para ti' : 'Time for you',
+          title: isEs ? 'Día libre de cumpleaños' : 'Birthday day off',
+          description: isEs
+            ? 'Queremos que celebres tu día con calma. Tendrás un espacio para desconectarte, compartir con los tuyos y recargar energía.'
+            : 'We want you to celebrate your day with ease. You will have time to disconnect, be with your people and recharge.',
+          icon: 'sparkles',
+        },
+        {
+          eyebrow: isEs ? 'Bienestar' : 'Wellbeing',
+          title: isEs ? 'Bono para salud y bienestar' : 'Health and wellbeing bonus',
+          description: isEs
+            ? 'Impulsamos beneficios que te ayuden a cuidar tu salud física y mental, con apoyo pensado para tu bienestar integral.'
+            : 'We promote benefits that help you take care of your physical and mental health, with support designed for your wellbeing.',
+          icon: 'globe',
+        },
+        {
+          eyebrow: isEs ? 'Flexibilidad' : 'Flexibility',
+          title: isEs ? 'Espacios para balancear tu vida' : 'Room to balance your life',
+          description: isEs
+            ? 'Promovemos dinámicas que te permitan organizarte mejor, trabajar con autonomía y sostener un equilibrio sano entre vida y trabajo.'
+            : 'We encourage ways of working that help you organize your time, work with autonomy and keep a healthy work-life balance.',
+          icon: 'users',
+        },
+      ],
+    },
+    process: {
+      title: isEs ? 'Proceso de selección' : 'Hiring process',
+      subtitle: isEs ? 'Un recorrido claro, humano y ágil.' : 'A clear, human and agile journey.',
+      steps: [
+        {
+          title: isEs ? 'Aplica' : 'Apply',
+          description: isEs ? 'Comparte tu perfil, tu experiencia y el rol que te interesa.' : 'Share your profile, experience and the role you are interested in.',
+        },
+        {
+          title: isEs ? 'Revisión de perfil' : 'Profile review',
+          description: isEs ? 'Nuestro equipo valida el match entre tu recorrido y la oportunidad.' : 'Our team validates the match between your background and the opportunity.',
+        },
+        {
+          title: isEs ? 'Primera conversación' : 'First conversation',
+          description: isEs ? 'Nos conocemos, resolvemos dudas y profundizamos en tu experiencia.' : 'We get to know each other, answer questions and go deeper into your experience.',
+        },
+        {
+          title: isEs ? 'Evaluación técnica' : 'Technical evaluation',
+          description: isEs ? 'Dependiendo del rol, te propondremos un reto o conversación técnica.' : 'Depending on the role, we may propose a challenge or technical conversation.',
+        },
+        {
+          title: isEs ? 'Conversación final' : 'Final conversation',
+          description: isEs ? 'Alineamos expectativas con líderes del equipo y del contexto de negocio.' : 'We align expectations with team leaders and the business context.',
+        },
+        {
+          title: isEs ? 'Oferta' : 'Offer',
+          description: isEs ? 'Si hay fit mutuo, te invitamos a construir con nosotros.' : 'If there is mutual fit, we invite you to build with us.',
+        },
+      ],
+    },
+    faq: {
+      title: isEs ? 'Preguntas frecuentes' : 'Frequently asked questions',
+      items: [
+        {
+          question: isEs
+            ? '¿Puedo aplicar si no hay una vacante activa que coincida con mi perfil?'
+            : 'Can I apply if there is no current opening that matches my profile?',
+          answer: isEs
+            ? 'Sí. Puedes aplicar para otro cargo y tendremos tu perfil en cuenta para futuras oportunidades.'
+            : 'Yes. You can apply for a different role and we will consider your profile for future opportunities.',
+        },
+        {
+          question: isEs ? '¿El proceso es remoto?' : 'Is the process remote?',
+          answer: isEs
+            ? 'Sí. La mayor parte del proceso puede realizarse de forma remota, con espacios de conversación claros y acompañamiento del equipo.'
+            : 'Yes. Most of the process can happen remotely, with clear conversation spaces and guidance from the team.',
+        },
+        {
+          question: isEs ? '¿Qué debo enviar para aplicar?' : 'What should I send to apply?',
+          answer: isEs
+            ? 'Tu CV en PDF y, si tienes, un enlace a LinkedIn o portfolio. Eso es suficiente para iniciar.'
+            : 'Your resume in PDF and, if available, a LinkedIn or portfolio link. That is enough to get started.',
+        },
+        {
+          question: isEs ? '¿Cuánto tarda el proceso?' : 'How long does the process take?',
+          answer: isEs
+            ? 'Depende del rol, pero siempre buscamos un proceso ágil, transparente y con comunicación oportuna.'
+            : 'It depends on the role, but we always aim for an agile, transparent process with timely communication.',
+        },
+      ],
+    },
+    openApplication: {
+      title: isEs ? '¿No ves una vacante para ti? Aplica para otro cargo aquí' : "Don't see a role for you? Apply for a different role here",
+      subtitle: isEs
+        ? 'Siempre estamos abiertos a conocer talento que quiera crecer con nosotros. Si hoy no hay una vacante que encaje contigo, puedes enviarnos tu perfil para futuras oportunidades.'
+        : 'We are always open to meeting talent that wants to grow with us. If there is not a current opening that fits you today, you can send us your profile for future opportunities.',
+    },
+    cta: {
+      id: 'careers-cta-band',
+      language,
+      type: 'ctaBand',
+      isEnabled: true,
+      order: 999,
+      title: isEs ? '¿Listo para encontrar tu próximo reto con propósito?' : 'Ready to find your next purpose-driven challenge?',
+      subtitle: isEs ? 'Explora las vacantes activas o compártenos tu perfil para futuras oportunidades.' : 'Explore active openings or share your profile for future opportunities.',
+      ctaLabel: isEs ? 'Ver vacantes' : 'View openings',
+      ctaHref: '#openings',
+      createdAt: '',
+      updatedAt: '',
+    },
+  };
+}
 
 export function Careers() {
   const { language } = useLanguage();
+  const { isDark } = useTheme();
+  const [searchParams] = useSearchParams();
   const [pageRecord, setPageRecord] = useState<any | null>(null);
+  const [sections, setSections] = useState<any[]>([]);
   const [jobs, setJobs] = useState<any[]>([]);
-
-  // State for job filters
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedArea, setSelectedArea] = useState('all');
   const [selectedLocation, setSelectedLocation] = useState('all');
   const [selectedModality, setSelectedModality] = useState('all');
   const [selectedSeniority, setSelectedSeniority] = useState('all');
-
-  // State for FAQ
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-  const fallbackJobs = mockJobs.map((job: any) => ({
-    ...job,
-    area_es: job.area_es ?? job.department_es ?? '',
-    area_en: job.area_en ?? job.department_en ?? '',
-    short_summary_es: job.short_summary_es ?? job.excerpt_es ?? job.description_es ?? '',
-    short_summary_en: job.short_summary_en ?? job.excerpt_en ?? job.description_en ?? '',
-    modality: job.modality ?? 'remote',
-    seniority: job.seniority ?? 'mid',
-  }));
+  const defaults = useMemo(() => getCareersDefaults(language), [language]);
+
+  const fallbackJobs = useMemo(
+    () =>
+      mockJobs.map((job: any) => ({
+        ...job,
+        area_es: job.area_es ?? job.department_es ?? '',
+        area_en: job.area_en ?? job.department_en ?? '',
+        short_summary_es: job.short_summary_es ?? job.excerpt_es ?? job.description_es ?? '',
+        short_summary_en: job.short_summary_en ?? job.excerpt_en ?? job.description_en ?? '',
+        modality: job.modality ?? 'remote',
+        seniority: job.seniority ?? 'mid',
+      })),
+    [],
+  );
 
   useEffect(() => {
     let cancelled = false;
 
-    async function loadPageRecord() {
+    async function loadPage() {
       try {
-        const record = await getPageByKey('careers');
+        const [page, sectionRows] = await Promise.all([
+          getPageByKey('careers'),
+          getHomeSections(language, 'careers').catch(() => []),
+        ]);
+
         if (!cancelled) {
-          setPageRecord(record);
+          setPageRecord(page);
+          setSections(sectionRows.filter((section) => section.isEnabled));
         }
       } catch (error) {
         console.error('Error loading careers page metadata:', error);
       }
     }
 
-    loadPageRecord();
+    loadPage();
 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [language]);
 
   useEffect(() => {
     let cancelled = false;
@@ -75,7 +272,7 @@ export function Careers() {
       try {
         const records = await getJobs();
         if (!cancelled) {
-          setJobs(records.length > 0 ? records : (allowMockFallback ? fallbackJobs : []));
+          setJobs(records.length > 0 ? records : allowMockFallback ? fallbackJobs : []);
         }
       } catch (error) {
         console.error('Error loading careers jobs:', error);
@@ -90,168 +287,104 @@ export function Careers() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [fallbackJobs]);
 
-  // SEO Content
-  const seoTitle = pageRecord
-    ? (language === 'es' ? pageRecord.title_es : pageRecord.title_en)
-    : language === 'es' ? 'Trabaja con nosotros - iData' : 'Work with us - iData';
-  const seoDescription = pageRecord
-    ? (language === 'es' ? pageRecord.description_es : pageRecord.description_en)
-    : language === 'es'
-      ? 'Únete a nuestro equipo de CoolStars y crece como experto en Data & AI, aportando a iniciativas de transformación estratégica y digital.'
-      : 'Join our team of CoolStars and grow as a Data & AI expert, contributing to strategic and digital transformation initiatives.';
+  const introSection = findSectionByVariant(sections, 'careersIntro');
+  const cultureSection = findSectionByVariant(sections, 'careersCulture');
+  const benefitsSection = findSectionByVariant(sections, 'careersBenefits');
+  const processSection = findSectionByVariant(sections, 'careersProcess');
+  const faqSection = findSectionByVariant(sections, 'careersFaq');
+  const openApplicationSection = findSectionByVariant(sections, 'careersOpenApplication');
+  const ctaBandSection = sections.find((section) => section.type === 'ctaBand') || defaults.cta;
 
-  // Hero Content
-  const heroContent = {
-    title: language === 'es' ? 'Trabaja con nosotros' : 'Work with us',
-    description: language === 'es'
-      ? 'Únete a nuestro equipo de CoolStars y crece como experto en Data & AI, aportando a iniciativas de transformación estratégica y digital para organizaciones visionarias.'
-      : 'Join our team of CoolStars and grow as a Data & AI expert, contributing to strategic and digital transformation initiatives for visionary organizations.',
-  };
+  const heroTitle = introSection?.title || defaults.hero.title;
+  const heroSubtitle = introSection?.subtitle || defaults.hero.subtitle;
+  const heroEyebrow = introSection?.config?.eyebrow || defaults.hero.eyebrow;
 
-  // Culture Content (in real app, this would come from CMS)
-  const cultureContent = {
-    title: language === 'es' ? 'Nuestra Cooltura' : 'Our Coolture',
-    text: language === 'es'
-      ? 'En iData valoramos la innovación, la empatía y la excelencia. Creemos en el balance entre personas, datos y soluciones. Fomentamos un ambiente donde cada CoolStar puede crecer profesionalmente, aprender continuamente y contribuir a proyectos que transforman organizaciones. Trabajamos con tecnologías de punta, metodologías ágiles y equipos multidisciplinarios que hacen la diferencia.'
-      : 'At iData we value innovation, empathy and excellence. We believe in the balance between people, data and solutions. We foster an environment where each CoolStar can grow professionally, learn continuously and contribute to projects that transform organizations. We work with cutting-edge technologies, agile methodologies and multidisciplinary teams that make a difference.',
-  };
+  const cultureCards = Array.isArray(cultureSection?.config?.cards) && cultureSection.config.cards.length > 0
+    ? cultureSection.config.cards
+    : defaults.culture.cards;
 
-  // Benefits (Why work with us)
-  const benefits = [
-    {
-      icon: TrendingUp,
-      title: language === 'es' ? 'Crecimiento profesional' : 'Professional growth',
-      description: language === 'es'
-        ? 'Oportunidades de desarrollo continuo y rutas de carrera claras'
-        : 'Continuous development opportunities and clear career paths',
-    },
-    {
-      icon: Lightbulb,
-      title: language === 'es' ? 'Proyectos innovadores' : 'Innovative projects',
-      description: language === 'es'
-        ? 'Trabaja con tecnologías de punta en proyectos de transformación digital'
-        : 'Work with cutting-edge technologies on digital transformation projects',
-    },
-    {
-      icon: Users,
-      title: language === 'es' ? 'Equipo internacional' : 'International team',
-      description: language === 'es'
-        ? 'Colabora con expertos de más de 10 países'
-        : 'Collaborate with experts from over 10 countries',
-    },
-    {
-      icon: Heart,
-      title: language === 'es' ? 'Cultura people-first' : 'People-first culture',
-      description: language === 'es'
-        ? 'Balance vida-trabajo y ambiente de respeto mutuo'
-        : 'Work-life balance and mutual respect environment',
-    },
-  ];
+  const hiringSteps = Array.isArray(processSection?.config?.steps) && processSection.config.steps.length > 0
+    ? processSection.config.steps
+    : defaults.process.steps;
 
-  // Hiring Process Steps
-  const hiringSteps = [
-    {
-      number: 1,
-      title: language === 'es' ? 'Aplica' : 'Apply',
-      description: language === 'es'
-        ? 'Envía tu CV y carta de presentación'
-        : 'Submit your CV and cover letter',
-    },
-    {
-      number: 2,
-      title: language === 'es' ? 'Revisión de perfil' : 'Profile review',
-      description: language === 'es'
-        ? 'Nuestro equipo evalúa tu experiencia'
-        : 'Our team evaluates your experience',
-    },
-    {
-      number: 3,
-      title: language === 'es' ? 'Entrevista' : 'Interview',
-      description: language === 'es'
-        ? 'Conversación con el equipo de reclutamiento'
-        : 'Conversation with the recruitment team',
-    },
-    {
-      number: 4,
-      title: language === 'es' ? 'Evaluación técnica' : 'Technical assessment',
-      description: language === 'es'
-        ? 'Caso práctico o evaluación de habilidades'
-        : 'Practical case or skills assessment',
-    },
-    {
-      number: 5,
-      title: language === 'es' ? 'Conversación final' : 'Final conversation',
-      description: language === 'es'
-        ? 'Reunión con líderes del área'
-        : 'Meeting with area leaders',
-    },
-    {
-      number: 6,
-      title: language === 'es' ? 'Oferta' : 'Offer',
-      description: language === 'es'
-        ? 'Bienvenido al equipo de CoolStars'
-        : 'Welcome to the CoolStars team',
-    },
-  ];
+  const benefitsCards = Array.isArray(benefitsSection?.config?.cards) && benefitsSection.config.cards.length > 0
+    ? benefitsSection.config.cards
+    : defaults.benefits.cards;
 
-  // FAQ Content
-  const faqItems = [
-    {
-      question: language === 'es'
-        ? '¿Puedo aplicar si no hay una vacante activa que coincida con mi perfil?'
-        : 'Can I apply if there is no current opening that matches my profile?',
-      answer: language === 'es'
-        ? 'Sí, absolutamente. Puedes enviar una aplicación espontánea a través de nuestro formulario de aplicación general. Mantendremos tu perfil en nuestra base de datos y te contactaremos cuando surja una oportunidad que se ajuste a tu experiencia.'
-        : 'Yes, absolutely. You can submit an open application through our general application form. We will keep your profile in our database and contact you when an opportunity arises that matches your experience.',
-    },
-    {
-      question: language === 'es'
-        ? '¿El proceso de reclutamiento es remoto?'
-        : 'Is the recruitment process remote?',
-      answer: language === 'es'
-        ? 'Sí, nuestro proceso de reclutamiento es completamente remoto. Todas las entrevistas y evaluaciones se realizan de forma virtual para garantizar accesibilidad a candidatos de diferentes ubicaciones.'
-        : 'Yes, our recruitment process is completely remote. All interviews and assessments are conducted virtually to ensure accessibility for candidates from different locations.',
-    },
-    {
-      question: language === 'es'
-        ? '¿Qué documentos debo presentar?'
-        : 'What documents should I submit?',
-      answer: language === 'es'
-        ? 'Necesitas enviar tu CV actualizado en formato PDF. Opcionalmente, puedes incluir una carta de presentación, portfolio o enlaces a proyectos relevantes. También te pediremos tu perfil de LinkedIn si está disponible.'
-        : 'You need to submit your updated CV in PDF format. Optionally, you can include a cover letter, portfolio or links to relevant projects. We will also ask for your LinkedIn profile if available.',
-    },
-    {
-      question: language === 'es'
-        ? '¿Cuánto tiempo toma el proceso de selección?'
-        : 'How long does the selection process take?',
-      answer: language === 'es'
-        ? 'El proceso completo suele tomar entre 2 y 4 semanas desde la aplicación inicial hasta la oferta final. Sin embargo, esto puede variar según la posición y disponibilidad de los candidatos y evaluadores.'
-        : 'The complete process usually takes between 2 and 4 weeks from initial application to final offer. However, this may vary depending on the position and availability of candidates and evaluators.',
-    },
-  ];
+  const faqItems = Array.isArray(faqSection?.config?.items) && faqSection.config.items.length > 0
+    ? faqSection.config.items
+    : defaults.faq.items;
 
-  const jobOpenings = jobs.filter((job: any) => job.status === 'published');
+  const jobOpenings = jobs.filter((job: any) => job.status === 'published' && job.active !== false);
 
-  // Filter jobs based on current filters
   const filteredJobs = jobOpenings.filter((job) => {
     const title = language === 'es' ? job.title_es : job.title_en;
-    const matchesSearch = title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesArea = selectedArea === 'all' || (language === 'es' ? job.area_es : job.area_en) === selectedArea;
-    const matchesLocation = selectedLocation === 'all' || (language === 'es' ? job.location_es : job.location_en).includes(selectedLocation);
+    const summary = language === 'es' ? job.short_summary_es : job.short_summary_en;
+    const area = language === 'es' ? job.area_es : job.area_en;
+    const location = language === 'es' ? job.location_es : job.location_en;
+
+    const normalizedQuery = searchQuery.toLowerCase();
+    const matchesSearch =
+      title.toLowerCase().includes(normalizedQuery) ||
+      String(summary || '').toLowerCase().includes(normalizedQuery) ||
+      String(area || '').toLowerCase().includes(normalizedQuery);
+
+    const matchesArea = selectedArea === 'all' || area === selectedArea;
+    const matchesLocation = selectedLocation === 'all' || String(location || '').includes(selectedLocation);
     const matchesModality = selectedModality === 'all' || job.modality === selectedModality;
     const matchesSeniority = selectedSeniority === 'all' || job.seniority === selectedSeniority;
 
     return matchesSearch && matchesArea && matchesLocation && matchesModality && matchesSeniority;
   });
 
-  // Get unique values for filters
-  const areas = Array.from(new Set(jobOpenings.map(job => language === 'es' ? job.area_es : job.area_en)));
-  const locations = Array.from(new Set(jobOpenings.map(job => {
-    const value = language === 'es' ? job.location_es : job.location_en;
-    return value?.split('/')[0]?.trim() || value;
-  }).filter(Boolean)));
+  const areas = Array.from(new Set(jobOpenings.map((job) => (language === 'es' ? job.area_es : job.area_en)).filter(Boolean)));
+  const locations = Array.from(
+    new Set(
+      jobOpenings
+        .map((job) => {
+          const value = language === 'es' ? job.location_es : job.location_en;
+          return value?.split('/')[0]?.trim() || value;
+        })
+        .filter(Boolean),
+    ),
+  );
+
+  const selectedJobKey = searchParams.get('job');
+  const selectedJob = selectedJobKey
+    ? jobOpenings.find((job) =>
+        [job.id, job.slug, job.slug_es, job.slug_en].filter(Boolean).includes(selectedJobKey),
+      ) || null
+    : null;
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!window.location.hash) return;
+
+    const targetId = window.location.hash.replace('#', '');
+    const element = document.getElementById(targetId);
+
+    if (!element) return;
+
+    window.requestAnimationFrame(() => {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }, [selectedJobKey, jobs.length]);
+
+  const seoTitle = pageRecord
+    ? language === 'es'
+      ? pageRecord.title_es
+      : pageRecord.title_en
+    : language === 'es'
+      ? 'Trabaja con nosotros - iData'
+      : 'Work with us - iData';
+
+  const seoDescription = pageRecord
+    ? language === 'es'
+      ? pageRecord.description_es
+      : pageRecord.description_en
+    : heroSubtitle;
 
   return (
     <>
@@ -264,714 +397,519 @@ export function Careers() {
         language={language}
       />
 
-      <InternalPageHero
-        eyebrow={language === 'es' ? 'Talento iData' : 'iData Talent'}
-        title={heroContent.title}
-        description={heroContent.description}
-        imageSrc={careersBannerImage}
-        imageAlt="Careers at iData"
-      />
+      <div className={`min-h-screen pt-20 pb-20 ${isDark ? 'bg-slate-950 text-white' : 'bg-white text-slate-950'}`}>
+        <section
+          id="openings"
+          className={`relative overflow-x-hidden border-b ${isDark ? 'border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.14),transparent_30%),radial-gradient(circle_at_top_right,rgba(167,139,250,0.16),transparent_28%),linear-gradient(180deg,#020617,#0f172a)]' : 'border-slate-200 bg-[radial-gradient(circle_at_top_left,rgba(191,219,254,0.9),transparent_28%),radial-gradient(circle_at_top_right,rgba(221,214,254,0.9),transparent_28%),linear-gradient(180deg,#f8fbff,#ffffff)]'}`}
+        >
+          <div className="absolute inset-0 pointer-events-none">
+            <div className={`absolute left-[-8rem] top-20 h-72 w-72 rounded-full blur-3xl ${isDark ? 'bg-sky-400/10' : 'bg-blue-300/40'}`} />
+            <div className={`absolute right-[-6rem] top-12 h-72 w-72 rounded-full blur-3xl ${isDark ? 'bg-violet-400/12' : 'bg-violet-300/40'}`} />
+          </div>
 
-      {/* SECTION 2: Culture / Cooltura */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left: Text Content */}
+          <div className="relative mx-auto max-w-7xl px-6 py-10 sm:px-8 lg:px-12 lg:py-16">
+            <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="lg:col-span-2"
+              >
+                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#0088FF]">{heroEyebrow}</p>
+                <h1 className={`mt-5 max-w-4xl text-balance text-5xl font-light leading-[0.95] tracking-[-0.08em] md:text-6xl lg:text-7xl ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                  {heroTitle}
+                </h1>
+                <p className={`mt-6 max-w-3xl text-lg leading-relaxed md:text-xl ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  {heroSubtitle}
+                </p>
+              </motion.div>
+            </div>
+
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className={`mt-8 overflow-x-auto px-1 pb-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${isDark ? 'text-white' : 'text-slate-900'}`}
             >
-              <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-6">
-                {cultureContent.title}
+              <div className="flex gap-4 sm:grid sm:w-full sm:grid-cols-3">
+                {[
+                  {
+                    value: `${jobOpenings.length}`,
+                    label: language === 'es' ? 'vacantes activas' : 'active openings',
+                  },
+                  {
+                    value: `${areas.length || 1}`,
+                    label: language === 'es' ? 'áreas en movimiento' : 'areas in motion',
+                  },
+                  {
+                    value: `${locations.length || 1}`,
+                    label: language === 'es' ? 'mercados y ubicaciones' : 'markets and locations',
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className={`min-w-[250px] flex-shrink-0 rounded-[28px] border px-5 py-5 shadow-[0_14px_28px_rgba(15,23,42,0.05),0_4px_10px_rgba(15,23,42,0.04)] backdrop-blur-xl sm:min-w-0 ${isDark ? 'border-white/10 bg-white/5' : 'border-white/80 bg-white/76'}`}
+                  >
+                    <div className="text-3xl font-light tracking-[-0.06em]">{item.value}</div>
+                    <div className={`mt-2 text-sm ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{item.label}</div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className={`mt-10 rounded-[30px] border p-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-xl ${isDark ? 'border-white/10 bg-white/5' : 'border-white/80 bg-white/82'}`}
+            >
+              <div className="mb-4 flex items-center gap-2 text-sm font-medium text-[#0088FF]">
+                <Filter className="h-4 w-4" />
+                {language === 'es' ? 'Filtra oportunidades' : 'Filter opportunities'}
+              </div>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+                <div className="relative xl:col-span-2">
+                  <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    placeholder={language === 'es' ? 'Busca por cargo, stack o área...' : 'Search by role, stack or area...'}
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    className={`w-full rounded-2xl border py-3 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-[#0088FF]/25 ${isDark ? 'border-white/10 bg-slate-950/60 text-white placeholder:text-slate-500' : 'border-slate-200 bg-white text-slate-900 placeholder:text-slate-400'}`}
+                  />
+                </div>
+
+                <select
+                  value={selectedArea}
+                  onChange={(event) => setSelectedArea(event.target.value)}
+                  className={`ui-select rounded-2xl border px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0088FF]/25 ${isDark ? 'border-white/10 bg-slate-950/60 text-white' : 'border-slate-200 bg-white text-slate-900'}`}
+                >
+                  <option value="all">{language === 'es' ? 'Todas las áreas' : 'All areas'}</option>
+                  {areas.map((area) => (
+                    <option key={area} value={area}>
+                      {area}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  value={selectedLocation}
+                  onChange={(event) => setSelectedLocation(event.target.value)}
+                  className={`ui-select rounded-2xl border px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0088FF]/25 ${isDark ? 'border-white/10 bg-slate-950/60 text-white' : 'border-slate-200 bg-white text-slate-900'}`}
+                >
+                  <option value="all">{language === 'es' ? 'Todas las ubicaciones' : 'All locations'}</option>
+                  {locations.map((location) => (
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
+                  ))}
+                </select>
+
+                <div className="grid grid-cols-2 gap-4 xl:grid-cols-2">
+                  <select
+                    value={selectedModality}
+                    onChange={(event) => setSelectedModality(event.target.value)}
+                    className={`ui-select rounded-2xl border px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0088FF]/25 ${isDark ? 'border-white/10 bg-slate-950/60 text-white' : 'border-slate-200 bg-white text-slate-900'}`}
+                  >
+                    <option value="all">{language === 'es' ? 'Modalidad' : 'Modality'}</option>
+                    <option value="remote">{language === 'es' ? 'Remoto' : 'Remote'}</option>
+                    <option value="hybrid">{language === 'es' ? 'Híbrido' : 'Hybrid'}</option>
+                    <option value="onsite">{language === 'es' ? 'Presencial' : 'On-site'}</option>
+                  </select>
+
+                  <select
+                    value={selectedSeniority}
+                    onChange={(event) => setSelectedSeniority(event.target.value)}
+                    className={`ui-select rounded-2xl border px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0088FF]/25 ${isDark ? 'border-white/10 bg-slate-950/60 text-white' : 'border-slate-200 bg-white text-slate-900'}`}
+                  >
+                    <option value="all">{language === 'es' ? 'Nivel' : 'Level'}</option>
+                    <option value="junior">Junior</option>
+                    <option value="mid">Mid-level</option>
+                    <option value="senior">Senior</option>
+                    <option value="lead">Lead</option>
+                  </select>
+                </div>
+              </div>
+            </motion.div>
+
+            <div className="mt-10 grid gap-6 lg:grid-cols-2">
+              {filteredJobs.length > 0 ? (
+                filteredJobs.map((job, index) => {
+                  const jobSlug = language === 'es' ? job.slug_es : job.slug_en;
+                  const title = language === 'es' ? job.title_es : job.title_en;
+                  const summary = language === 'es' ? job.short_summary_es : job.short_summary_en;
+                  const area = language === 'es' ? job.area_es : job.area_en;
+                  const location = language === 'es' ? job.location_es : job.location_en;
+                  const employmentType = language === 'es' ? job.employment_type_es || job.type_es : job.employment_type_en || job.type_en;
+
+                  return (
+                    <motion.article
+                      key={job.id}
+                      initial={{ opacity: 0, y: 22 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.45, delay: index * 0.05 }}
+                      className={`group rounded-[32px] border p-6 shadow-[0_18px_38px_rgba(15,23,42,0.08),0_30px_80px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_rgba(15,23,42,0.10),0_38px_95px_rgba(15,23,42,0.08)] ${isDark ? 'border-white/10 bg-[linear-gradient(180deg,rgba(15,23,42,0.92),rgba(6,12,24,0.98))] hover:border-sky-400/30' : 'border-white/80 bg-white/88 hover:border-sky-200'}`}
+                    >
+                      <div className="flex h-full flex-col">
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#0088FF]">
+                              {area || (language === 'es' ? 'Equipo iData' : 'iData team')}
+                            </p>
+                            <h2 className={`mt-3 text-2xl font-light tracking-[-0.05em] ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                              {title}
+                            </h2>
+                          </div>
+                          <span className={`rounded-full px-3 py-1 text-xs font-medium ${isDark ? 'bg-white/8 text-slate-200' : 'bg-slate-100 text-slate-600'}`}>
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                        </div>
+
+                        <div className="mt-5 flex flex-wrap gap-2 text-sm">
+                          {area && (
+                            <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 ${isDark ? 'border-white/10 bg-white/6 text-slate-200' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                              <Briefcase className="h-4 w-4 text-[#0088FF]" />
+                              {area}
+                            </span>
+                          )}
+                          {location && (
+                            <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 ${isDark ? 'border-white/10 bg-white/6 text-slate-200' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                              <MapPin className="h-4 w-4 text-[#0088FF]" />
+                              {location}
+                            </span>
+                          )}
+                          <span className={`rounded-full border px-3 py-1.5 ${isDark ? 'border-white/10 bg-white/6 text-slate-200' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                            {getModalityLabel(language, job.modality)}
+                          </span>
+                          <span className={`rounded-full border px-3 py-1.5 ${isDark ? 'border-white/10 bg-white/6 text-slate-200' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                            {getSeniorityLabel(language, job.seniority)}
+                          </span>
+                          {employmentType && (
+                            <span className={`rounded-full border px-3 py-1.5 ${isDark ? 'border-white/10 bg-white/6 text-slate-200' : 'border-slate-200 bg-slate-50 text-slate-700'}`}>
+                              {employmentType}
+                            </span>
+                          )}
+                        </div>
+
+                        <p className={`mt-5 flex-1 text-base leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                          {summary}
+                        </p>
+
+                        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                          <Link
+                            to={`/${language}/${language === 'es' ? 'trabaja-con-nosotros/ofertas' : 'work-with-us/jobs'}/${jobSlug}`}
+                            className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-250 ${isDark ? 'border border-white/12 bg-white/6 text-white hover:bg-white/10' : 'border border-slate-200 bg-white text-slate-900 hover:bg-slate-50'}`}
+                          >
+                            {language === 'es' ? 'Ver detalle' : 'View details'}
+                          </Link>
+                          <Link
+                            to={`/${language}/${language === 'es' ? 'trabaja-con-nosotros' : 'work-with-us'}?job=${jobSlug}#open-application`}
+                            className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-medium text-white transition-all duration-250 hover:bg-slate-800 hover:shadow-[0_18px_34px_rgba(15,23,42,0.18)]"
+                          >
+                            {language === 'es' ? 'Aplicar' : 'Apply'}
+                            <ArrowRight className="h-4 w-4" />
+                          </Link>
+                        </div>
+                      </div>
+                    </motion.article>
+                  );
+                })
+              ) : (
+                <div className={`lg:col-span-2 rounded-[32px] border px-8 py-14 text-center shadow-[0_18px_50px_rgba(15,23,42,0.08)] ${isDark ? 'border-white/10 bg-white/5' : 'border-white/80 bg-white/86'}`}>
+                  <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#0088FF]/10 text-[#0088FF]">
+                    <Compass className="h-8 w-8" />
+                  </div>
+                  <h3 className={`mt-6 text-3xl font-light tracking-[-0.05em] ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                    {language === 'es' ? 'No encontramos vacantes con esos filtros' : 'We could not find openings with those filters'}
+                  </h3>
+                  <p className={`mx-auto mt-4 max-w-2xl text-lg ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                    {language === 'es'
+                      ? 'Puedes ajustar la búsqueda o aplicar para otro cargo.'
+                      : 'You can adjust the search or apply for a different role.'}
+                  </p>
+                  <a
+                    href="#open-application"
+                    className="mt-8 inline-flex items-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-sm font-medium text-white transition-all duration-250 hover:bg-slate-800"
+                  >
+                    {language === 'es' ? 'Quiero aplicar para otro cargo' : 'I want to apply for a different role'}
+                    <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        <section className={`py-20 ${isDark ? 'bg-slate-950' : 'bg-white'}`}>
+          <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+            <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55 }}
+              >
+                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0088FF]">
+                  {language === 'es' ? 'Cultura iData' : 'iData Culture'}
+                </p>
+                <h2 className={`mt-4 text-balance text-4xl font-light tracking-[-0.06em] md:text-5xl ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                  {cultureSection?.title || defaults.culture.title}
+                </h2>
+                <p className={`mt-5 max-w-2xl text-lg leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  {cultureSection?.subtitle || defaults.culture.subtitle}
+                </p>
+
+                <div className={`mt-8 overflow-hidden rounded-[32px] border shadow-[0_18px_50px_rgba(15,23,42,0.08)] ${isDark ? 'border-white/10 bg-slate-900' : 'border-slate-200 bg-slate-100'}`}>
+                  <img
+                    src={cultureSection?.config?.image || cultureImage}
+                    alt={language === 'es' ? 'Cultura de equipo iData' : 'iData team culture'}
+                    className="h-[380px] w-full object-cover"
+                  />
+                </div>
+              </motion.div>
+
+              <div className="grid gap-5">
+                {cultureCards.map((card: any, index: number) => (
+                  <motion.article
+                    key={`${card.title}-${index}`}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.45, delay: index * 0.08 }}
+                    className={`rounded-[30px] border p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] backdrop-blur-xl ${isDark ? 'border-white/10 bg-white/5' : 'border-white/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(248,250,252,0.95))]'}`}
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#0088FF]">
+                      {card.eyebrow || `${language === 'es' ? 'Bloque' : 'Block'} ${index + 1}`}
+                    </p>
+                    <h3 className={`mt-4 text-2xl font-light tracking-[-0.05em] ${isDark ? 'text-white' : 'text-slate-950'}`}>{card.title}</h3>
+                    <p className={`mt-4 text-base leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{card.description}</p>
+                  </motion.article>
+                ))}
+
+                <div className={`rounded-[30px] border px-6 py-5 ${isDark ? 'border-sky-400/15 bg-sky-400/5 text-slate-200' : 'border-sky-100 bg-sky-50/70 text-slate-700'}`}>
+                  <p className="text-sm leading-relaxed">
+                    {cultureSection?.config?.closing || defaults.culture.closing}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className={`${isDark ? 'bg-[linear-gradient(180deg,#020617,#0b1222)]' : 'bg-[linear-gradient(180deg,#f8fbff,#ffffff)]'} py-20`}>
+          <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+            <motion.div
+              className="mx-auto max-w-3xl text-center"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+            >
+              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0088FF]">
+                {language === 'es' ? 'Beneficios' : 'Benefits'}
+              </p>
+              <h2 className={`mt-4 text-balance text-4xl font-light tracking-[-0.06em] md:text-5xl ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                {benefitsSection?.title || defaults.benefits.title}
               </h2>
-              <p className="text-lg text-gray-700 font-light leading-relaxed">
-                {cultureContent.text}
+              <p className={`mt-4 text-lg leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                {benefitsSection?.subtitle || defaults.benefits.subtitle}
               </p>
             </motion.div>
 
-            {/* Right: Image */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="relative"
-            >
-              <div className="rounded-2xl overflow-hidden shadow-2xl h-[400px]">
-                <img
-                  src={cultureImage}
-                  alt={language === 'es' ? 'Equipo iData - Nuestra Cooltura' : 'iData Team - Our Coolture'}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+            <div className="mt-12 grid gap-6 lg:grid-cols-3">
+              {benefitsCards.map((card: any, index: number) => {
+                const Icon =
+                  card.icon === 'globe'
+                    ? Globe
+                    : card.icon === 'users'
+                      ? Users
+                      : Sparkles;
 
-      {/* SECTION 3: Why work with us / Benefits */}
-      <section className="py-20 bg-gradient-to-br from-purple-50 via-white to-blue-50">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4">
-              {language === 'es' ? '¿Por qué trabajar con nosotros?' : 'Why work with us?'}
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {benefits.map((benefit, index) => {
-              const Icon = benefit.icon;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 hover:shadow-xl hover:scale-105 transition-all duration-300"
-                >
-                  <div className="flex items-center justify-center mb-4">
-                    <Icon className="w-12 h-12 text-purple-600" />
-                  </div>
-                  <h3 className="text-xl font-light text-gray-900 mb-3 text-center">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-gray-600 font-light text-center">
-                    {benefit.description}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 4: Open Positions Listing */}
-      <section id="openings" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4">
-              {language === 'es' ? 'Vacantes abiertas' : 'Open positions'}
-            </h2>
-            <p className="text-xl text-gray-600 font-light">
-              {language === 'es'
-                ? 'Encuentra tu próxima oportunidad'
-                : 'Find your next opportunity'}
-            </p>
-          </motion.div>
-
-          {/* Filters */}
-          <div className="mb-8 bg-gray-50 rounded-xl p-6 border border-gray-200">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-              {/* Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder={language === 'es' ? 'Buscar por título...' : 'Search by title...'}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
-
-              {/* Area */}
-              <select
-                value={selectedArea}
-                onChange={(e) => setSelectedArea(e.target.value)}
-                className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              >
-                <option value="all">{language === 'es' ? 'Todas las áreas' : 'All areas'}</option>
-                {areas.map((area) => (
-                  <option key={area} value={area}>{area}</option>
-                ))}
-              </select>
-
-              {/* Location */}
-              <select
-                value={selectedLocation}
-                onChange={(e) => setSelectedLocation(e.target.value)}
-                className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              >
-                <option value="all">{language === 'es' ? 'Todas las ubicaciones' : 'All locations'}</option>
-                {locations.map((location) => (
-                  <option key={location} value={location}>{location}</option>
-                ))}
-              </select>
-
-              {/* Modality */}
-              <select
-                value={selectedModality}
-                onChange={(e) => setSelectedModality(e.target.value)}
-                className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              >
-                <option value="all">{language === 'es' ? 'Todas las modalidades' : 'All modalities'}</option>
-                <option value="remote">{language === 'es' ? 'Remoto' : 'Remote'}</option>
-                <option value="hybrid">{language === 'es' ? 'Híbrido' : 'Hybrid'}</option>
-                <option value="onsite">{language === 'es' ? 'Presencial' : 'On-site'}</option>
-              </select>
-
-              {/* Seniority */}
-              <select
-                value={selectedSeniority}
-                onChange={(e) => setSelectedSeniority(e.target.value)}
-                className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              >
-                <option value="all">{language === 'es' ? 'Todos los niveles' : 'All levels'}</option>
-                <option value="junior">Junior</option>
-                <option value="mid">{language === 'es' ? 'Intermedio' : 'Mid'}</option>
-                <option value="senior">Senior</option>
-              </select>
+                return (
+                  <motion.article
+                    key={`${card.title}-${index}`}
+                    initial={{ opacity: 0, y: 22 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.45, delay: index * 0.07 }}
+                    className={`rounded-[30px] border p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] ${isDark ? 'border-white/10 bg-white/5' : 'border-white/80 bg-white/88'}`}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#0088FF]">
+                        {card.eyebrow}
+                      </p>
+                      <div className={`rounded-2xl p-3 ${isDark ? 'bg-white/8 text-[#7dc4ff]' : 'bg-[#0088FF]/10 text-[#0088FF]'}`}>
+                        <Icon className="h-5 w-5" />
+                      </div>
+                    </div>
+                    <h3 className={`mt-6 text-2xl font-light tracking-[-0.05em] ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                      {card.title}
+                    </h3>
+                    <p className={`mt-4 text-base leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                      {card.description}
+                    </p>
+                  </motion.article>
+                );
+              })}
             </div>
           </div>
+        </section>
 
-          {/* Job Listings */}
-          {filteredJobs.length > 0 ? (
-            <div className="grid gap-6">
-              {filteredJobs.map((job, index) => (
+        <section className={`${isDark ? 'bg-[linear-gradient(180deg,#020617,#0b1222)]' : 'bg-[linear-gradient(180deg,#f8fbff,#ffffff)]'} py-20`}>
+          <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
+            <motion.div
+              className="mx-auto max-w-3xl text-center"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+            >
+              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0088FF]">
+                {language === 'es' ? 'Cómo se vive' : 'How it works'}
+              </p>
+              <h2 className={`mt-4 text-4xl font-light tracking-[-0.06em] md:text-5xl ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                {processSection?.title || defaults.process.title}
+              </h2>
+              <p className={`mt-4 text-lg ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                {processSection?.subtitle || defaults.process.subtitle}
+              </p>
+            </motion.div>
+
+            <div className="mt-14 grid gap-5 md:grid-cols-2 xl:grid-cols-6">
+              {hiringSteps.map((step: any, index: number) => (
                 <motion.div
-                  key={job.id}
-                  initial={{ opacity: 0, y: 20 }}
+                  key={`${step.title}-${index}`}
+                  initial={{ opacity: 0, y: 22 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg hover:border-purple-300 transition-all duration-300"
+                  transition={{ duration: 0.45, delay: index * 0.06 }}
+                  className={`rounded-[30px] border p-5 shadow-[0_18px_50px_rgba(15,23,42,0.08)] ${isDark ? 'border-white/10 bg-white/5' : 'border-white/80 bg-white/85'}`}
                 >
-                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                    {/* Left: Job Info */}
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-light text-gray-900 mb-3">
-                        {language === 'es' ? job.title_es : job.title_en}
-                      </h3>
-                      
-                      <div className="flex flex-wrap gap-3 mb-3">
-                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
-                          <Briefcase className="w-4 h-4" />
-                          {language === 'es' ? job.area_es : job.area_en}
-                        </span>
-                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                          <MapPin className="w-4 h-4" />
-                          {language === 'es' ? job.location_es : job.location_en}
-                        </span>
-                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
-                          <Clock className="w-4 h-4" />
-                          {job.modality === 'remote' ? (language === 'es' ? 'Remoto' : 'Remote') : 
-                           job.modality === 'hybrid' ? (language === 'es' ? 'Híbrido' : 'Hybrid') : 
-                           (language === 'es' ? 'Presencial' : 'On-site')}
-                        </span>
-                      </div>
-
-                      <p className="text-gray-600 font-light">
-                        {language === 'es' ? job.short_summary_es : job.short_summary_en}
-                      </p>
-                    </div>
-
-                    {/* Right: CTA */}
-                    <div className="flex-shrink-0">
-                      <Link
-                        to={`/${language}/${language === 'es' ? 'trabaja-con-nosotros' : 'work-with-us'}/${language === 'es' ? job.slug_es : job.slug_en}`}
-                        className="inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-purple-700 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-100 group"
-                      >
-                        {language === 'es' ? 'Aplicar' : 'Apply now'}
-                        <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                      </Link>
-                    </div>
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#0088FF] text-lg font-semibold text-white">
+                      {index + 1}
+                    </span>
+                    <CheckCircle2 className={`h-5 w-5 ${isDark ? 'text-slate-500' : 'text-slate-300'}`} />
                   </div>
+                  <h3 className={`mt-5 text-xl font-medium ${isDark ? 'text-white' : 'text-slate-950'}`}>{step.title}</h3>
+                  <p className={`mt-3 text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{step.description}</p>
                 </motion.div>
               ))}
             </div>
-          ) : (
-            /* Empty State */
+          </div>
+        </section>
+
+        <section className={`py-20 ${isDark ? 'bg-slate-950' : 'bg-white'}`}>
+          <div className="mx-auto max-w-4xl px-6 sm:px-8 lg:px-12">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              className="text-center"
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center py-16 bg-gray-50 rounded-xl border border-gray-200"
+              transition={{ duration: 0.55 }}
             >
-              <Briefcase className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-2xl font-light text-gray-900 mb-3">
-                {language === 'es'
-                  ? 'No tenemos vacantes activas en este momento'
-                  : 'We do not have active openings at the moment'}
-              </h3>
-              <p className="text-gray-600 font-light mb-6">
-                {language === 'es'
-                  ? 'Pero nos encantaría conocerte. Envía tu aplicación espontánea.'
-                  : 'But we would still love to hear from you. Submit your open application.'}
+              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0088FF]">
+                {language === 'es' ? 'FAQ' : 'FAQ'}
               </p>
-              <a
-                href="#open-application"
-                className="inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-purple-700 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-100 group"
-              >
-                {language === 'es' ? 'Aplicación espontánea' : 'Open application'}
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
+              <h2 className={`mt-4 text-4xl font-light tracking-[-0.06em] md:text-5xl ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                {faqSection?.title || defaults.faq.title}
+              </h2>
             </motion.div>
-          )}
-        </div>
-      </section>
 
-      {/* SECTION 5: Hiring Process */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4">
-              {language === 'es' ? 'Proceso de selección' : 'Hiring process'}
-            </h2>
-            <p className="text-xl text-gray-600 font-light">
-              {language === 'es'
-                ? 'Un proceso transparente y ágil'
-                : 'A transparent and agile process'}
-            </p>
-          </motion.div>
-
-          {/* Timeline - Desktop & Tablet View */}
-          <div className="hidden md:block relative">
-            {/* Horizontal Timeline Line */}
-            <div className="absolute top-[60px] left-0 right-0 h-0.5 bg-gradient-to-r from-purple-200 via-purple-400 to-purple-200" />
-            
-            <div className="grid grid-cols-6 gap-4">
-              {hiringSteps.map((step, index) => (
+            <div className="mt-10 space-y-4">
+              {faqItems.map((item: any, index: number) => (
                 <motion.div
-                  key={index}
+                  key={`${item.question}-${index}`}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="relative"
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  className={`overflow-hidden rounded-[28px] border ${isDark ? 'border-white/10 bg-white/5' : 'border-slate-200 bg-white'}`}
                 >
-                  {/* Step Circle */}
-                  <div className="flex justify-center mb-6">
-                    <div className="relative z-10 w-[120px] h-[120px] rounded-full bg-gradient-to-br from-purple-600 to-purple-800 text-white flex flex-col items-center justify-center shadow-xl border-4 border-white">
-                      <div className="text-3xl font-light mb-1">{step.number}</div>
-                      <div className="text-xs font-medium opacity-90">
-                        {language === 'es' ? 'PASO' : 'STEP'}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Step Content */}
-                  <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200 min-h-[180px] flex flex-col">
-                    <h3 className="text-lg font-medium text-gray-900 mb-3 text-center">
-                      {step.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 font-light text-center flex-1">
-                      {step.description}
-                    </p>
-                  </div>
-
-                  {/* Arrow Connector (except for last item) */}
-                  {index < hiringSteps.length - 1 && (
-                    <div className="absolute top-[60px] -right-2 z-20">
-                      <ArrowRight className="w-6 h-6 text-purple-600" />
+                  <button
+                    onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                    className="flex w-full items-center justify-between gap-6 px-6 py-5 text-left"
+                  >
+                    <span className={`text-lg font-light ${isDark ? 'text-white' : 'text-slate-950'}`}>{item.question}</span>
+                    <ChevronDown className={`h-5 w-5 flex-shrink-0 transition-transform duration-300 ${openFaqIndex === index ? 'rotate-180' : ''} ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
+                  </button>
+                  {openFaqIndex === index && (
+                    <div className="px-6 pb-6">
+                      <p className={`text-base leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>{item.answer}</p>
                     </div>
                   )}
                 </motion.div>
               ))}
             </div>
           </div>
+        </section>
 
-          {/* Timeline - Mobile View (Vertical) */}
-          <div className="md:hidden relative">
-            {/* Vertical Timeline Line */}
-            <div className="absolute left-[30px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-200 via-purple-400 to-purple-200" />
-            
-            <div className="space-y-8">
-              {hiringSteps.map((step, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="relative flex gap-6"
+        <section
+          id="open-application"
+          className={`scroll-mt-28 py-20 ${isDark ? 'bg-[linear-gradient(180deg,#0b1222,#020617)]' : 'bg-[linear-gradient(180deg,#f8fbff,#ffffff)]'}`}
+        >
+          <div className="mx-auto max-w-5xl px-6 sm:px-8 lg:px-12">
+            <motion.div
+              className="mx-auto max-w-3xl text-center"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+            >
+              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0088FF]">
+                {selectedJob
+                  ? language === 'es'
+                    ? 'Aplicación contextual'
+                    : 'Contextual application'
+                  : language === 'es'
+                    ? 'Aplicación a otro cargo'
+                    : 'Apply for a different role'}
+              </p>
+              <h2 className={`mt-4 text-balance text-4xl font-light tracking-[-0.06em] md:text-5xl ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                {selectedJob
+                  ? language === 'es'
+                    ? `Aplica a ${selectedJob.title_es || selectedJob.title_en}`
+                    : `Apply to ${selectedJob.title_en || selectedJob.title_es}`
+                  : openApplicationSection?.title || defaults.openApplication.title}
+              </h2>
+              <p className={`mt-4 text-lg leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                {selectedJob
+                  ? language === 'es'
+                    ? 'Ya cargamos el contexto de la vacante para que no tengas que volver a seleccionarla manualmente.'
+                    : 'We already loaded the job context so you do not have to choose it manually again.'
+                  : openApplicationSection?.subtitle || defaults.openApplication.subtitle}
+              </p>
+              {selectedJob && (
+                <Link
+                  to={`/${language}/${language === 'es' ? 'trabaja-con-nosotros' : 'work-with-us'}#open-application`}
+                  className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-[#0088FF]"
                 >
-                  {/* Step Circle */}
-                  <div className="relative z-10 flex-shrink-0 w-[60px] h-[60px] rounded-full bg-gradient-to-br from-purple-600 to-purple-800 text-white flex flex-col items-center justify-center shadow-xl border-4 border-white">
-                    <div className="text-xl font-light">{step.number}</div>
-                  </div>
+                  {language === 'es' ? 'Quiero aplicar para otro cargo' : 'I want to apply for a different role'}
+                </Link>
+              )}
+            </motion.div>
 
-                  {/* Step Content */}
-                  <div className="flex-1 bg-white rounded-xl p-6 shadow-lg border border-gray-200">
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
-                      {step.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 font-light">
-                      {step.description}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: 0.1 }}
+              className={`mt-10 rounded-[34px] border p-6 shadow-[0_24px_60px_rgba(15,23,42,0.10)] backdrop-blur-xl md:p-8 ${isDark ? 'border-white/10 bg-white/5' : 'border-white/80 bg-white/88'}`}
+            >
+              <JobApplicationForm
+                language={language}
+                applicationType={selectedJob ? 'job' : 'open'}
+                job={selectedJob}
+                submitLabel={language === 'es' ? 'Enviar postulación' : 'Send application'}
+              />
+            </motion.div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* SECTION 6: FAQ */}
-      <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4">
-              {language === 'es' ? 'Preguntas frecuentes' : 'Frequently asked questions'}
-            </h2>
-          </motion.div>
-
-          <div className="space-y-4">
-            {faqItems.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-xl border border-gray-200 overflow-hidden"
-              >
-                <button
-                  onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                  className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors duration-200"
-                >
-                  <span className="text-lg font-light text-gray-900 pr-4">
-                    {item.question}
-                  </span>
-                  <ChevronDown
-                    className={`w-5 h-5 text-gray-500 flex-shrink-0 transition-transform duration-300 ${
-                      openFaqIndex === index ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-                {openFaqIndex === index && (
-                  <div className="px-6 pb-6">
-                    <p className="text-gray-600 font-light leading-relaxed">
-                      {item.answer}
-                    </p>
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 7: Open Application / General Application Form */}
-      <section id="open-application" className="py-20 bg-gradient-to-br from-purple-50 via-white to-blue-50">
-        <div className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-4">
-              {language === 'es' ? 'Aplicación espontánea' : 'Open application'}
-            </h2>
-            <p className="text-xl text-gray-600 font-light">
-              {language === 'es'
-                ? '¿No encuentras una vacante que se ajuste a tu perfil? Envíanos tu información y te contactaremos cuando surja una oportunidad.'
-                : "Can't find an opening that matches your profile? Send us your information and we'll contact you when an opportunity arises."}
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-2xl p-8 shadow-xl border border-gray-200"
-          >
-            <form className="space-y-6">
-              {/* Name Fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {language === 'es' ? 'Nombre' : 'First name'} *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    minLength={2}
-                    maxLength={50}
-                    pattern={NAME_PATTERN}
-                    title={language === 'es' ? 'Solo letras y espacios' : 'Only letters and spaces'}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {language === 'es' ? 'Apellido' : 'Last name'} *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    minLength={2}
-                    maxLength={50}
-                    pattern={NAME_PATTERN}
-                    title={language === 'es' ? 'Solo letras y espacios' : 'Only letters and spaces'}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-              </div>
-
-              {/* Contact Fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {language === 'es' ? 'Correo electrónico' : 'Email'} *
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    maxLength={100}
-                    placeholder={language === 'es' ? 'tu@correo.com' : 'you@email.com'}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {language === 'es' ? 'Teléfono' : 'Phone'} *
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    pattern={PHONE_PATTERN}
-                    placeholder="+57 300 123 4567"
-                    title={language === 'es' ? 'Formato: +57 300 123 4567' : 'Format: +57 300 123 4567'}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-              </div>
-
-              {/* Location */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {language === 'es' ? 'País' : 'Country'} *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    minLength={2}
-                    maxLength={50}
-                    pattern={NAME_PATTERN}
-                    title={language === 'es' ? 'Solo letras y espacios' : 'Only letters and spaces'}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {language === 'es' ? 'Ciudad' : 'City'} *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    minLength={2}
-                    maxLength={50}
-                    pattern={NAME_PATTERN}
-                    title={language === 'es' ? 'Solo letras y espacios' : 'Only letters and spaces'}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-              </div>
-
-              {/* Desired Area and Role */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {language === 'es' ? 'Área de interés' : 'Desired area'}
-                  </label>
-                  <select className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                    <option value="">{language === 'es' ? 'Selecciona un área' : 'Select an area'}</option>
-                    <option value="data-engineering">{language === 'es' ? 'Ingeniería de Datos' : 'Data Engineering'}</option>
-                    <option value="data-science">{language === 'es' ? 'Ciencia de Datos' : 'Data Science'}</option>
-                    <option value="analytics">{language === 'es' ? 'Analítica' : 'Analytics'}</option>
-                    <option value="ai-ml">{language === 'es' ? 'IA & ML' : 'AI & ML'}</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {language === 'es' ? 'Rol deseado' : 'Desired role'}
-                  </label>
-                  <input
-                    type="text"
-                    maxLength={100}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-              </div>
-
-              {/* LinkedIn and Portfolio */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    LinkedIn
-                  </label>
-                  <input
-                    type="url"
-                    pattern="https://.*"
-                    placeholder="https://linkedin.com/in/..."
-                    title={language === 'es' ? 'Debe comenzar con https://' : 'Must start with https://'}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Portfolio
-                  </label>
-                  <input
-                    type="url"
-                    pattern="https://.*"
-                    placeholder="https://..."
-                    title={language === 'es' ? 'Debe comenzar con https://' : 'Must start with https://'}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-              </div>
-
-              {/* CV Upload */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {language === 'es' ? 'CV / Hoja de vida' : 'Resume / CV'} * (PDF, máx. 5MB)
-                </label>
-                <input
-                  type="file"
-                  accept=".pdf,application/pdf"
-                  required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 file:cursor-pointer"
-                />
-                <p className="mt-1 text-xs text-gray-500">
-                  {language === 'es' ? 'Solo archivos PDF, tamaño máximo 5MB' : 'PDF files only, maximum size 5MB'}
-                </p>
-              </div>
-
-              {/* Cover Letter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {language === 'es' ? 'Cuéntanos sobre ti' : 'Tell us about yourself'} *
-                </label>
-                <textarea
-                  required
-                  rows={6}
-                  minLength={50}
-                  maxLength={1000}
-                  placeholder={language === 'es' 
-                    ? 'Describe tu experiencia, habilidades y por qué te gustaría trabajar en iData...'
-                    : 'Describe your experience, skills and why you would like to work at iData...'}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
-                />
-                <p className="mt-1 text-xs text-gray-500">
-                  {language === 'es' ? 'Mínimo 50 caracteres, máximo 1000' : 'Minimum 50 characters, maximum 1000'}
-                </p>
-              </div>
-
-              {/* Consent */}
-              <div className="flex items-start gap-3">
-                <input
-                  type="checkbox"
-                  required
-                  id="consent-open"
-                  className="mt-1 w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                />
-                <label htmlFor="consent-open" className="text-sm text-gray-600">
-                  {language === 'es' ? 'Acepto la ' : 'I accept the '}
-                  <a
-                    href={EXTERNAL_DATA_POLICY_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-[#0088FF] hover:underline"
-                  >
-                    {language === 'es' ? 'política de privacidad y el tratamiento de mis datos personales' : 'privacy policy and the processing of my personal data'}
-                  </a>
-                  {language === 'es' ? ' para fines de reclutamiento.' : ' for recruitment purposes.'} *
-                </label>
-              </div>
-
-              {/* Submit Button */}
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-purple-600 text-white px-8 py-4 rounded-xl font-medium hover:bg-purple-700 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-100 group"
-                >
-                  {language === 'es' ? 'Enviar aplicación' : 'Submit application'}
-                  <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
-                </button>
-              </div>
-            </form>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* SECTION 8: Final CTA */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <motion.div
-            className="relative"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            {/* Background blobs */}
-            <div className="absolute -left-20 top-1/2 -translate-y-1/2 w-64 h-64 bg-blue-400 rounded-full blur-3xl opacity-50" />
-            <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-64 h-64 bg-purple-500 rounded-full blur-3xl opacity-50" />
-
-            {/* Card */}
-            <div className="theme-glass-panel relative overflow-hidden rounded-2xl p-8 md:rounded-3xl">
-              <div className="relative">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-8">
-                  <div className="flex-1 text-center md:text-left">
-                    <h2 className="mb-2 text-xl font-light leading-tight tracking-tight text-[var(--glass-text-primary)] md:text-2xl lg:text-3xl">
-                      {language === 'es'
-                        ? '¿Listo para unirte a los CoolStars?'
-                        : 'Ready to join the CoolStars?'}
-                    </h2>
-                    <p className="text-sm font-light leading-relaxed text-[var(--glass-text-secondary)] md:text-base">
-                      {language === 'es'
-                        ? 'Explora nuestras vacantes o envía tu aplicación espontánea'
-                        : 'Explore our openings or submit your open application'}
-                    </p>
-                  </div>
-                  <div className="flex justify-center md:justify-end md:flex-shrink-0">
-                    <a
-                      href="#openings"
-                      className="inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-800 transition-all duration-250 hover:shadow-xl hover:scale-[1.02] active:scale-100 group whitespace-nowrap"
-                    >
-                      {language === 'es' ? 'Ver vacantes' : 'View openings'}
-                      <ArrowRight className="w-4 h-4 transition-transform duration-250 group-hover:translate-x-1" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+        <CTABandSection section={ctaBandSection} />
+      </div>
     </>
   );
 }

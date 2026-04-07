@@ -17,6 +17,11 @@ export interface JobApplicationInput {
   job_id?: string | null;
   job_title?: string | null;
   job_slug?: string | null;
+  job_area?: string | null;
+  job_location?: string | null;
+  job_modality?: string | null;
+  job_level?: string | null;
+  spontaneous_application?: boolean;
   applied_to_label: string;
   first_name: string;
   last_name: string;
@@ -26,6 +31,7 @@ export interface JobApplicationInput {
   city: string;
   desired_area?: string;
   desired_role?: string;
+  experience_level?: string;
   years_of_experience?: string;
   availability?: string;
   linkedin_url?: string;
@@ -46,6 +52,11 @@ export interface JobApplicationRecord {
   job_id?: string | null;
   job_title?: string | null;
   job_slug?: string | null;
+  job_area?: string | null;
+  job_location?: string | null;
+  job_modality?: string | null;
+  job_level?: string | null;
+  spontaneous_application?: boolean;
   applied_to_label: string;
   first_name: string;
   last_name: string;
@@ -55,6 +66,7 @@ export interface JobApplicationRecord {
   city: string;
   desired_area?: string | null;
   desired_role?: string | null;
+  experience_level?: string | null;
   years_of_experience?: string | null;
   availability?: string | null;
   linkedin_url?: string | null;
@@ -111,8 +123,15 @@ function isSupabaseUnavailable(error: unknown) {
     message.includes('bucket') ||
     message.includes('storage') ||
     message.includes('network') ||
-    message.includes('failed to fetch')
+    message.includes('failed to fetch') ||
+    message.includes('could not find the') ||
+    message.includes('column')
   );
+}
+
+function isMissingColumnError(error: unknown) {
+  const message = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
+  return message.includes('column') || message.includes('schema cache')
 }
 
 async function uploadResume(applicationId: string, file: File) {
@@ -159,6 +178,11 @@ async function normalizeRecord(row: any): Promise<JobApplicationRecord> {
     job_id: row.job_id ?? null,
     job_title: row.job_title ?? null,
     job_slug: row.job_slug ?? null,
+    job_area: row.job_area ?? null,
+    job_location: row.job_location ?? null,
+    job_modality: row.job_modality ?? null,
+    job_level: row.job_level ?? null,
+    spontaneous_application: row.spontaneous_application ?? row.application_type === 'open',
     applied_to_label: row.applied_to_label ?? row.job_title ?? '',
     first_name: row.first_name ?? '',
     last_name: row.last_name ?? '',
@@ -168,6 +192,7 @@ async function normalizeRecord(row: any): Promise<JobApplicationRecord> {
     city: row.city ?? '',
     desired_area: row.desired_area ?? null,
     desired_role: row.desired_role ?? null,
+    experience_level: row.experience_level ?? null,
     years_of_experience: row.years_of_experience ?? null,
     availability: row.availability ?? null,
     linkedin_url: row.linkedin_url ?? null,
@@ -199,6 +224,11 @@ function createLocalFallbackRecord(input: JobApplicationInput): JobApplicationRe
     job_id: input.job_id ?? null,
     job_title: input.job_title ?? null,
     job_slug: input.job_slug ?? null,
+    job_area: input.job_area ?? null,
+    job_location: input.job_location ?? null,
+    job_modality: input.job_modality ?? null,
+    job_level: input.job_level ?? null,
+    spontaneous_application: input.spontaneous_application ?? input.application_type === 'open',
     applied_to_label: input.applied_to_label,
     first_name: input.first_name,
     last_name: input.last_name,
@@ -208,6 +238,7 @@ function createLocalFallbackRecord(input: JobApplicationInput): JobApplicationRe
     city: input.city,
     desired_area: input.desired_area ?? null,
     desired_role: input.desired_role ?? null,
+    experience_level: input.experience_level ?? null,
     years_of_experience: input.years_of_experience ?? null,
     availability: input.availability ?? null,
     linkedin_url: input.linkedin_url ?? null,
@@ -236,7 +267,7 @@ export async function createJobApplication(input: JobApplicationInput): Promise<
   try {
     const resume = await uploadResume(applicationId, input.resume_file);
 
-    const payload = {
+    const basePayload = {
       id: applicationId,
       application_type: input.application_type,
       status: 'new',
@@ -268,17 +299,35 @@ export async function createJobApplication(input: JobApplicationInput): Promise<
       ...resume,
     };
 
-    const { data, error } = await supabase
+    const extendedPayload = {
+      ...basePayload,
+      job_area: input.job_area ?? null,
+      job_location: input.job_location ?? null,
+      job_modality: input.job_modality ?? null,
+      job_level: input.job_level ?? null,
+      spontaneous_application: input.spontaneous_application ?? input.application_type === 'open',
+      experience_level: input.experience_level ?? null,
+    };
+
+    let insertResponse = await supabase
       .from('job_applications')
-      .insert(payload)
+      .insert(extendedPayload)
       .select()
       .single();
 
-    if (error) {
-      throw error;
+    if (insertResponse.error && isMissingColumnError(insertResponse.error)) {
+      insertResponse = await supabase
+        .from('job_applications')
+        .insert(basePayload)
+        .select()
+        .single();
     }
 
-    return normalizeRecord(data);
+    if (insertResponse.error) {
+      throw insertResponse.error;
+    }
+
+    return normalizeRecord(insertResponse.data);
   } catch (error) {
     if (!isSupabaseUnavailable(error)) {
       throw error;

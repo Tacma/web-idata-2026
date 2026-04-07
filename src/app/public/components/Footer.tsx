@@ -167,14 +167,14 @@ export function Footer() {
                 </p>
               </div>
 
-              <ul className="flex flex-wrap gap-3 lg:justify-end">
+              <ul className="grid grid-cols-2 gap-3 lg:flex lg:flex-wrap lg:justify-end">
                 {officeContacts.map((region) => (
-                  <li key={region.id}>
+                  <li key={region.id} className="min-w-0">
                     <a
                       href={buildWhatsAppRegionUrl(region, language)}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex min-w-[190px] items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm transition-all duration-300 hover:border-white/20 hover:bg-white/8"
+                      className="flex h-full w-full min-w-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm transition-all duration-300 hover:border-white/20 hover:bg-white/8 lg:min-w-[190px]"
                     >
                       <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-lg">
                         {officeFlags[region.id] || '🌐'}

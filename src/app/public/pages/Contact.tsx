@@ -1,24 +1,22 @@
 import { useLanguage } from '../../shared/contexts/LanguageContext';
+import { useTheme } from '../../shared/contexts/ThemeContext';
 import { SEOHead } from '../../shared/components/SEOHead';
 import { motion } from 'motion/react';
-import { ArrowRight, Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, Building2, Globe, Clock, Briefcase, X } from 'lucide-react';
-import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
+import { ArrowRight, Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, X, Instagram, Linkedin, Youtube, Facebook } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router';
 import { emailConfig, emailTemplates } from '../../shared/config/emailConfig';
 import { getByKey as getPageByKey } from '../../../services/pagesService';
-import contactHeroImage from '/assets/images/hero/contact.png';
-import { Link } from 'react-router';
 import { useContactSettings } from '../../shared/hooks/useContactSettings';
-import { WhatsAppContactCard } from '../../shared/components/whatsapp/WhatsAppContactCard';
-import { InternalPageHero } from '../components/InternalPageHero';
 import { EXTERNAL_DATA_POLICY_URL } from '../../shared/constants/legalLinks';
+import { buildWhatsAppRegionUrl, getActiveWhatsAppRegions, getLocalizedRegionAvailability, getLocalizedRegionHelper, getLocalizedRegionName } from '../../shared/utils/whatsapp';
 
 const NAME_PATTERN = "[A-Za-zÀ-ÿ' -]+";
 const PHONE_PATTERN = "[0-9+() -]{8,20}";
 
 export function Contact() {
   const { language } = useLanguage();
+  const { isDark } = useTheme();
   const { settings: contactSettings } = useContactSettings();
   const activeWhatsAppRegions = [...contactSettings.whatsapp.regions]
     .filter((region) => region.isActive)
@@ -96,14 +94,6 @@ export function Contact() {
       ? 'Estamos listos para ayudarte a transformar tus datos en decisiones estratégicas. Contáctanos para iniciar tu proyecto de Data & AI.'
       : 'We are ready to help you transform your data into strategic decisions. Contact us to start your Data & AI project.';
 
-  // Hero Content
-  const heroContent = {
-    title: language === 'es' ? 'Hablemos' : "Let's talk",
-    description: language === 'es'
-      ? 'Estamos listos para ayudarte a transformar tus datos en decisiones estratégicas.'
-      : 'We are ready to help you transform your data into strategic decisions.',
-  };
-
   // Project Types
   const projectTypes = [
     { value: '', label: language === 'es' ? 'Selecciona un tipo' : 'Select a type' },
@@ -114,43 +104,6 @@ export function Contact() {
     { value: 'data-governance', label: language === 'es' ? 'Gobierno de Datos' : 'Data Governance' },
     { value: 'bi-visualization', label: language === 'es' ? 'BI & Visualización' : 'BI & Visualization' },
     { value: 'other', label: language === 'es' ? 'Otro' : 'Other' },
-  ];
-
-  // Industries
-  const industries = [
-    { value: '', label: language === 'es' ? 'Selecciona una industria' : 'Select an industry' },
-    { value: 'financial', label: language === 'es' ? 'Servicios Financieros' : 'Financial Services' },
-    { value: 'retail', label: language === 'es' ? 'Retail & E-commerce' : 'Retail & E-commerce' },
-    { value: 'healthcare', label: language === 'es' ? 'Salud' : 'Healthcare' },
-    { value: 'manufacturing', label: language === 'es' ? 'Manufactura' : 'Manufacturing' },
-    { value: 'telecommunications', label: language === 'es' ? 'Telecomunicaciones' : 'Telecommunications' },
-    { value: 'energy', label: language === 'es' ? 'Energía' : 'Energy' },
-    { value: 'government', label: language === 'es' ? 'Gobierno' : 'Government' },
-    { value: 'education', label: language === 'es' ? 'Educación' : 'Education' },
-    { value: 'other', label: language === 'es' ? 'Otra' : 'Other' },
-  ];
-
-  // Budget Ranges
-  const budgetRanges = [
-    { value: '', label: language === 'es' ? 'Selecciona un rango' : 'Select a range' },
-    { value: 'under-25k', label: language === 'es' ? 'Menos de $25,000 USD' : 'Under $25,000 USD' },
-    { value: '25k-50k', label: '$25,000 - $50,000 USD' },
-    { value: '50k-100k', label: '$50,000 - $100,000 USD' },
-    { value: '100k-250k', label: '$100,000 - $250,000 USD' },
-    { value: '250k-500k', label: '$250,000 - $500,000 USD' },
-    { value: 'over-500k', label: language === 'es' ? 'Más de $500,000 USD' : 'Over $500,000 USD' },
-    { value: 'not-decided', label: language === 'es' ? 'Por definir' : 'To be determined' },
-  ];
-
-  // Timelines
-  const timelines = [
-    { value: '', label: language === 'es' ? 'Selecciona un plazo' : 'Select a timeline' },
-    { value: 'urgent', label: language === 'es' ? 'Urgente (menos de 1 mes)' : 'Urgent (less than 1 month)' },
-    { value: '1-3-months', label: language === 'es' ? '1-3 meses' : '1-3 months' },
-    { value: '3-6-months', label: language === 'es' ? '3-6 meses' : '3-6 months' },
-    { value: '6-12-months', label: language === 'es' ? '6-12 meses' : '6-12 months' },
-    { value: 'over-12-months', label: language === 'es' ? 'Más de 12 meses' : 'Over 12 months' },
-    { value: 'flexible', label: language === 'es' ? 'Flexible' : 'Flexible' },
   ];
 
   // Contact Information (would come from CMS in production)
@@ -183,6 +136,35 @@ export function Contact() {
         language === 'es' ? contactSettings.businessHours_es : contactSettings.businessHours_en,
     },
   ];
+
+  const socialLinks = [
+    {
+      key: 'facebook',
+      label: 'Facebook',
+      href: 'https://www.facebook.com/iData.Global.IA/',
+      icon: Facebook,
+    },
+    {
+      key: 'linkedin',
+      label: 'LinkedIn',
+      href: contactSettings.socialMedia.linkedin,
+      icon: Linkedin,
+    },
+    {
+      key: 'instagram',
+      label: 'Instagram',
+      href: contactSettings.socialMedia.instagram,
+      icon: Instagram,
+    },
+    {
+      key: 'youtube',
+      label: 'YouTube',
+      href: contactSettings.socialMedia.youtube,
+      icon: Youtube,
+    },
+  ].filter((item) => Boolean(item.href));
+
+  const compactWhatsAppRegions = getActiveWhatsAppRegions(contactSettings.whatsapp);
 
   // Handle form input changes
   const handleInputChange = (
@@ -516,48 +498,108 @@ export function Contact() {
         alternateEN="/en/contact/"
         language={language}
       />
-
-      <InternalPageHero
-        eyebrow={language === 'es' ? 'Contacto' : 'Contact'}
-        title={heroContent.title}
-        description={heroContent.description}
-        imageSrc={contactHeroImage}
-        imageAlt="Contact iData"
-      />
-
-      {/* SECTION 2: Contact Form + Info */}
-      <section id="contact-form" className="py-20 bg-white">
+      <section id="contact-form" className={`py-20 md:pt-24 md:pb-20 ${isDark ? 'bg-slate-950' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
-            {/* Left Column: Form (3 columns) */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-10"
+          >
+            <div className={`rounded-[28px] border p-6 shadow-[0_18px_50px_rgba(15,23,42,0.08)] ${isDark ? 'border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(34,197,94,0.12),transparent_22%),radial-gradient(circle_at_top_right,rgba(59,130,246,0.12),transparent_22%),linear-gradient(180deg,#0f172a,#020617)]' : 'border-purple-100 bg-gradient-to-r from-green-50 via-white to-blue-50'}`}>
+              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0088FF]">
+                {language === 'es' ? 'Contacto directo' : 'Direct contact'}
+              </p>
+              <div className="mt-3 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+                <h2 className={`text-2xl font-light tracking-[-0.05em] md:text-3xl ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {language === 'es' ? 'Escríbenos por WhatsApp o también déjanos tu mensaje' : 'Message us on WhatsApp or leave us your message below'}
+                </h2>
+              </div>
+
+              <div className="mt-5 overflow-x-auto pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                <div className="flex gap-4">
+                  {compactWhatsAppRegions.map((region) => {
+                    const regionName = getLocalizedRegionName(region, language);
+                    const helperText = getLocalizedRegionHelper(region, language);
+                    const availabilityText = getLocalizedRegionAvailability(region, language);
+                    const regionFlags: Record<string, string> = {
+                      'central-america': '🌎',
+                      centralamerica: '🌎',
+                      chile: '🇨🇱',
+                      colombia: '🇨🇴',
+                      usa: '🇺🇸',
+                    };
+                    const regionFlag = regionFlags[region.slug] || regionFlags[region.id] || '🌐';
+
+                    return (
+                      <button
+                        key={region.id}
+                        type="button"
+                        onClick={() => window.open(buildWhatsAppRegionUrl(region, language), '_blank', 'noopener,noreferrer')}
+                        className={`min-w-[248px] rounded-[22px] border px-4 py-4 text-left shadow-[0_12px_30px_rgba(15,23,42,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(15,23,42,0.10)] sm:min-w-[268px] ${isDark ? 'border-emerald-400/20 bg-slate-900/90 hover:border-emerald-300/40' : 'border-emerald-200 bg-white hover:border-emerald-300'}`}
+                      >
+                        <div className="flex flex-col items-start gap-3">
+                          <span className="text-2xl leading-none" aria-hidden="true">
+                            {regionFlag}
+                          </span>
+                          <div className="space-y-2">
+                            <p className={`text-base font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{regionName}</p>
+                            {helperText && <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>{helperText}</p>}
+                          </div>
+                          {availabilityText && (
+                            <span className={`rounded-full px-2.5 py-1 text-[11px] font-medium ${isDark ? 'bg-emerald-500/12 text-emerald-300' : 'bg-emerald-50 text-emerald-600'}`}>
+                              {availabilityText}
+                            </span>
+                          )}
+                        </div>
+                        <div className={`mt-4 inline-flex items-center gap-2 text-sm font-medium ${isDark ? 'text-emerald-300' : 'text-emerald-600'}`}>
+                          WhatsApp
+                          <ArrowRight className="h-4 w-4" />
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
             <div className="lg:col-span-3">
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="bg-white rounded-2xl p-8 shadow-xl border border-gray-200"
+                className={`rounded-2xl border p-8 shadow-xl ${isDark ? 'border-white/10 bg-slate-900' : 'border-gray-200 bg-white'}`}
               >
-                <h2 className="text-2xl md:text-3xl font-light text-gray-900 mb-6">
-                  {language === 'es' ? 'Envíanos un mensaje' : 'Send us a message'}
-                </h2>
+                <div className="mb-6">
+                  <h1 className={`text-2xl md:text-3xl font-light ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {language === 'es' ? 'Hablemos de tu iniciativa' : 'Let us talk about your initiative'}
+                  </h1>
+                  <p className={`mt-3 text-sm md:text-base ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                    {language === 'es'
+                      ? 'Déjanos tus datos y un breve contexto. Nuestro equipo te contactará pronto.'
+                      : 'Leave your details and a brief context. Our team will contact you shortly.'}
+                  </p>
+                </div>
 
-                {/* Contextual Banner - Shows source */}
                 {showContextBanner && leadContext.source_title && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-6 bg-purple-50 border border-purple-200 rounded-xl p-4 flex items-start justify-between gap-3"
+                    className={`mb-6 flex items-start justify-between gap-3 rounded-xl border p-4 ${isDark ? 'border-purple-400/20 bg-purple-500/10' : 'border-purple-200 bg-purple-50'}`}
                   >
                     <div className="flex-1">
-                      <p className="text-sm text-purple-900">
+                      <p className={`text-sm ${isDark ? 'text-purple-100' : 'text-purple-900'}`}>
                         {language === 'es' ? 'Estás contactándonos sobre:' : 'You are contacting us about:'}
-                        <span className="font-medium ml-1">{leadContext.source_title}</span>
+                        <span className="ml-1 font-medium">{leadContext.source_title}</span>
                       </p>
                     </div>
                     <button
                       onClick={() => setShowContextBanner(false)}
-                      className="flex-shrink-0 text-purple-600 hover:text-purple-800 transition-colors"
+                      className={`flex-shrink-0 transition-colors ${isDark ? 'text-purple-300 hover:text-purple-100' : 'text-purple-600 hover:text-purple-800'}`}
                       aria-label={language === 'es' ? 'Cerrar' : 'Close'}
                     >
                       <X className="w-4 h-4" />
@@ -565,23 +607,20 @@ export function Contact() {
                   </motion.div>
                 )}
 
-                {/* Success/Error Messages */}
                 <div id="form-result" className="mb-6">
                   {submitSuccess && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3"
+                      className={`flex items-start gap-3 rounded-xl border p-4 ${isDark ? 'border-green-400/20 bg-green-500/10' : 'border-green-200 bg-green-50'}`}
                     >
-                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
                       <div>
-                        <h3 className="font-medium text-green-900 mb-1">
+                        <h3 className={`mb-1 font-medium ${isDark ? 'text-green-100' : 'text-green-900'}`}>
                           {language === 'es' ? 'Gracias por tu mensaje.' : 'Thank you for your message.'}
                         </h3>
-                        <p className="text-sm text-green-700">
-                          {language === 'es'
-                            ? 'Nuestro equipo te responderá pronto.'
-                            : 'Our team will respond shortly.'}
+                        <p className={`text-sm ${isDark ? 'text-green-200' : 'text-green-700'}`}>
+                          {language === 'es' ? 'Nuestro equipo te responderá pronto.' : 'Our team will respond shortly.'}
                         </p>
                       </div>
                     </motion.div>
@@ -591,16 +630,16 @@ export function Contact() {
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3"
+                      className={`flex items-start gap-3 rounded-xl border p-4 ${isDark ? 'border-red-400/20 bg-red-500/10' : 'border-red-200 bg-red-50'}`}
                     >
-                      <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                      <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
                       <div>
-                        <h3 className="font-medium text-red-900 mb-1">
+                        <h3 className={`mb-1 font-medium ${isDark ? 'text-red-100' : 'text-red-900'}`}>
                           {language === 'es'
                             ? 'Hubo un problema enviando el mensaje.'
                             : 'There was a problem sending your message.'}
                         </h3>
-                        <p className="text-sm text-red-700">
+                        <p className={`text-sm ${isDark ? 'text-red-200' : 'text-red-700'}`}>
                           {language === 'es' ? 'Intenta nuevamente.' : 'Please try again.'}
                         </p>
                       </div>
@@ -609,10 +648,9 @@ export function Contact() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Name Fields */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div>
-                      <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="first_name" className={`mb-2 block text-sm font-medium ${isDark ? 'text-slate-200' : 'text-gray-700'}`}>
                         {language === 'es' ? 'Nombre' : 'First name'} *
                       </label>
                       <input
@@ -626,11 +664,11 @@ export function Contact() {
                         title={language === 'es' ? 'Solo letras y espacios' : 'Only letters and spaces'}
                         value={formData.first_name}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
+                        className={`w-full rounded-xl border px-4 py-3.5 transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500 ${isDark ? 'border-white/10 bg-slate-950 text-white hover:border-white/20' : 'border-gray-300 bg-white hover:border-gray-400'}`}
                       />
                     </div>
                     <div>
-                      <label htmlFor="last_name" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="last_name" className={`mb-2 block text-sm font-medium ${isDark ? 'text-slate-200' : 'text-gray-700'}`}>
                         {language === 'es' ? 'Apellido' : 'Last name'} *
                       </label>
                       <input
@@ -644,15 +682,14 @@ export function Contact() {
                         title={language === 'es' ? 'Solo letras y espacios' : 'Only letters and spaces'}
                         value={formData.last_name}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
+                        className={`w-full rounded-xl border px-4 py-3.5 transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500 ${isDark ? 'border-white/10 bg-slate-950 text-white hover:border-white/20' : 'border-gray-300 bg-white hover:border-gray-400'}`}
                       />
                     </div>
                   </div>
 
-                  {/* Contact Fields */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="email" className={`mb-2 block text-sm font-medium ${isDark ? 'text-slate-200' : 'text-gray-700'}`}>
                         {language === 'es' ? 'Correo electrónico' : 'Email'} *
                       </label>
                       <input
@@ -664,32 +701,30 @@ export function Contact() {
                         placeholder={language === 'es' ? 'tu@empresa.com' : 'you@company.com'}
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400 placeholder:text-gray-400"
+                        className={`w-full rounded-xl border px-4 py-3.5 transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500 ${isDark ? 'border-white/10 bg-slate-950 text-white placeholder:text-slate-500 hover:border-white/20' : 'border-gray-300 bg-white hover:border-gray-400 placeholder:text-gray-400'}`}
                       />
                     </div>
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                        {language === 'es' ? 'Teléfono' : 'Phone'} *
+                      <label htmlFor="phone" className={`mb-2 block text-sm font-medium ${isDark ? 'text-slate-200' : 'text-gray-700'}`}>
+                        {language === 'es' ? 'Teléfono' : 'Phone'}
                       </label>
                       <input
                         type="tel"
                         id="phone"
                         name="phone"
-                        required
                         pattern={PHONE_PATTERN}
                         placeholder="+57 300 123 4567"
                         title={language === 'es' ? 'Formato: +57 300 123 4567' : 'Format: +57 300 123 4567'}
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400 placeholder:text-gray-400"
+                        className={`w-full rounded-xl border px-4 py-3.5 transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500 ${isDark ? 'border-white/10 bg-slate-950 text-white placeholder:text-slate-500 hover:border-white/20' : 'border-gray-300 bg-white hover:border-gray-400 placeholder:text-gray-400'}`}
                       />
                     </div>
                   </div>
 
-                  {/* Company & Country */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div>
-                      <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
+                      <label htmlFor="company" className={`mb-2 block text-sm font-medium ${isDark ? 'text-slate-200' : 'text-gray-700'}`}>
                         {language === 'es' ? 'Empresa' : 'Company'} *
                       </label>
                       <input
@@ -701,61 +736,21 @@ export function Contact() {
                         maxLength={100}
                         value={formData.company}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
+                        className={`w-full rounded-xl border px-4 py-3.5 transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500 ${isDark ? 'border-white/10 bg-slate-950 text-white hover:border-white/20' : 'border-gray-300 bg-white hover:border-gray-400'}`}
                       />
                     </div>
                     <div>
-                      <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">
-                        {language === 'es' ? 'País' : 'Country'} *
-                      </label>
-                      <input
-                        type="text"
-                        id="country"
-                        name="country"
-                        required
-                        minLength={2}
-                        maxLength={50}
-                        pattern={NAME_PATTERN}
-                        title={language === 'es' ? 'Solo letras y espacios' : 'Only letters and spaces'}
-                        value={formData.country}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Project Type & Industry */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="project_type" className="block text-sm font-medium text-gray-700 mb-2">
-                        {language === 'es' ? 'Tipo de proyecto' : 'Project type'}
+                      <label htmlFor="project_type" className={`mb-2 block text-sm font-medium ${isDark ? 'text-slate-200' : 'text-gray-700'}`}>
+                        {language === 'es' ? 'Tipo de necesidad' : 'Type of need'}
                       </label>
                       <select
                         id="project_type"
                         name="project_type"
                         value={formData.project_type}
                         onChange={handleInputChange}
-                        className="w-full pl-4 pr-10 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22none%22%3E%3cpath%20d%3D%22M7%207l3%203%203-3%22%20stroke%3D%22%239CA3AF%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3c%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat cursor-pointer"
+                        className={`ui-select w-full rounded-xl border py-3.5 pl-4 transition-all duration-200 cursor-pointer focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500 ${isDark ? 'border-white/10 bg-slate-950 text-white hover:border-white/20' : 'border-gray-300 bg-white hover:border-gray-400'}`}
                       >
-                        {projectTypes.map(option => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label htmlFor="industry" className="block text-sm font-medium text-gray-700 mb-2">
-                        {language === 'es' ? 'Industria' : 'Industry'}
-                      </label>
-                      <select
-                        id="industry"
-                        name="industry"
-                        value={formData.industry}
-                        onChange={handleInputChange}
-                        className="w-full pl-4 pr-10 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22none%22%3E%3cpath%20d%3D%22M7%207l3%203%203-3%22%20stroke%3D%22%239CA3AF%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3c%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat cursor-pointer"
-                      >
-                        {industries.map(option => (
+                        {projectTypes.map((option) => (
                           <option key={option.value} value={option.value}>
                             {option.label}
                           </option>
@@ -764,71 +759,36 @@ export function Contact() {
                     </div>
                   </div>
 
-                  {/* Budget & Timeline */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="budget_range" className="block text-sm font-medium text-gray-700 mb-2">
-                        {language === 'es' ? 'Presupuesto estimado' : 'Estimated budget'}
-                      </label>
-                      <select
-                        id="budget_range"
-                        name="budget_range"
-                        value={formData.budget_range}
-                        onChange={handleInputChange}
-                        className="w-full pl-4 pr-10 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22none%22%3E%3cpath%20d%3D%22M7%207l3%203%203-3%22%20stroke%3D%22%239CA3AF%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3c%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat cursor-pointer"
-                      >
-                        {budgetRanges.map(option => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label htmlFor="timeline" className="block text-sm font-medium text-gray-700 mb-2">
-                        {language === 'es' ? 'Plazo' : 'Timeline'}
-                      </label>
-                      <select
-                        id="timeline"
-                        name="timeline"
-                        value={formData.timeline}
-                        onChange={handleInputChange}
-                        className="w-full pl-4 pr-10 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22none%22%3E%3cpath%20d%3D%22M7%207l3%203%203-3%22%20stroke%3D%22%239CA3AF%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3c%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat cursor-pointer"
-                      >
-                        {timelines.map(option => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Message */}
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                      {language === 'es' ? 'Mensaje' : 'Message'} *
+                    <label htmlFor="message" className={`mb-2 block text-sm font-medium ${isDark ? 'text-slate-200' : 'text-gray-700'}`}>
+                      {language === 'es' ? 'Cuéntanos brevemente qué necesitas' : 'Briefly tell us what you need'} *
                     </label>
                     <textarea
                       id="message"
                       name="message"
                       required
-                      rows={6}
+                      rows={5}
                       minLength={10}
-                      maxLength={2000}
+                      maxLength={1200}
                       placeholder={language === 'es'
-                        ? 'Cuéntanos sobre tu proyecto y cómo podemos ayudarte...'
-                        : 'Tell us about your project and how we can help you...'}
+                        ? 'Cuéntanos el reto, el objetivo o la conversación que te gustaría tener.'
+                        : 'Tell us the challenge, goal or conversation you would like to have.'}
                       value={formData.message}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none transition-all duration-200 bg-white hover:border-gray-400 placeholder:text-gray-400"
+                      className={`w-full resize-none rounded-xl border px-4 py-3.5 transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500 ${isDark ? 'border-white/10 bg-slate-950 text-white placeholder:text-slate-500 hover:border-white/20' : 'border-gray-300 bg-white hover:border-gray-400 placeholder:text-gray-400'}`}
                     />
-                    <p className="mt-1 text-xs text-gray-500">
-                      {language === 'es' ? 'Mínimo 10 caracteres, máximo 2000' : 'Minimum 10 characters, maximum 2000'}
+                    <p className={`mt-1 text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                      {language === 'es' ? 'Mínimo 10 caracteres, máximo 1200' : 'Minimum 10 characters, maximum 1200'}
                     </p>
                   </div>
 
-                  {/* Privacy Policy */}
+                  <div className="hidden">
+                    <input type="text" id="country" name="country" value={formData.country} onChange={handleInputChange} tabIndex={-1} autoComplete="off" />
+                    <input type="text" id="industry" name="industry" value={formData.industry} onChange={handleInputChange} tabIndex={-1} autoComplete="off" />
+                    <input type="text" id="budget_range" name="budget_range" value={formData.budget_range} onChange={handleInputChange} tabIndex={-1} autoComplete="off" />
+                    <input type="text" id="timeline" name="timeline" value={formData.timeline} onChange={handleInputChange} tabIndex={-1} autoComplete="off" />
+                  </div>
+
                   <div className="flex items-start gap-3">
                     <input
                       type="checkbox"
@@ -837,19 +797,17 @@ export function Contact() {
                       required
                       checked={formData.privacy_policy_acceptance}
                       onChange={handleInputChange}
-                      className="mt-1 w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                      className="mt-1 h-4 w-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
                     />
-                    <label htmlFor="privacy_policy_acceptance" className="text-sm text-gray-600">
-                      {language === 'es'
-                        ? 'Acepto la '
-                        : 'I accept the '}
+                    <label htmlFor="privacy_policy_acceptance" className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                      {language === 'es' ? 'Acepto la ' : 'I accept the '}
                       <a
                         href={EXTERNAL_DATA_POLICY_URL}
                         target="_blank"
                         rel="noreferrer"
                         className="text-[#0088FF] hover:underline"
                       >
-                        {language === 'es' ? 'politica de privacidad' : 'privacy policy'}
+                        {language === 'es' ? 'política de privacidad' : 'privacy policy'}
                       </a>
                       {language === 'es'
                         ? ' y el tratamiento de mis datos personales para fines de contacto comercial.'
@@ -857,22 +815,21 @@ export function Contact() {
                     </label>
                   </div>
 
-                  {/* Submit Button */}
-                  <div className="pt-4">
+                  <div className="pt-2">
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full inline-flex items-center justify-center gap-2 bg-purple-600 text-white px-8 py-4 rounded-xl font-medium hover:bg-purple-700 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 group"
+                      className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-purple-600 px-8 py-4 font-medium text-white transition-all duration-300 hover:scale-[1.02] hover:bg-purple-700 hover:shadow-lg active:scale-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
                     >
                       {isSubmitting ? (
                         <>
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                           {language === 'es' ? 'Enviando...' : 'Sending...'}
                         </>
                       ) : (
                         <>
                           {language === 'es' ? 'Enviar mensaje' : 'Send message'}
-                          <Send className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+                          <Send className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                         </>
                       )}
                     </button>
@@ -881,7 +838,6 @@ export function Contact() {
               </motion.div>
             </div>
 
-            {/* Right Column: Contact Information (2 columns) */}
             <div className="lg:col-span-2">
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
@@ -890,20 +846,8 @@ export function Contact() {
                 transition={{ duration: 0.6 }}
                 className="space-y-6 lg:sticky lg:top-24"
               >
-                {/* Intro Text */}
-                <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 border border-purple-100">
-                  <p className="text-base md:text-lg text-gray-700 font-light leading-relaxed">
-                    {language === 'es'
-                      ? 'Nuestro equipo está listo para ayudarte a resolver desafíos en analítica, datos e inteligencia artificial. Cuéntanos sobre tu proyecto y uno de nuestros especialistas se pondrá en contacto contigo.'
-                      : 'Our team is ready to help you solve challenges in analytics, data and artificial intelligence. Tell us about your project and one of our specialists will get in touch with you.'}
-                  </p>
-                </div>
-
-                <WhatsAppContactCard />
-
-                {/* Contact Info Cards */}
-                <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-200">
-                  <h3 className="text-xl font-medium text-gray-900 mb-6">
+                <div className={`rounded-2xl border p-8 shadow-xl ${isDark ? 'border-white/10 bg-slate-900' : 'border-gray-200 bg-white'}`}>
+                  <h3 className={`mb-6 text-xl font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     {language === 'es' ? 'Información de contacto' : 'Contact information'}
                   </h3>
                   <div className="space-y-6">
@@ -911,18 +855,16 @@ export function Contact() {
                       const Icon = info.icon;
                       return (
                         <div key={index} className="flex items-start gap-4">
-                          <div className="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                            <Icon className="w-6 h-6 text-purple-600" />
+                          <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl ${isDark ? 'bg-white/8' : 'bg-purple-100'}`}>
+                            <Icon className={`h-6 w-6 ${isDark ? 'text-purple-300' : 'text-purple-600'}`} />
                           </div>
                           <div className="flex-1">
-                            <h4 className="font-medium text-gray-900 mb-2">{info.title}</h4>
+                            <h4 className={`mb-2 font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{info.title}</h4>
                             <div className="space-y-1">
-                              <p className="text-sm text-gray-700 font-medium">{info.content}</p>
-                              {info.subContent && (
-                                <p className="text-sm text-gray-600">{info.subContent}</p>
-                              )}
+                              <p className={`text-sm font-medium ${isDark ? 'text-slate-200' : 'text-gray-700'}`}>{info.content}</p>
+                              {info.subContent && <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>{info.subContent}</p>}
                               {(info as any).additionalContent && (
-                                <p className="text-sm text-gray-600">{(info as any).additionalContent}</p>
+                                <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>{(info as any).additionalContent}</p>
                               )}
                             </div>
                           </div>
@@ -932,66 +874,47 @@ export function Contact() {
                   </div>
                 </div>
 
-                {/* Additional Info */}
-                <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-6 border border-purple-100">
-                  <h4 className="font-medium text-gray-900 mb-3">
+                {socialLinks.length > 0 && (
+                  <div className={`rounded-2xl border p-8 shadow-xl ${isDark ? 'border-white/10 bg-slate-900' : 'border-gray-200 bg-white'}`}>
+                    <h3 className={`mb-3 text-xl font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                      {language === 'es' ? 'Síguenos en redes sociales' : 'Follow us on social media'}
+                    </h3>
+                    <p className={`mb-5 text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-gray-600'}`}>
+                      {language === 'es'
+                        ? 'También puedes seguir la conversación y conocer lo que estamos construyendo.'
+                        : 'You can also follow the conversation and see what we are building.'}
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      {socialLinks.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <a
+                            key={item.key}
+                            href={item.href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium transition-all duration-200 ${isDark ? 'border-white/10 bg-slate-950 text-slate-200 hover:border-purple-300/30 hover:bg-purple-500/10 hover:text-purple-200' : 'border-gray-200 bg-white text-gray-700 hover:border-purple-200 hover:bg-purple-50 hover:text-purple-700'}`}
+                          >
+                            <Icon className="h-4 w-4" />
+                            {item.label}
+                          </a>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                <div className={`rounded-2xl border p-6 ${isDark ? 'border-white/10 bg-[linear-gradient(180deg,#111827,#0f172a)]' : 'border-purple-100 bg-gradient-to-br from-purple-50 to-blue-50'}`}>
+                  <h4 className={`mb-3 font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     {language === 'es' ? 'Tiempo de respuesta' : 'Response time'}
                   </h4>
-                  <p className="text-sm text-gray-700 font-light leading-relaxed">
-                    {language === 'es'
-                      ? 'Nuestro equipo responde todos los mensajes en un plazo máximo de 24 horas hábiles. Para consultas urgentes, puedes contactarnos directamente por teléfono.'
-                      : 'Our team responds to all messages within 24 business hours. For urgent inquiries, you can contact us directly by phone.'}
+                  <p className={`text-sm font-light leading-relaxed ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                    {language === 'es' ? 'Respondemos en un máximo de 24 horas hábiles.' : 'We reply within 24 business hours.'}
                   </p>
                 </div>
               </motion.div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* SECTION 4: Final CTA */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-          <motion.div
-            className="relative"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            {/* Background blobs */}
-            <div className="absolute -left-20 top-1/2 -translate-y-1/2 w-64 h-64 bg-blue-400 rounded-full blur-3xl opacity-50" />
-            <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-64 h-64 bg-purple-500 rounded-full blur-3xl opacity-50" />
-
-            {/* Card */}
-            <div className="theme-glass-panel relative overflow-hidden rounded-2xl p-8 md:rounded-3xl">
-              <div className="relative">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-8">
-                  <div className="flex-1 text-center md:text-left">
-                    <h2 className="mb-2 text-xl font-light leading-tight tracking-tight text-[var(--glass-text-primary)] md:text-2xl lg:text-3xl">
-                      {language === 'es'
-                        ? '¿Listo para transformar tu estrategia de datos?'
-                        : 'Ready to transform your data strategy?'}
-                    </h2>
-                    <p className="text-sm font-light leading-relaxed text-[var(--glass-text-secondary)] md:text-base">
-                      {language === 'es'
-                        ? 'Nuestro equipo te está esperando'
-                        : 'Our team is waiting for you'}
-                    </p>
-                  </div>
-                  <div className="flex justify-center md:justify-end md:flex-shrink-0">
-                    <a
-                      href="#contact-form"
-                      className="inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-gray-800 transition-all duration-250 hover:shadow-xl hover:scale-[1.02] active:scale-100 group whitespace-nowrap"
-                    >
-                      {language === 'es' ? 'Contactar ahora' : 'Contact us'}
-                      <ArrowRight className="w-4 h-4 transition-transform duration-250 group-hover:translate-x-1" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
     </>

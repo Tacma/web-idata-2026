@@ -213,7 +213,7 @@ function Select(props: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <select
       {...props}
-      className={`glass-input w-full appearance-none rounded-2xl px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#4387DF]/20 ${props.className || ''}`}
+      className={`glass-input ui-select w-full rounded-2xl px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#4387DF]/20 ${props.className || ''}`}
     />
   );
 }

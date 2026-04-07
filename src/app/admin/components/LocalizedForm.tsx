@@ -173,7 +173,7 @@ export function LocalizedForm({
             value={fieldValue}
             onChange={(e) => handleChange(fieldName, e.target.value)}
             required={field.required}
-            className={baseClassName}
+            className={`${baseClassName} ui-select`}
           >
             <option value="">Select...</option>
             {field.options?.map((option) => (
