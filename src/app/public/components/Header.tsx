@@ -211,18 +211,37 @@ export function Header() {
       <nav className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
         <div className="flex justify-between items-center h-20">
           
-          {/* Logo - Left - 15% smaller */}
+          {/* Logo */}
           <div className="flex-shrink-0">
             <Link 
               to={getLocalizedRoute('home', language)} 
               className="block transition-opacity duration-300 hover:opacity-70"
             >
-              <img 
-                src={activeLogo} 
-                alt="iData Global" 
-                className="w-auto"
-                style={{ height: '34px' }}
-              />
+              <div className="hidden xl:block">
+                <img 
+                  src={activeLogo} 
+                  alt="iData Global" 
+                  className="w-auto"
+                  style={{ height: '34px' }}
+                />
+              </div>
+
+              <div className="hidden md:block xl:hidden">
+                <img 
+                  src={activeLogo} 
+                  alt="iData Global" 
+                  className="w-auto"
+                  style={{ height: '32px' }}
+                />
+              </div>
+
+              <div className="block md:hidden overflow-hidden" style={{ width: '42px', height: '34px' }}>
+                <img 
+                  src={activeLogo} 
+                  alt="iData" 
+                  className="h-[34px] max-w-none"
+                />
+              </div>
             </Link>
           </div>
 
@@ -252,7 +271,7 @@ export function Header() {
             })}
           </div>
 
-          {/* Right Side - Language + Sign Up Button */}
+          {/* Right Side - Desktop */}
           <div className="hidden xl:flex xl:items-center xl:gap-4">
             <ThemeToggle language={language} />
 
@@ -280,8 +299,19 @@ export function Header() {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="xl:hidden">
+          {/* Tablet/Mobile actions */}
+          <div className="flex items-center gap-2 xl:hidden">
+            <ThemeToggle language={language} />
+            <Link
+              to={alternatePath}
+              onClick={preserveScrollForLanguageSwitch}
+              aria-label={language === 'es' ? 'Cambiar idioma a inglés' : 'Switch language to Spanish'}
+              title={language === 'es' ? 'Cambiar a English' : 'Cambiar a Español'}
+              className="inline-flex h-11 items-center gap-2 rounded-full border border-[var(--header-border)] bg-[var(--header-pill-hover)] px-4 text-sm font-semibold text-[var(--header-text)] shadow-[0_10px_28px_rgba(8,15,30,0.08)] transition-all duration-300 hover:border-[#4387DF]/35 hover:text-[#0088FF]"
+            >
+              <span className="text-xs">🌐</span>
+              {alternateLanguage.toUpperCase()}
+            </Link>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-[var(--header-text-muted)] hover:text-[var(--header-text)] transition-colors duration-300"
@@ -310,23 +340,7 @@ export function Header() {
                 </Link>
               );
             })}
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t pt-4" style={{ borderColor: 'var(--header-border)' }}>
-              <div className="flex items-center gap-3">
-                <ThemeToggle language={language} />
-                <Link
-                  to={alternatePath}
-                  aria-label={language === 'es' ? 'Cambiar idioma a inglés' : 'Switch language to Spanish'}
-                  title={language === 'es' ? 'Cambiar a English' : 'Cambiar a Español'}
-                  className="inline-flex h-11 items-center gap-2 rounded-full border border-[var(--header-border)] bg-[var(--header-pill-hover)] px-4 text-sm font-semibold text-[var(--header-text)] shadow-[0_10px_28px_rgba(8,15,30,0.08)] transition-all duration-300 hover:border-[#4387DF]/35 hover:text-[#0088FF]"
-                  onClick={() => {
-                    preserveScrollForLanguageSwitch();
-                    setIsMenuOpen(false);
-                  }}
-                >
-                  <span className="text-xs">🌐</span>
-                  {alternateLanguage.toUpperCase()}
-                </Link>
-              </div>
+            <div className="mt-4 flex flex-wrap items-center justify-end gap-3 border-t pt-4" style={{ borderColor: 'var(--header-border)' }}>
               <Link
                 to={getLocalizedRoute('contact', language)}
                 className="inline-flex h-11 items-center gap-2 rounded-full bg-gray-900 px-5 text-sm font-medium text-white transition-all duration-300 hover:bg-[#8E32F5]"
